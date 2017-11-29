@@ -1,0 +1,152 @@
+[#import "/views/common/base.html" as base]
+[@base.page]
+
+<div class="widget-box grid-filter">
+    <div class="widget-header widget-header-flat">
+        <h5 class="widget-title">
+            <i class="ace-icon fa fa-search"></i> 条件查询
+        </h5>
+        <div class="widget-toolbar">
+            <a href="#" data-action="collapse">
+                <i class="ace-icon fa fa-chevron-up"></i>
+            </a>
+        </div>
+    </div>
+    <div class="widget-body" style="display: block;">
+        <div class="widget-main no-padding">
+            <form id="form" class="form-inline fix-input-size">
+                <input type="hidden" name="category" value="FILE TYPE"/>
+                <fieldset>
+                    <div class="form-fieldset">
+                        <label>编码：</label>
+                        <input type="text" name="code"/>
+                    </div>
+                    <div class="form-fieldset">
+                        <label>名称：</label>
+                        <input type="text" name="name"/>
+                    </div>
+                    <div class="form-fieldset">
+                        <label>状态：</label>
+                        <select name="state">
+                            <option value=""></option>
+                            [#if status ??][#list status as e]<option value="${e}">${e.description}</option>[/#list][/#if]
+                        </select>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button id="btnSearch" class="btn btn-sm btn-info" type="button">
+                        <i class="ace-icon glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button id="jqg_add" class="btn btn-success btn-sm" type="button" data-url="rest/sys/dict/add">
+                        <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
+                    </button>
+                    <button id="jqg_del" class="btn btn-sm btn-danger" type="button" data-url="rest/sys/dict/del">
+                        <i class="ace-icon glyphicon glyphicon-trash"></i> 删除
+                    </button>
+                    <button id="btnReset" class="btn btn-sm" type="button">
+                        <i class="ace-icon glyphicon glyphicon-refresh"></i> 重置
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.widget-main -->
+    </div>
+    <!-- /.widget-body -->
+</div>
+
+[#include "/views/common/grid-table.html"/]
+
+[#import "/views/common/udt.html" as udt]
+
+<script type="text/javascript">
+    $(function() {
+        $("#grid-table").grid({
+            url : "rest/sys/dict/page",
+            delUrl : "rest/sys/dict/del",
+            editUrl : "rest/sys/dict/edit",
+            //        token: _csrf,
+            colModel : [ {
+                label : '',
+                name : 'id',
+                key : true,
+                hidden : true,
+                editable : true
+            }, {
+                label : '类型',
+                name : 'category',
+                hidden : true,
+                editable : true,
+                editrules : {
+                    required : true
+                },
+                editoptions : {
+                    defaultValue : "FILE TYPE",
+                },
+            }, {
+                label : '编码',
+                name : 'code',
+                editable : true,
+                editrules : {
+                    required : true
+                }
+            }, {
+                label : '名称',
+                name : 'name',
+                editable : true,
+                editrules : {
+                    required : true
+                }
+            }, {
+                label : '状态',
+                name : 'state',
+                width : 60,
+                align : "center",
+                formatter : "fmValidOrInvalid",
+                editable : true,
+                edittype : "select",
+                editoptions : {
+                    value : validOrInvalidOptionsJson
+                }
+            }, {
+                label : '属性1',
+                name : 'property1',
+                editable : true
+            }, {
+                label : '属性2',
+                name : 'property2',
+                editable : true
+            }, {
+                label : '属性3',
+                name : 'property3',
+                editable : true
+            }, {
+                label : '属性4',
+                name : 'property4',
+                editable : true
+            }, {
+                label : '排序',
+                name : 'sortOrder',
+                width : 60,
+                align : "center",
+                editable : true,
+                editrules : {
+                    number : true
+                }
+            }, {
+                label : '备注',
+                name : 'note',
+                editable : true
+            }, ],
+            sortname : 'category',
+            sortorder : "desc"
+        });
+        $("#btnSearch").click(function() {
+            $("#grid-table").trigger("reloadGrid");
+        });
+        $("#btnReset").click(function() {
+            $("#form")[0].reset();
+        });
+    });
+</script>
+
+[/@base.page]

@@ -1,0 +1,33 @@
+[#import "/views/common/base.html" as base] 
+[@base.page]
+<!-- PAGE CONTENT BEGINS -->
+<div class="col-md-8 col-md-offset-2">
+    <div class="error-container">
+        <h2 class="grey lighter smaller">
+            <span class="blue bigger-125">
+                <i class="ace-icon fa fa-wrench icon-animated-wrench bigger-125"></i> 500
+            </span>
+            &nbsp;唉，系统出错了！
+        </h2>
+        <hr>
+        <div class="space"></div>
+        <div class="alert alert-danger" style="text-align: left;">
+            [#if Request["URL"]??]出错页面：${Request["URL"]}<br>[/#if] 
+            [#if Request["ERROR_CODE"]??]错误代码：${Request["ERROR_CODE"]}<br>[/#if] 
+            [#if Request["EXCEPTION"]??]错误信息：${Request["EXCEPTION"].message}<br>[/#if]
+        </div>
+        <div class="space"></div>
+        <hr>
+        <div class="space"></div>
+        <div class="center">
+            <a href="javascript:history.back()" class="btn btn-grey">
+                <i class="ace-icon fa fa-arrow-left"></i> 回 退
+            </a>
+            <a href="" class="btn btn-primary">
+                <i class="ace-icon fa fa-home"></i> 首 页
+            </a>
+        </div>
+    </div>
+</div>
+<!-- PAGE CONTENT ENDS -->
+[/@base.page]

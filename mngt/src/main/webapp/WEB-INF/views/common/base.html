@@ -1,0 +1,57 @@
+[#macro page]
+[#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] /]
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>交易平台管理系统</title>
+    [#include "head.html"/]
+    [#include "basic-scripts.html"/]
+    [#include "validate-scripts.html"/]
+</head>
+
+<body class="no-skin">
+
+	[#include "banner.html"/]
+
+	<div class="main-container" id="main-container">
+		<script type="text/javascript">
+			try{ace.settings.check('main-container' , 'fixed')}catch(e){}
+		</script>
+
+		[#include "sidebar.html"/]
+		
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="breadcrumbs" id="breadcrumbs">
+					<script type="text/javascript">
+						try{ace.settings.check('breadcrumbs' , 'fixed')}catch(e){}
+					</script>
+
+					<ul class="breadcrumb" id="breadcrumb">
+						<li>
+							<i class="ace-icon fa fa-home home-icon"></i>
+							<a href="#">首页</a>
+						</li>
+					</ul><!-- /.breadcrumb -->
+				</div>
+				<!-- 内容页 -->
+				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-12 col-md-12">
+						[#nested]
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+		[#include "footer.html"/]
+	</div><!-- /.main-container -->
+
+	<script src="resources/js/common/menu_status.js"></script>
+</body>
+</html>
+[/#macro]

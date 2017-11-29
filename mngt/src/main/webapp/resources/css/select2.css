@@ -1,0 +1,14 @@
+.select2-container--default .select2-selection {
+    border-radius: 0;
+    border-color: #D5D5D5;
+}
+.select2-container--default .select2-selection:hover {
+    border-color: #b5b5b5;
+}
+.select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: solid #F59942 1px;
+    outline: 0;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #4F99C6;
+}
