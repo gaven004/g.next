@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.g.sys.dict.mapper.SysDictionaryMapper">
+
+    <!-- 开启二级缓存 -->
+    <!-- <cache type="org.mybatis.caches.redis.RedisCache" /> -->
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.g.sys.dict.model.SysDictionary">
+        <id column="id" property="id" />
+        <result column="category_id" property="categoryId" />
+        <result column="category" property="category" />
+        <result column="code" property="code" />
+        <result column="name" property="name" />
+        <result column="property_1" property="property1" />
+        <result column="property_2" property="property2" />
+        <result column="property_3" property="property3" />
+        <result column="property_4" property="property4" />
+        <result column="state" property="state" />
+        <result column="sort_order" property="sortOrder" />
+        <result column="note" property="note" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, category_id AS categoryId, category, code, name, property_1 AS property1, property_2 AS property2,
+        property_3 AS property3, property_4 AS property4, state, sort_order AS sortOrder, note
+    </sql>
+
+</mapper>

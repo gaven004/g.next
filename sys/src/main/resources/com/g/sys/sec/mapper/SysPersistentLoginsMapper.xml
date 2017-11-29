@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.g.sys.sec.mapper.SysPersistentLoginsMapper">
+
+    <!-- 开启二级缓存 -->
+    <cache type="org.mybatis.caches.redis.RedisCache"/>
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.g.sys.sec.model.SysPersistentLogins">
+        <id column="series" property="series" />
+        <result column="uid" property="uid" />
+        <result column="token" property="token" />
+        <result column="last_used" property="lastUsed" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        uid, series, token, last_used AS lastUsed
+    </sql>
+
+</mapper>
