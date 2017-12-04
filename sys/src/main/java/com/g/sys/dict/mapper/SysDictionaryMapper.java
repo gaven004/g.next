@@ -14,7 +14,7 @@ import com.g.sys.dict.model.SysDictionary;
  * @author Alfred Huang
  * @since 2017-07-13
  */
-//@CacheNamespaceRef(SysDictionaryMapper.class)
+@CacheNamespaceRef(SysDictionaryMapper.class)
 public interface SysDictionaryMapper extends BaseMapper<SysDictionary> {
 
 }

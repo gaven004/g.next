@@ -1,7 +1,14 @@
 package com.g.sys.sec.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -20,17 +27,35 @@ public class SysUsers implements Serializable {
 
     @TableId(value = "uid", type = IdType.INPUT)
     private String uid;
+
     /**
      * 用户账号
      */
+    @NotNull(message = "用户账号是必须的")
+    @NotEmpty(message = "用户账号是必须的")
+    @Size(max = 15, message = "用户账号最长为15个字符")
     private String account;
+
     /**
      * 用户名称
      */
+    @NotNull(message = "用户名是必须的")
+    @NotEmpty(message = "用户名是必须的")
+    @Size(max = 50, message = "用户名最长为50个字符")
     private String username;
+
     private String password;
+
+    @NotNull(message = "邮箱是必须的")
+    @NotEmpty(message = "邮箱是必须的")
+    @Size(max = 60, message = "邮箱最长为60个字符")
     private String email;
+
     private String enabled;
+
+    @TableField(exist=false)
+    @NotNull(message = "用于需要设置角色")
+    private Set<String> roles;
 
     public String getUid() {
         return uid;
@@ -86,6 +111,15 @@ public class SysUsers implements Serializable {
         return this;
     }
 
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
+
     public static final String UID = "uid";
     public static final String ACCOUNT = "account";
     public static final String USERNAME = "username";
@@ -102,7 +136,8 @@ public class SysUsers implements Serializable {
         builder.append("username=").append(username).append(", ");
         builder.append("password=").append(password).append(", ");
         builder.append("email=").append(email).append(", ");
-        builder.append("enabled=").append(enabled);
+        builder.append("enabled=").append(enabled).append(", ");
+        builder.append("roles=").append(roles);
         builder.append("]");
         return builder.toString();
     }

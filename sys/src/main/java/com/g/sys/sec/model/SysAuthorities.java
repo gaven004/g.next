@@ -1,9 +1,9 @@
 package com.g.sys.sec.model;
 
-import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
+
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.annotations.TableName;
 
 /**
  * <p>
@@ -16,9 +16,9 @@ import com.baomidou.mybatisplus.enums.IdType;
 @TableName("sys_authorities")
 public class SysAuthorities implements Serializable {
     private static final long serialVersionUID = -8974936343023751543L;
-
-    @TableId(value = "uid", type = IdType.INPUT)
+    @TableId
     private String uid;
+    @TableId
     private String authority;
 
     public String getUid() {

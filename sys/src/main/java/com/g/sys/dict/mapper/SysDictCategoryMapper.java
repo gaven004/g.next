@@ -14,7 +14,7 @@ import com.g.sys.dict.model.SysDictCategory;
  * @author Alfred Huang
  * @since 2017-07-13
  */
-//@CacheNamespaceRef(SysDictCategoryMapper.class)
+@CacheNamespaceRef(SysDictCategoryMapper.class)
 public interface SysDictCategoryMapper extends BaseMapper<SysDictCategory> {
 
 }
