@@ -1,5 +1,6 @@
 package com.g.commons.controller;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -95,7 +96,7 @@ public abstract class GeneralController<S extends ServiceImpl<M, T>, M extends B
      */
     @RequestMapping("del")
     @ResponseBody
-    public RestApiResponse<?> deleteById(Long[] id) {
+    public RestApiResponse<?> deleteById(String[] id) {
         return RestApiResponse.create(service.deleteBatchIds(Arrays.asList(id)));
     }
 
