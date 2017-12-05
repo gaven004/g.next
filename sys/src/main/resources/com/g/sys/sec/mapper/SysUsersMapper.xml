@@ -7,7 +7,7 @@
     <!-- <cache /> -->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.g.sys.sec.model.SysUsers">
+    <resultMap id="BaseResultMap" type="com.g.sys.sec.model.SysUser">
         <id column="uid" property="uid" />
         <result column="account" property="account" />
         <result column="username" property="username" />

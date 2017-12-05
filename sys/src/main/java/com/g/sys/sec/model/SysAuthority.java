@@ -14,7 +14,7 @@ import com.baomidou.mybatisplus.annotations.TableName;
  * @since 2017-11-27
  */
 @TableName("sys_authorities")
-public class SysAuthorities implements Serializable {
+public class SysAuthority implements Serializable {
     private static final long serialVersionUID = -8974936343023751543L;
     @TableId
     private String uid;
@@ -25,7 +25,7 @@ public class SysAuthorities implements Serializable {
         return uid;
     }
 
-    public SysAuthorities setUid(String uid) {
+    public SysAuthority setUid(String uid) {
         this.uid = uid;
         return this;
     }
@@ -34,7 +34,7 @@ public class SysAuthorities implements Serializable {
         return authority;
     }
 
-    public SysAuthorities setAuthority(String authority) {
+    public SysAuthority setAuthority(String authority) {
         this.authority = authority;
         return this;
     }
@@ -45,7 +45,7 @@ public class SysAuthorities implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("SysAuthorities [");
+        builder.append("SysAuthority [");
         builder.append("uid=").append(uid).append(", ");
         builder.append("authority=").append(authority);
         builder.append("]");

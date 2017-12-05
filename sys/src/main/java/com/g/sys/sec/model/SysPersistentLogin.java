@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.enums.IdType;
  * @since 2017-11-27
  */
 @TableName("sys_persistent_logins")
-public class SysPersistentLogins implements Serializable {
+public class SysPersistentLogin implements Serializable {
     private static final long serialVersionUID = -5029482496694740738L;
 
     private String uid;
@@ -30,7 +30,7 @@ public class SysPersistentLogins implements Serializable {
         return uid;
     }
 
-    public SysPersistentLogins setUid(String uid) {
+    public SysPersistentLogin setUid(String uid) {
         this.uid = uid;
         return this;
     }
@@ -39,7 +39,7 @@ public class SysPersistentLogins implements Serializable {
         return series;
     }
 
-    public SysPersistentLogins setSeries(String series) {
+    public SysPersistentLogin setSeries(String series) {
         this.series = series;
         return this;
     }
@@ -48,7 +48,7 @@ public class SysPersistentLogins implements Serializable {
         return token;
     }
 
-    public SysPersistentLogins setToken(String token) {
+    public SysPersistentLogin setToken(String token) {
         this.token = token;
         return this;
     }
@@ -57,7 +57,7 @@ public class SysPersistentLogins implements Serializable {
         return lastUsed;
     }
 
-    public SysPersistentLogins setLastUsed(Date lastUsed) {
+    public SysPersistentLogin setLastUsed(Date lastUsed) {
         this.lastUsed = lastUsed;
         return this;
     }
@@ -70,7 +70,7 @@ public class SysPersistentLogins implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("SysPersistentLogins [");
+        builder.append("SysPersistentLogin [");
         builder.append("uid=").append(uid).append(", ");
         builder.append("series=").append(series).append(", ");
         builder.append("token=").append(token).append(", ");

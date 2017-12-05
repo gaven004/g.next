@@ -33,7 +33,7 @@ import com.g.sys.sec.exception.DuplicateUserAccountException;
 import com.g.sys.sec.exception.PasswordMismatchException;
 import com.g.sys.sec.exception.UserNotFoundException;
 import com.g.sys.sec.mapper.SysUsersMapper;
-import com.g.sys.sec.model.SysUsers;
+import com.g.sys.sec.model.SysUser;
 
 /**
  * <p>
@@ -46,7 +46,7 @@ import com.g.sys.sec.model.SysUsers;
  * @since 2017-11-27
  */
 @Service
-public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
+public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     private enum Action {
         NEW, RESET;
     }
@@ -76,8 +76,8 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
     private MailSender mailSender;
 
     @Override
-    public SysUsers selectById(Serializable id) {
-        SysUsers user = super.selectById(id);
+    public SysUser selectById(Serializable id) {
+        SysUser user = super.selectById(id);
         if (user != null) {
             user.setRoles(sysAuthoritiesService.getAuthorities((String) id));
         }
@@ -85,10 +85,19 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
     }
 
     @Override
-    public List<SysUsers> selectList(Wrapper<SysUsers> wrapper) {
-        List<SysUsers> list = super.selectList(wrapper);
+    public SysUser selectOne(Wrapper<SysUser> wrapper) {
+        SysUser user = super.selectOne(wrapper);
+        if (user != null) {
+            user.setRoles(sysAuthoritiesService.getAuthorities(user.getUid()));
+        }
+        return user;
+    }
+
+    @Override
+    public List<SysUser> selectList(Wrapper<SysUser> wrapper) {
+        List<SysUser> list = super.selectList(wrapper);
         if (list != null && !list.isEmpty()) {
-            for (SysUsers user : list) {
+            for (SysUser user : list) {
                 user.setRoles(sysAuthoritiesService.getAuthorities(user.getUid()));
             }
         }
@@ -96,10 +105,10 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
     }
 
     @Override
-    public Page<SysUsers> selectPage(Page<SysUsers> page, Wrapper<SysUsers> wrapper) {
+    public Page<SysUser> selectPage(Page<SysUser> page, Wrapper<SysUser> wrapper) {
         page = super.selectPage(page, wrapper);
         if (page.getRecords() != null && !page.getRecords().isEmpty()) {
-            for (SysUsers user : page.getRecords()) {
+            for (SysUser user : page.getRecords()) {
                 user.setRoles(sysAuthoritiesService.getAuthorities(user.getUid()));
             }
         }
@@ -108,7 +117,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean insert(SysUsers entity) {
+    public boolean insert(SysUser entity) {
         checkAccount(entity);
         checkEmail(entity);
 
@@ -124,7 +133,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean updateById(SysUsers entity) {
+    public boolean updateById(SysUser entity) {
         if (entity.getAccount() != null) {
             checkAccount(entity);
         }
@@ -152,15 +161,15 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
     /*
      * 检查重复账号
      */
-    private void checkAccount(SysUsers entity) throws DuplicateUserAccountException {
-        Wrapper<SysUsers> wrapper = new EntityWrapper<>();
+    private void checkAccount(SysUser entity) throws DuplicateUserAccountException {
+        Wrapper<SysUser> wrapper = new EntityWrapper<>();
 
         // 新增用户，用户账号不能与库中的记录重复
-        wrapper.eq(SysUsers.ACCOUNT, entity.getAccount());
+        wrapper.eq(SysUser.ACCOUNT, entity.getAccount());
 
         if (entity.getUid() != null) {
             // 旧用户修改，账号不能与除本记录外的其它记录重复
-            wrapper.ne(SysUsers.UID, entity.getUid());
+            wrapper.ne(SysUser.UID, entity.getUid());
         }
 
         if (selectCount(wrapper) > 0) {
@@ -171,7 +180,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
     @Transactional(rollbackFor = Exception.class)
     public boolean changePassword(String uid, String oldpwd, String newpwd)
             throws UserNotFoundException, PasswordMismatchException {
-        SysUsers record = selectById(uid);
+        SysUser record = selectById(uid);
         if (record == null) {
             throw new UserNotFoundException();
         }
@@ -180,7 +189,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
             throw new PasswordMismatchException();
         }
 
-        record = new SysUsers();
+        record = new SysUser();
         record.setUid(uid);
         record.setPassword(passwordEncoder.encode(newpwd));
         return retBool(baseMapper.updateById(record));
@@ -188,19 +197,19 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
 
     @Transactional(rollbackFor = Exception.class)
     public boolean resetPassword(String email) throws UserNotFoundException {
-        Wrapper<SysUsers> wrapper = new EntityWrapper<>();
-        wrapper.eq(SysUsers.EMAIL, email);
+        Wrapper<SysUser> wrapper = new EntityWrapper<>();
+        wrapper.eq(SysUser.EMAIL, email);
 
-        List<SysUsers> list = selectList(wrapper);
+        List<SysUser> list = selectList(wrapper);
         if (list == null || list.isEmpty()) {
             throw new UserNotFoundException();
         }
 
-        SysUsers record = list.get(0);
+        SysUser record = list.get(0);
         String uid = record.getUid();
         String pwd = generatePwdAndSendMail(record, Action.RESET);
 
-        record = new SysUsers();
+        record = new SysUser();
         record.setUid(uid);
         record.setPassword(passwordEncoder.encode(pwd));
         return retBool(baseMapper.updateById(record));
@@ -209,15 +218,15 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
     /*
      * 检查重复邮箱
      */
-    private void checkEmail(SysUsers entity) throws DuplicateEmailException {
-        Wrapper<SysUsers> wrapper = new EntityWrapper<>();
+    private void checkEmail(SysUser entity) throws DuplicateEmailException {
+        Wrapper<SysUser> wrapper = new EntityWrapper<>();
 
         // 新增用户，用户邮箱不能与库中的记录重复
-        wrapper.eq(SysUsers.EMAIL, entity.getEmail());
+        wrapper.eq(SysUser.EMAIL, entity.getEmail());
 
         if (entity.getUid() != null) {
             // 旧用户修改，邮箱不能与除本记录外的其它记录重复
-            wrapper.ne(SysUsers.UID, entity.getUid());
+            wrapper.ne(SysUser.UID, entity.getUid());
         }
 
         if (selectCount(wrapper) > 0) {
@@ -225,7 +234,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUsers> {
         }
     }
 
-    private String generatePwdAndSendMail(SysUsers entity, Action action) {
+    private String generatePwdAndSendMail(SysUser entity, Action action) {
         String msg = null;
         String pwd = RandomStringUtils.randomAlphanumeric(DEFAULT_PASSWORD_LENGTH);
 

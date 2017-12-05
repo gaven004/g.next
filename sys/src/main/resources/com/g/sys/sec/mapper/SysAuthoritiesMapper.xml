@@ -7,7 +7,7 @@
     <!-- <cache /> -->
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.g.sys.sec.model.SysAuthorities">
+    <resultMap id="BaseResultMap" type="com.g.sys.sec.model.SysAuthority">
         <id column="uid" property="uid" />
         <result column="authority" property="authority" />
     </resultMap>

@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.enums.IdType;
  * @since 2017-11-28
  */
 @TableName("sys_users")
-public class SysUsers implements Serializable {
+public class SysUser implements Serializable {
     private static final long serialVersionUID = -6511918582479158479L;
 
     @TableId(value = "uid", type = IdType.INPUT)
@@ -61,7 +61,7 @@ public class SysUsers implements Serializable {
         return uid;
     }
 
-    public SysUsers setUid(String uid) {
+    public SysUser setUid(String uid) {
         this.uid = uid;
         return this;
     }
@@ -70,7 +70,7 @@ public class SysUsers implements Serializable {
         return account;
     }
 
-    public SysUsers setAccount(String account) {
+    public SysUser setAccount(String account) {
         this.account = account;
         return this;
     }
@@ -79,7 +79,7 @@ public class SysUsers implements Serializable {
         return username;
     }
 
-    public SysUsers setUsername(String username) {
+    public SysUser setUsername(String username) {
         this.username = username;
         return this;
     }
@@ -88,7 +88,7 @@ public class SysUsers implements Serializable {
         return password;
     }
 
-    public SysUsers setPassword(String password) {
+    public SysUser setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -97,7 +97,7 @@ public class SysUsers implements Serializable {
         return email;
     }
 
-    public SysUsers setEmail(String email) {
+    public SysUser setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -106,7 +106,7 @@ public class SysUsers implements Serializable {
         return enabled;
     }
 
-    public SysUsers setEnabled(String enabled) {
+    public SysUser setEnabled(String enabled) {
         this.enabled = enabled;
         return this;
     }
@@ -130,7 +130,7 @@ public class SysUsers implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("SysUsers [");
+        builder.append("SysUser [");
         builder.append("uid=").append(uid).append(", ");
         builder.append("account=").append(account).append(", ");
         builder.append("username=").append(username).append(", ");
