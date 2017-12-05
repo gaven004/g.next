@@ -47,9 +47,9 @@ import com.baomidou.mybatisplus.toolkit.StringUtils;
  * BY问题 修复开启二级缓存时分页查询，翻页数据不变的问题（生成的CacheKey相同）
  */
 @Intercepts({
-        @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class,
-                RowBounds.class, ResultHandler.class }),
-        @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class }) })
+        @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class,
+                RowBounds.class, ResultHandler.class}),
+        @Signature(type = StatementHandler.class, method = "prepare", args = {Connection.class, Integer.class})})
 public class CachePaginationInterceptor extends PaginationInterceptor implements Interceptor {
 
     /* 溢出总页数，设置第一页 */
