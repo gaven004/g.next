@@ -43,10 +43,12 @@
                     <button id="btnSearch" class="btn btn-sm btn-info" type="button">
                         <i class="ace-icon glyphicon glyphicon-search"></i> 查询
                     </button>
-                    <button id="jqg_add" class="btn btn-success btn-sm" type="button" data-url="rest/sys/dict/add">
+                    <button id="jqg_add" class="btn btn-success btn-sm" type="button" data-url="rest/sys/dict/add"
+                            data-token="${_csrf.token}">
                         <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
                     </button>
-                    <button id="jqg_del" class="btn btn-sm btn-danger" type="button" data-url="rest/sys/dict/del">
+                    <button id="jqg_del" class="btn btn-sm btn-danger" type="button" data-url="rest/sys/dict/del"
+                            data-token="${_csrf.token}">
                         <i class="ace-icon glyphicon glyphicon-trash"></i> 删除
                     </button>
                     <button id="btnReset" class="btn btn-sm" type="button">
@@ -78,7 +80,7 @@
             url : "rest/sys/dict/page",
             delUrl : "rest/sys/dict/del",
             editUrl : "rest/sys/dict/edit",
-            //        token: _csrf,
+            token: "${_csrf.token}",
             colModel : [ {
                 label : '',
                 name : 'id',

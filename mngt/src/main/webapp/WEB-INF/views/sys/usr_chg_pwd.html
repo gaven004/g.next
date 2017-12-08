@@ -1,0 +1,131 @@
+[#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] /]
+[#assign spg=JspTaglibs["http://www.springframework.org/tags"] /]
+[#assign frm=JspTaglibs["http://www.springframework.org/tags/form"] /]
+[#import "/views/common/base.html" as base]
+[#import "/tags/s5.ftl" as s5 /]
+[@base.page]
+<div class="page-header">
+    <h2>
+        个人信息
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            &nbsp;&nbsp;密码修改
+        </small>
+    </h2>
+</div><!-- /.page-header -->
+
+[@s5.showMsg/]
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        [@frm.form id="frmUser" name="frmUser" action="sys/usr/save-pwd.view" method="POST" cssClass="form-horizontal"]
+        <div class="space-2"></div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="email">原密码：</label>
+            <div class="col-xs-12 col-sm-4">
+                <div class="clearfix">
+                    <input id="oldpwd" name="oldpwd" class="width-100" title="原密码" type="password" maxlength="50"/>
+                </div>
+            </div>
+            <div class="help-block col-xs-12 col-sm-reset inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="email">新密码：</label>
+            <div class="col-xs-12 col-sm-4">
+                <div class="clearfix">
+                    <input id="newpwd" name="newpwd" class="width-100" title="新密码" type="password" maxlength="50"/>
+                </div>
+            </div>
+            <div class="help-block col-xs-12 col-sm-reset inline"></div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="email">确认新密码：</label>
+            <div class="col-xs-12 col-sm-4">
+                <div class="clearfix">
+                    <input id="newpwdcnfm" name="newpwdcnfm" class="width-100" title="确认新密码" type="password"
+                           maxlength="50"/>
+                </div>
+            </div>
+            <div class="help-block col-xs-12 col-sm-reset inline"></div>
+        </div>
+        <div class="space-2"></div>
+        [@sec.csrfInput /]
+        <div class="clearfix form-actions">
+            <div class="col-md-offset-3 col-md-9">
+                <button class="btn btn-info" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    保 存
+                </button>
+                &nbsp; &nbsp; &nbsp;
+                <button class="btn" type="reset" id="btnCancel">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    取 消
+                </button>
+            </div>
+        </div>
+        [/@frm.form]
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#sidebar li.active").removeClass("active");
+        $("#breadcrumb li.active").remove();
+        $("#breadcrumb").append($("<li class='active'>个人信息</li>"));
+
+        // 取消按钮
+        $("button#btnCancel").click(function () {
+            window.location.href = "[@spring.url '/'/]";
+        });
+
+        $('form#frmUser div.form-group div.help-block').each(function (i, e) {
+            if ($.trim($(e).text()) != '') {
+                $(e).closest('.form-group').addClass('has-error');
+            }
+        });
+
+        $('form#frmUser').validate({
+            focusInvalid: true,
+            rules: {
+                oldpwd: {
+                    required: true
+                },
+                newpwd: {
+                    required: true,
+                    minlength: 6
+                },
+                newpwdcnfm: {
+                    required: true,
+                    minlength: 6,
+                    equalTo: "#newpwd"
+                }
+            },
+            messages: {
+                oldpwd: "请输入原密码",
+                newpwd: {
+                    required: "请输入新密码",
+                    minlength: "密码至少为6位"
+                },
+                newpwdcnfm: {
+                    required: "请再次输入新密码",
+                    minlength: "密码至少为6位",
+                    equalTo: "两次输入的密码必须相同"
+                }
+            },
+            highlight: function (e) {
+                $(e).closest('.form-group').addClass('has-error');
+            },
+            success: function (e) {
+                $(e).closest('.form-group').removeClass('has-error');
+                $(e).closest('.form-group').find('div.help-block').html('');
+            },
+            errorPlacement: function (error, element) {
+                var block = $(element).closest('.form-group').find('div.help-block');
+                block.html('');
+                error.appendTo(block);
+            }
+        });
+    });
+</script>
+[/@base.page]

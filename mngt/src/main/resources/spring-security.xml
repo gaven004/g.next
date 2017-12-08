@@ -3,46 +3,42 @@
        xmlns:sec="http://www.springframework.org/schema/security"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
-		http://www.springframework.org/schema/beans 
-		http://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/security 
-		http://www.springframework.org/schema/security/spring-security.xsd">
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <!-- <bean id="secUserDetailsService" class="com.hs.clam.sec.service.secUserDetailsService"/> -->
+    <bean id="secUserDetailsService" class="com.g.sys.sec.service.GUserDetailsService"/>
 
     <!-- 启用注解 -->
     <sec:global-method-security pre-post-annotations="enabled" jsr250-annotations="enabled"/>
-<!-- 
+
     <sec:authentication-manager>
         <sec:authentication-provider user-service-ref="secUserDetailsService">
             <sec:password-encoder ref="passwordEncoder"/>
         </sec:authentication-provider>
     </sec:authentication-manager>
- -->
-    <sec:http pattern="/biz_js/**" security="none"/>
-    <sec:http pattern="/css/**" security="none"/>
-    <sec:http pattern="/font/**" security="none"/>
-    <sec:http pattern="/img/**" security="none"/>
-    <sec:http pattern="/js/**" security="none"/>
-    <sec:http pattern="/plugin/**" security="none"/>
-    <sec:http pattern="/static/**" security="none"/>
+
+    <sec:http pattern="/resources/**" security="none"/>
+    <sec:http pattern="/vendors/**" security="none"/>
 
     <sec:http>
-        <sec:intercept-url pattern="/login*" access="permitAll"/>
-        <sec:intercept-url pattern="/404*" access="permitAll"/>
-        <sec:intercept-url pattern="/error*" access="permitAll"/>
-        <sec:intercept-url pattern="/rest/sec/user/reset_pwd*" access="permitAll"/>
-        <sec:intercept-url pattern="/sec/user/profile.view" access="isAuthenticated()"/>
-        <sec:intercept-url pattern="/sec/user/save_profile.view" access="isAuthenticated()"/>
-        <sec:intercept-url pattern="/sec/user/change_pwd.view" access="isAuthenticated()"/>
-        <sec:intercept-url pattern="/sec/user/save_pwd.view" access="isAuthenticated()"/>
+        <sec:intercept-url pattern="/login.view" access="permitAll"/>
+        <sec:intercept-url pattern="/403.view" access="permitAll"/>
+        <sec:intercept-url pattern="/404.view" access="permitAll"/>
+        <sec:intercept-url pattern="/error.view" access="permitAll"/>
+        <sec:intercept-url pattern="/sys/usr/reset-pwd.view" access="permitAll"/>
+        <sec:intercept-url pattern="/sys/usr/profile.view" access="isAuthenticated()"/>
+        <sec:intercept-url pattern="/sys/usr/save-profile.view" access="isAuthenticated()"/>
+        <sec:intercept-url pattern="/sys/usr/change-pwd.view" access="isAuthenticated()"/>
+        <sec:intercept-url pattern="/sys/usr/save-pwd.view" access="isAuthenticated()"/>
         <sec:intercept-url pattern="/**" access="isAuthenticated()"/>
         <sec:form-login login-page="/login.view" authentication-failure-url="/login.view?error"
-            default-target-url="/blank.view" />
-        <sec:remember-me />
+                        default-target-url="/blank.view"/>
+        <sec:remember-me/>
         <sec:logout logout-url="/logout" logout-success-url="/login.view?logout" invalidate-session="false"
-            delete-cookies="JSESSIONID" />
-        <sec:session-management invalid-session-url="/login.view?invalidSession" />
+                    delete-cookies="JSESSIONID"/>
+        <sec:session-management invalid-session-url="/login.view?invalidSession"/>
         <sec:csrf/>
     </sec:http>
 </beans>

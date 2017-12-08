@@ -1,0 +1,126 @@
+[#assign sec=JspTaglibs["http://www.springframework.org/security/tags"] /]
+[#assign spg=JspTaglibs["http://www.springframework.org/tags"] /]
+[#assign frm=JspTaglibs["http://www.springframework.org/tags/form"] /]
+[#import "/views/common/base.html" as base]
+[#import "/tags/s5.ftl" as s5 /]
+[@base.page]
+<div class="page-header">
+    <h2>
+        个人信息
+    </h2>
+</div><!-- /.page-header -->
+
+[@s5.showMsg/]
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        [@frm.form id="frmUser" name="frmUser" action="sys/usr/save-profile.view" method="POST" modelAttribute="User"
+            cssClass="form-horizontal"]
+        <div class="space-2"></div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="uid">用户ID：</label>
+            <div class="col-xs-12 col-sm-3">
+                <div class="clearfix">
+                    [@frm.input path="uid" title="用户ID" cssClass="width-100" readonly=true /]
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="account">用户账号：</label>
+            <div class="col-xs-12 col-sm-4">
+                <div class="clearfix">
+                    [@frm.input path="account" title="用户账号" cssClass="width-100" maxlength="15" readonly=true /]
+                </div>
+            </div>
+            <div class="help-block col-xs-12 col-sm-reset inline"> [@frm.errors path="account" /]</div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="username">用户名：</label>
+            <div class="col-xs-12 col-sm-4">
+                <div class="clearfix">
+                    [@frm.input path="username" title="用户名" cssClass="width-100" maxlength="50" /]
+                </div>
+            </div>
+            <div class="help-block col-xs-12 col-sm-reset inline"> [@frm.errors path="username" /]</div>
+        </div>
+        <div class="space-2"></div>
+        <div class="form-group">
+            <label class="control-label col-xs-12 col-sm-3 no-padding-right" for="email">邮箱：</label>
+            <div class="col-xs-12 col-sm-4">
+                <div class="clearfix">
+                    [@frm.input path="email" title="邮箱" cssClass="width-100" maxlength="60" /]
+                </div>
+            </div>
+            <div class="help-block col-xs-12 col-sm-reset inline"> [@frm.errors path="email" /]</div>
+        </div>
+        <div class="space-2"></div>
+        [@sec.csrfInput /]
+        <div class="clearfix form-actions">
+            <div class="col-md-offset-3 col-md-9">
+                <button class="btn btn-info" type="submit">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    保 存
+                </button>
+                &nbsp; &nbsp; &nbsp;
+                <button class="btn" type="reset" id="btnCancel">
+                    <i class="ace-icon fa fa-undo bigger-110"></i>
+                    取 消
+                </button>
+            </div>
+        </div>
+        [/@frm.form]
+        <!-- PAGE CONTENT ENDS -->
+    </div><!-- /.col -->
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#sidebar li.active").removeClass("active");
+        $("#breadcrumb li.active").remove();
+        $("#breadcrumb").append($("<li class='active'>个人信息</li>"));
+
+        // 取消按钮
+        $("button#btnCancel").click(function () {
+            window.location.href = "[@spring.url '/'/]";
+        });
+
+        $('form#frmUser div.form-group div.help-block').each(function (i, e) {
+            if ($.trim($(e).text()) != '') {
+                $(e).closest('.form-group').addClass('has-error');
+            }
+        });
+
+        $('form#frmUser').validate({
+            focusInvalid: true,
+            rules: {
+                username: {
+                    required: true
+                },
+                email: {
+                    required: true,
+                    email: true
+                }
+            },
+            messages: {
+                username: "请输入用户名",
+                email: {
+                    required: "请输入用户邮箱",
+                    email: "请输入正确的用户邮箱"
+                }
+            },
+            highlight: function (e) {
+                $(e).closest('.form-group').addClass('has-error');
+            },
+            success: function (e) {
+                $(e).closest('.form-group').removeClass('has-error');
+                $(e).closest('.form-group').find('div.help-block').html('');
+            },
+            errorPlacement: function (error, element) {
+                var block = $(element).closest('.form-group').find('div.help-block');
+                block.html('');
+                error.appendTo(block);
+            }
+        });
+    });
+</script>
+[/@base.page]

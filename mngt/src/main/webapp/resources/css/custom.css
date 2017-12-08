@@ -1,5 +1,13 @@
 @CHARSET "UTF-8";
 
+.page-header h2 {
+    padding: 0;
+    margin: 0 8px;
+    font-size: 20px;
+    font-weight: lighter;
+    color: #2679B5;
+}
+
 /*条件查询form各个控件统一大小*/
 .grid-filter form .form-fieldset {
     float: left;

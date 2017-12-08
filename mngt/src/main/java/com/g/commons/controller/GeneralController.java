@@ -1,8 +1,8 @@
 package com.g.commons.controller;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+
 import com.g.commons.db.WrapperHelper;
 import com.g.commons.model.BindingPage;
 import com.g.commons.model.RestApiResponse;
@@ -51,7 +52,7 @@ public abstract class GeneralController<S extends ServiceImpl<M, T>, M extends B
      */
     @RequestMapping("{id}")
     @ResponseBody
-    public T selectById(@PathVariable("id") Long id) {
+    public T selectById(HttpServletRequest request, @PathVariable("id") String id) {
         return service.selectById(id);
     }
 

@@ -4,10 +4,12 @@
 <p>
 <div class="row">
     <div class="col-xs-4">
-        <button id="jqg_add" class="btn btn-success btn-sm" type="button" data-url="rest/sys/dict_category/add">
+        <button id="jqg_add" class="btn btn-success btn-sm" type="button" data-url="rest/sys/dict_category/add"
+                data-token="${_csrf.token}">
             <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
         </button>
-        <button id="jqg_del" class="btn btn-sm btn-danger" type="button" data-url="rest/sys/dict_category/del">
+        <button id="jqg_del" class="btn btn-sm btn-danger" type="button" data-url="rest/sys/dict_category/del"
+                data-token="${_csrf.token}">
             <i class="ace-icon glyphicon glyphicon-trash"></i> 删除
         </button>
     </div>
@@ -22,7 +24,7 @@
             url : "rest/sys/dict_category/page",
             delUrl : "rest/sys/dict_category/del",
             editUrl : "rest/sys/dict_category/edit",
-            //        token: _csrf,
+            token: "${_csrf.token}",
             colModel : [ {
                 label : '',
                 name : 'id',
