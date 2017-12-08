@@ -3,8 +3,8 @@
 <mapper namespace="com.g.sys.dict.mapper.SysDictionaryMapper">
 
     <!-- 开启二级缓存 -->
-    <cache type="org.mybatis.caches.redis.RedisCache" />
-    <!-- <cache /> -->
+    <!--<cache type="org.mybatis.caches.redis.RedisCache" />-->
+    <cache/>
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.g.sys.dict.model.SysDictionary">

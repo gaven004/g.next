@@ -54,7 +54,6 @@ public class SysUser implements Serializable {
     private String enabled;
 
     @TableField(exist=false)
-    @NotNull(message = "用于需要设置角色")
     private Set<String> roles;
 
     public String getUid() {
