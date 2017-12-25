@@ -1,0 +1,183 @@
+[#import "/views/common/base.html" as base]
+[@base.page]
+
+<div class="widget-box grid-filter">
+    <div class="widget-header widget-header-flat">
+        <h5 class="widget-title">
+            <i class="ace-icon fa fa-search"></i> 条件查询
+        </h5>
+        <div class="widget-toolbar">
+            <a href="#" data-action="collapse">
+                <i class="ace-icon fa fa-chevron-up"></i>
+            </a>
+        </div>
+    </div>
+    <div class="widget-body" style="display: block;">
+        <div class="widget-main no-padding">
+            <form id="form" class="form-inline fix-input-size">
+                <fieldset>
+                    <div class="form-fieldset">
+                        <label>所属栏目：</label>
+                        <select name="columnId">
+                            <option value=""></option>
+                            [#if mc_columns ??][#list mc_columns as e]
+                            <option value="${e.id}">${e.cname}</option>
+                            [/#list][/#if]
+                        </select>
+                    </div>
+                    <div class="form-fieldset">
+                        <label>标题：</label>
+                        <input type="text" name="title"/>
+                    </div>
+                </fieldset>
+                <div class="form-actions">
+                    <button id="btnSearch" class="btn btn-sm btn-info" type="button">
+                        <i class="ace-icon glyphicon glyphicon-search"></i> 查询
+                    </button>
+                    <button id="jqg_add" class="btn btn-success btn-sm" type="button" data-url="rest/sys/mc_article/add"
+                            data-token="${_csrf.token}">
+                        <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
+                    </button>
+                    <button id="jqg_del" class="btn btn-sm btn-danger" type="button" data-url="rest/sys/mc_article/del"
+                            data-token="${_csrf.token}">
+                        <i class="ace-icon glyphicon glyphicon-trash"></i> 删除
+                    </button>
+                    <button id="btnReset" class="btn btn-sm" type="button">
+                        <i class="ace-icon glyphicon glyphicon-refresh"></i> 重置
+                    </button>
+                </div>
+            </form>
+        </div>
+        <!-- /.widget-main -->
+    </div>
+    <!-- /.widget-body -->
+</div>
+
+[#include "/views/common/grid-table.html"/]
+
+[#import "/views/common/udt.html" as udt]
+
+<script src="vendors/ckeditor/ckeditor.js"></script>
+
+<script type="text/javascript">
+    var columnOptionsJson = [@udt.tojson mc_columns 'id' 'cname' /];
+
+    function fmColumn(cellvalue, options, rowdata) {
+        return JsonUtil.getValue(columnOptionsJson, cellvalue);
+    }
+
+    function unfmColumn(cellvalue, options) {
+        return JsonUtil.getKey(columnOptionsJson, cellvalue);
+    }
+
+    var stateOptionsJson = [@udt.tojson states '' 'description' /];
+
+    function fmState(cellvalue, options, rowdata) {
+        return JsonUtil.getValue(stateOptionsJson, cellvalue);
+    }
+
+    function unfmState(cellvalue, options) {
+        return JsonUtil.getKey(stateOptionsJson, cellvalue);
+    }
+
+    $(function () {
+        var ckeditor;
+        $("#grid-table").grid({
+            url: "rest/sys/mc_article/page",
+            delUrl: "rest/sys/mc_article/del",
+            editUrl: "rest/sys/mc_article/edit",
+            token: "${_csrf.token}",
+            customEditOptions: {
+                top : $(window).height() / 8,
+                left : $(window).width() / 8,
+                width : $(window).width() / 8 * 6,
+            },
+            colModel: [{
+                label: '',
+                name: 'id',
+                key: true,
+                hidden: true,
+                editable: true
+            }, {
+                label: '所属栏目',
+                name: 'columnId',
+                formatter: fmColumn,
+                editable: true,
+                edittype: "select",
+                editoptions: {
+                    value: ":请选择... [#if mc_columns ??][#list mc_columns as e];${e.id}:${e.cname}[/#list][/#if]",
+                },
+                editrules: {
+                    required: true
+                }
+            }, {
+                label: '标题',
+                name: 'title',
+                editable: true,
+                editrules: {
+                    required: true
+                }
+            }, {
+                label: '文章内容',
+                name: 'body',
+                hidden: true,
+                editable: true,
+                edittype: 'textarea',
+                editoptions: {
+                    dataInit: function (element) {
+                        $(element).parent().contents().filter(function() {
+                            return this.nodeType == 3; //Node.TEXT_NODE
+                        }).remove();
+                        ckeditor = CKEDITOR.replace(element, {
+                            filebrowserUploadUrl : 'upload/mc/article.view',
+                            customConfig : 'mc.config.js'
+                        });
+                        ckeditor.on( 'change', function ( ) {
+                            $(element).val(ckeditor.getData());
+                        } );
+                    }
+                },
+                editrules: {
+                    edithidden: true,
+                    required: true
+                }
+            }, {
+                label: '修改时间',
+                name: 'mtime',
+                width: 90,
+                align: "center",
+                formatter: "date",
+                formatoptions: {masks: 'ISO8601Long'},
+                editable: false,
+            }, {
+                label: '状态',
+                name: 'state',
+                width: 60,
+                align: "center",
+                formatter: fmState,
+                editable: false,
+            },],
+        });
+        $("#btnSearch").click(function () {
+            $("#grid-table").trigger("reloadGrid");
+        });
+        $("#btnReset").click(function () {
+            $("#form")[0].reset();
+        });
+        $("#jqg_add").unbind('click');
+        $("#jqg_add").click(function() {
+            var grid = $("#grid-table");
+            var url = $(this).attr("data-url");
+            var token = $(this).attr("data-token");
+            var options = {
+                top: $(window).height() / 8,
+                left: $(window).width() / 8,
+                width: $(window).width() / 8 * 6,
+            };
+            options = $.extend(jqgEditOptions(url, token), options);
+            grid.editGridRow("new", options);
+        });
+    });
+</script>
+
+[/@base.page]
