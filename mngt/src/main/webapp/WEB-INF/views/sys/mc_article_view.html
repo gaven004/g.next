@@ -1,0 +1,16 @@
+[#import "/views/common/base.html" as base]
+[@base.page]
+[#if article ??]
+<div class="page-header">
+    <h1>
+        ${article.title}
+        <small>
+            (${article.mtime?datetime})
+        </small>
+    </h1>
+</div>
+<div>
+    <p>${article.body}</p>
+</div>
+[/#if]
+[/@base.page]

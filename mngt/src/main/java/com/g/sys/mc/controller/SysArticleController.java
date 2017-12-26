@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.baomidou.mybatisplus.mapper.Condition;
@@ -44,6 +45,16 @@ public class SysArticleController extends GeneralController<SysArticleService, S
 
     public SysArticleController() {
         super("/sys/mc_article");
+    }
+
+    /**
+     * 展示文章
+     */
+    @RequestMapping("browse")
+    public String view(@RequestParam(name = "id") String id, ModelMap modelMap) {
+        SysArticle record = service.selectById(id);
+        modelMap.addAttribute("article", record);
+        return "/sys/mc_article_view";
     }
 
     /**
