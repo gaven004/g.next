@@ -31,7 +31,7 @@
                     </div>
                     <div class="form-fieldset">
                         <label>状态：</label>
-                        <select name="state">
+                        <select name="enabled">
                             <option value=""></option>
                             [#if status ??][#list status as e]<option value="${e}">${e.description}</option>[/#list][/#if]
                         </select>
