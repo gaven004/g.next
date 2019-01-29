@@ -5,9 +5,10 @@ import java.lang.reflect.Field;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.reflection.MetaObject;
 
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.enums.IdType;
-import com.baomidou.mybatisplus.mapper.MetaObjectHandler;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 
 import com.g.commons.utils.UUIDHexGenerator;
 
@@ -18,7 +19,7 @@ import com.g.commons.utils.UUIDHexGenerator;
  * @version 2017/7/13
  * @since 1.0
  */
-public class IdFillMetaObjectHandler extends MetaObjectHandler {
+public class IdFillMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
         try {

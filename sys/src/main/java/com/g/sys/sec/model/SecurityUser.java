@@ -1,12 +1,7 @@
 package com.g.sys.sec.model;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,15 +16,13 @@ public class SecurityUser implements UserDetails, CredentialsContainer {
     private final String uid;
     private final String username; // Spring Security中，username对应S5系统中的account
     private final String nickname; // Spring Security中，nickname对应S5系统中的username
-    private String password;
     private final String email;
-
     private final Set<GrantedAuthority> authorities;
-
     private final boolean accountNonExpired;
     private final boolean accountNonLocked;
     private final boolean credentialsNonExpired;
     private final boolean enabled;
+    private String password;
 
     public SecurityUser(SysUser usr) {
         this.uid = usr.getUid();
@@ -66,6 +59,40 @@ public class SecurityUser implements UserDetails, CredentialsContainer {
         this.accountNonLocked = accountNonLocked;
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = enabled;
+    }
+
+    private static SortedSet<GrantedAuthority> buildAuthorities(
+            Collection<String> authorities) {
+        Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
+        // Ensure array iteration order is predictable (as per
+        // UserDetails.getAuthorities() contract and SEC-717)
+        SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<GrantedAuthority>(
+                new AuthorityComparator());
+
+        for (String role : authorities) {
+            Assert.notNull(role,
+                    "GrantedAuthority list cannot contain any null elements");
+            sortedAuthorities.add(new SimpleGrantedAuthority(role));
+        }
+
+        return sortedAuthorities;
+    }
+
+    private static SortedSet<GrantedAuthority> sortAuthorities(
+            Collection<? extends GrantedAuthority> authorities) {
+        Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
+        // Ensure array iteration order is predictable (as per
+        // UserDetails.getAuthorities() contract and SEC-717)
+        SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<GrantedAuthority>(
+                new AuthorityComparator());
+
+        for (GrantedAuthority grantedAuthority : authorities) {
+            Assert.notNull(grantedAuthority,
+                    "GrantedAuthority list cannot contain any null elements");
+            sortedAuthorities.add(grantedAuthority);
+        }
+
+        return sortedAuthorities;
     }
 
     public Collection<GrantedAuthority> getAuthorities() {
@@ -110,61 +137,6 @@ public class SecurityUser implements UserDetails, CredentialsContainer {
 
     public void eraseCredentials() {
         password = null;
-    }
-
-    private static SortedSet<GrantedAuthority> buildAuthorities(
-            Collection<String> authorities) {
-        Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
-        // Ensure array iteration order is predictable (as per
-        // UserDetails.getAuthorities() contract and SEC-717)
-        SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<GrantedAuthority>(
-                new AuthorityComparator());
-
-        for (String role : authorities) {
-            Assert.notNull(role,
-                    "GrantedAuthority list cannot contain any null elements");
-            sortedAuthorities.add(new SimpleGrantedAuthority(role));
-        }
-
-        return sortedAuthorities;
-    }
-
-    private static SortedSet<GrantedAuthority> sortAuthorities(
-            Collection<? extends GrantedAuthority> authorities) {
-        Assert.notNull(authorities, "Cannot pass a null GrantedAuthority collection");
-        // Ensure array iteration order is predictable (as per
-        // UserDetails.getAuthorities() contract and SEC-717)
-        SortedSet<GrantedAuthority> sortedAuthorities = new TreeSet<GrantedAuthority>(
-                new AuthorityComparator());
-
-        for (GrantedAuthority grantedAuthority : authorities) {
-            Assert.notNull(grantedAuthority,
-                    "GrantedAuthority list cannot contain any null elements");
-            sortedAuthorities.add(grantedAuthority);
-        }
-
-        return sortedAuthorities;
-    }
-
-    private static class AuthorityComparator implements Comparator<GrantedAuthority>,
-            Serializable {
-        private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
-
-        public int compare(GrantedAuthority g1, GrantedAuthority g2) {
-            // Neither should ever be null as each entry is checked before adding it to
-            // the set.
-            // If the authority is null, it is a custom authority and should precede
-            // others.
-            if (g2.getAuthority() == null) {
-                return -1;
-            }
-
-            if (g1.getAuthority() == null) {
-                return 1;
-            }
-
-            return g1.getAuthority().compareTo(g2.getAuthority());
-        }
     }
 
     /**
@@ -221,5 +193,26 @@ public class SecurityUser implements UserDetails, CredentialsContainer {
         }
 
         return sb.toString();
+    }
+
+    private static class AuthorityComparator implements Comparator<GrantedAuthority>,
+            Serializable {
+        private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
+
+        public int compare(GrantedAuthority g1, GrantedAuthority g2) {
+            // Neither should ever be null as each entry is checked before adding it to
+            // the set.
+            // If the authority is null, it is a custom authority and should precede
+            // others.
+            if (g2.getAuthority() == null) {
+                return -1;
+            }
+
+            if (g1.getAuthority() == null) {
+                return 1;
+            }
+
+            return g1.getAuthority().compareTo(g2.getAuthority());
+        }
     }
 }

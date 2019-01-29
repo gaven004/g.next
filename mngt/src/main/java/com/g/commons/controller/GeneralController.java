@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.g.commons.db.WrapperHelper;
 import com.g.commons.model.BindingPage;
@@ -53,7 +53,7 @@ public abstract class GeneralController<S extends ServiceImpl<M, T>, M extends B
     @RequestMapping("{id}")
     @ResponseBody
     public T selectById(HttpServletRequest request, @PathVariable("id") String id) {
-        return service.selectById(id);
+        return service.getById(id);
     }
 
     /**
@@ -62,7 +62,7 @@ public abstract class GeneralController<S extends ServiceImpl<M, T>, M extends B
     @RequestMapping("list")
     @ResponseBody
     public List<T> selectList(T param) {
-        return service.selectList(buildWrapper(param));
+        return service.list(buildWrapper(param));
     }
 
     /**
@@ -70,8 +70,8 @@ public abstract class GeneralController<S extends ServiceImpl<M, T>, M extends B
      */
     @RequestMapping("page")
     @ResponseBody
-    public Page<T> page(BindingPage<T> page, T param) {
-        return service.selectPage(page, buildWrapper(param));
+    public IPage<T> page(BindingPage<T> page, T param) {
+        return service.page(page, buildWrapper(param));
     }
 
     /**
@@ -80,7 +80,7 @@ public abstract class GeneralController<S extends ServiceImpl<M, T>, M extends B
     @RequestMapping("add")
     @ResponseBody
     public RestApiResponse<?> insert(T record) {
-        return RestApiResponse.create(service.insert(record));
+        return RestApiResponse.create(service.save(record));
     }
 
     /**
@@ -98,10 +98,10 @@ public abstract class GeneralController<S extends ServiceImpl<M, T>, M extends B
     @RequestMapping("del")
     @ResponseBody
     public RestApiResponse<?> deleteById(String[] id) {
-        return RestApiResponse.create(service.deleteBatchIds(Arrays.asList(id)));
+        return RestApiResponse.create(service.removeByIds(Arrays.asList(id)));
     }
 
-    protected EntityWrapper<T> buildWrapper(T param) {
+    protected QueryWrapper<T> buildWrapper(T param) {
         return WrapperHelper.buildWrapper(param);
     }
 }

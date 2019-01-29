@@ -1,18 +1,21 @@
 package com.g.commons.model;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.toolkit.StringUtils;
+
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
- * 分页参数 增加jqgrid传入的排序字段 增加排序字段驼峰形式自动转成下划线形式
+ * r
+ * jqgrid分页参数 增加jqgrid传入的排序字段 增加排序字段驼峰形式自动转成下划线形式
+ * jqgrid只支持单字段排序，而MP从3.0开始，支持多字段排序，V1.1做适应性修改
  *
- * @author zhongsh
- * @version 2017/7/18
- * @since 1.0
+ * @version 1.1 2019/1/18, By Gaven
  */
 public class BindingPage<T> extends Page<T> {
     private static final long serialVersionUID = -918312364976356742L;
 
+    private String sidx;
+    private String sord;
     private boolean convertOrderBy = true;
 
     /**
@@ -21,23 +24,27 @@ public class BindingPage<T> extends Page<T> {
      * @param sidx
      */
     public void setSidx(String sidx) {
-        setOrderByField(sidx);
+        this.sidx = convertOrderBy ? StringUtils.camelToUnderline(sidx) : (StringUtils.isEmpty(sidx) ? "" : sidx);
+        setOrderByField();
     }
 
     /**
      * jqgrid设置排序方式
      *
-     * @param sord
-     *            asc、desc
+     * @param sord asc、desc
      */
     public void setSord(String sord) {
-        if (StringUtils.isEmpty(sord)) {
-            return;
-        }
-        if ("ASC".equalsIgnoreCase(sord)) {
-            setAsc(true);
+        this.sord = sord;
+        setOrderByField();
+    }
+
+    private void setOrderByField() {
+        if (StringUtils.isEmpty(sord) || "ASC".equalsIgnoreCase(sord)) {
+            setAsc(sidx);
+            setDesc(null);
         } else {
-            setAsc(false);
+            setDesc(sidx);
+            setAsc(null);
         }
     }
 
@@ -50,9 +57,15 @@ public class BindingPage<T> extends Page<T> {
         this.convertOrderBy = convertOrderBy;
     }
 
-    @Override
     public String getOrderByField() {
-        String orderByField = super.getOrderByField();
+        String orderByField = "";
+
+        if (ascs() != null && ascs().length > 0 && !StringUtils.isEmpty(ascs()[0])) {
+            orderByField = ascs()[0];
+        } else if (descs() != null && descs().length > 0 && !StringUtils.isEmpty(descs()[0])) {
+            orderByField = descs()[0];
+        }
+
         if (convertOrderBy) {
             return StringUtils.camelToUnderline(orderByField);
         }

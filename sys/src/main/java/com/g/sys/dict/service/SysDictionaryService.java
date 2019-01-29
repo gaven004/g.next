@@ -2,7 +2,7 @@ package com.g.sys.dict.service;
 
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.g.sys.dict.mapper.SysDictionaryMapper;
 import com.g.sys.dict.model.SysDictionary;
@@ -17,5 +17,5 @@ import com.g.sys.dict.model.SysDictionary;
  */
 @Service
 public class SysDictionaryService extends ServiceImpl<SysDictionaryMapper, SysDictionary> {
-	
+
 }

@@ -4,14 +4,14 @@ import static org.springframework.ui.freemarker.FreeMarkerTemplateUtils.processT
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,13 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
-
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 
 import com.g.commons.mail.MailSender;
 import com.g.sys.sec.exception.DuplicateEmailException;
@@ -38,7 +37,7 @@ import com.g.sys.sec.model.SysUser;
 /**
  * <p>
  * 服务实现类
- *
+ * <p>
  * 对于权限，使用另一个SERVICE操作，适用于有缓存的方式
  * </p>
  *
@@ -47,10 +46,7 @@ import com.g.sys.sec.model.SysUser;
  */
 @Service
 public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
-    private enum Action {
-        NEW, RESET;
-    }
-
+    public static final int DEFAULT_PASSWORD_LENGTH = 8;
     private static final Logger logger = LoggerFactory.getLogger(SysUsersService.class);
 
     private static final String REGISTER_MAIL_TEMPLATE = "com/g/sys/sec/template/reg.html";
@@ -58,26 +54,20 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
 
     private static final String REGISTER_MAIL_SUBJECT = "新用户注册";
     private static final String RESET_PASSWORD_MAIL_SUBJECT = "密码重置";
-
-    public static final int DEFAULT_PASSWORD_LENGTH = 8;
-
     @Autowired
     private SysAuthoritiesService sysAuthoritiesService;
-
     @Autowired
     @Qualifier("passwordEncoder")
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private Configuration freemarkerConfiguration;
-
     @Autowired
     @Qualifier("usrMailSender")
     private MailSender mailSender;
 
     @Override
-    public SysUser selectById(Serializable id) {
-        SysUser user = super.selectById(id);
+    public SysUser getById(Serializable id) {
+        SysUser user = super.getById(id);
         if (user != null) {
             user.setRoles(sysAuthoritiesService.getAuthorities((String) id));
         }
@@ -85,8 +75,8 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Override
-    public SysUser selectOne(Wrapper<SysUser> wrapper) {
-        SysUser user = super.selectOne(wrapper);
+    public SysUser getOne(Wrapper<SysUser> wrapper) {
+        SysUser user = super.getOne(wrapper);
         if (user != null) {
             user.setRoles(sysAuthoritiesService.getAuthorities(user.getUid()));
         }
@@ -94,8 +84,8 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Override
-    public List<SysUser> selectList(Wrapper<SysUser> wrapper) {
-        List<SysUser> list = super.selectList(wrapper);
+    public List<SysUser> list(Wrapper<SysUser> wrapper) {
+        List<SysUser> list = super.list(wrapper);
         if (list != null && !list.isEmpty()) {
             for (SysUser user : list) {
                 user.setRoles(sysAuthoritiesService.getAuthorities(user.getUid()));
@@ -105,8 +95,8 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Override
-    public Page<SysUser> selectPage(Page<SysUser> page, Wrapper<SysUser> wrapper) {
-        page = super.selectPage(page, wrapper);
+    public IPage<SysUser> page(IPage<SysUser> page, Wrapper<SysUser> wrapper) {
+        page = super.page(page, wrapper);
         if (page.getRecords() != null && !page.getRecords().isEmpty()) {
             for (SysUser user : page.getRecords()) {
                 user.setRoles(sysAuthoritiesService.getAuthorities(user.getUid()));
@@ -117,7 +107,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean insert(SysUser entity) {
+    public boolean save(SysUser entity) {
         checkAccount(entity);
         checkEmail(entity);
 
@@ -151,7 +141,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean deleteBatchIds(List<? extends Serializable> idList) {
+    public boolean removeByIds(Collection<? extends Serializable> idList) {
         for (Serializable uid : idList) {
             sysAuthoritiesService.deleteAuthorities((String) uid);
         }
@@ -162,7 +152,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
      * 检查重复账号
      */
     private void checkAccount(SysUser entity) throws DuplicateUserAccountException {
-        Wrapper<SysUser> wrapper = new EntityWrapper<>();
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
 
         // 新增用户，用户账号不能与库中的记录重复
         wrapper.eq(SysUser.ACCOUNT, entity.getAccount());
@@ -172,7 +162,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
             wrapper.ne(SysUser.UID, entity.getUid());
         }
 
-        if (selectCount(wrapper) > 0) {
+        if (count(wrapper) > 0) {
             throw new DuplicateUserAccountException();
         }
     }
@@ -180,7 +170,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     @Transactional(rollbackFor = Exception.class)
     public boolean changePassword(String uid, String oldpwd, String newpwd)
             throws UserNotFoundException, PasswordMismatchException {
-        SysUser record = selectById(uid);
+        SysUser record = getById(uid);
         if (record == null) {
             throw new UserNotFoundException();
         }
@@ -197,10 +187,10 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
 
     @Transactional(rollbackFor = Exception.class)
     public boolean resetPassword(String email) throws UserNotFoundException {
-        Wrapper<SysUser> wrapper = new EntityWrapper<>();
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.eq(SysUser.EMAIL, email);
 
-        List<SysUser> list = selectList(wrapper);
+        List<SysUser> list = list(wrapper);
         if (list == null || list.isEmpty()) {
             throw new UserNotFoundException();
         }
@@ -219,7 +209,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
      * 检查重复邮箱
      */
     private void checkEmail(SysUser entity) throws DuplicateEmailException {
-        Wrapper<SysUser> wrapper = new EntityWrapper<>();
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
 
         // 新增用户，用户邮箱不能与库中的记录重复
         wrapper.eq(SysUser.EMAIL, entity.getEmail());
@@ -229,7 +219,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
             wrapper.ne(SysUser.UID, entity.getUid());
         }
 
-        if (selectCount(wrapper) > 0) {
+        if (count(wrapper) > 0) {
             throw new DuplicateEmailException();
         }
     }
@@ -244,33 +234,31 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
         model.put("password", pwd);
 
         switch (action) {
-        case NEW:
-            model.put("email", entity.getEmail());
-            try {
-                msg = composeHtml(REGISTER_MAIL_TEMPLATE, model);
-                mailSender.sendHTMLMailAsync(entity.getEmail(), REGISTER_MAIL_SUBJECT, msg);
-            } catch (IOException e) {
-                logger.warn("发送注册邮件时系统异常", e);
-            } catch (TemplateException e) {
-                logger.warn("发送注册邮件时系统异常", e);
-            }
-            break;
-        case RESET:
-            try {
-                msg = composeHtml(RESET_PASSWORD_MAIL_TEMPLATE, model);
-                mailSender.sendHTMLMailAsync(entity.getEmail(), RESET_PASSWORD_MAIL_SUBJECT, msg);
-            } catch (IOException e) {
-                logger.warn("发送注册邮件时系统异常", e);
-            } catch (TemplateException e) {
-                logger.warn("发送注册邮件时系统异常", e);
-            }
-            break;
+            case NEW:
+                model.put("email", entity.getEmail());
+                sendMail(entity, model, REGISTER_MAIL_TEMPLATE, REGISTER_MAIL_SUBJECT);
+                break;
+            case RESET:
+                sendMail(entity, model, RESET_PASSWORD_MAIL_TEMPLATE, RESET_PASSWORD_MAIL_SUBJECT);
+                break;
         }
 
         return pwd;
     }
 
-    private String composeHtml(String template, Map<String, Object> model) throws IOException, TemplateException {
-        return processTemplateIntoString(freemarkerConfiguration.getTemplate(template), model);
+    private void sendMail(SysUser entity, Map<String, Object> model, String template, String subject) {
+        String msg;
+        try {
+            msg = processTemplateIntoString(freemarkerConfiguration.getTemplate(template), model);
+            mailSender.sendHTMLMailAsync(entity.getEmail(), subject, msg);
+        } catch (IOException e) {
+            logger.warn("发送注册邮件时系统异常", e);
+        } catch (TemplateException e) {
+            logger.warn("发送注册邮件时系统异常", e);
+        }
+    }
+
+    private enum Action {
+        NEW, RESET
     }
 }

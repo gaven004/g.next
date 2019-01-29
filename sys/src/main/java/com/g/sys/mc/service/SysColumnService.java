@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.g.sys.mc.exception.InvalidParentException;
 import com.g.sys.mc.mapper.SysColumnMapper;
@@ -25,9 +25,9 @@ import com.g.sys.mc.model.SysColumn;
 public class SysColumnService extends ServiceImpl<SysColumnMapper, SysColumn> {
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean insert(SysColumn entity) {
+    public boolean save(SysColumn entity) {
         checkParent(entity);
-        return super.insert(entity);
+        return super.save(entity);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -51,7 +51,7 @@ public class SysColumnService extends ServiceImpl<SysColumnMapper, SysColumn> {
         Set<String> family = new HashSet<String>();
         family.add(parentId);
 
-        SysColumn parent = selectById(parentId);
+        SysColumn parent = getById(parentId);
         while (parent != null) {
             parentId = parent.getParentId();
             if (parentId == null) {
@@ -62,7 +62,7 @@ public class SysColumnService extends ServiceImpl<SysColumnMapper, SysColumn> {
                 throw new InvalidParentException();
             }
 
-            parent = selectById(parentId);
+            parent = getById(parentId);
             if (parent == null) {
                 throw new InvalidParentException();
             }

@@ -2,10 +2,10 @@ package com.g.sys.dict.model;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
@@ -18,8 +18,19 @@ import com.baomidou.mybatisplus.enums.IdType;
 @TableName("sys_dictionary")
 public class SysDictionary implements Serializable {
 
+    public static final String ID = "id";
+    public static final String CATEGORY_ID = "category_id";
+    public static final String CATEGORY = "category";
+    public static final String CODE = "code";
+    public static final String NAME = "name";
+    public static final String PROPERTY_1 = "property_1";
+    public static final String PROPERTY_2 = "property_2";
+    public static final String PROPERTY_3 = "property_3";
+    public static final String PROPERTY_4 = "property_4";
+    public static final String STATE = "state";
+    public static final String SORT_ORDER = "sort_order";
+    public static final String NOTE = "note";
     private static final long serialVersionUID = 1L;
-
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
@@ -181,34 +192,21 @@ public class SysDictionary implements Serializable {
         return this;
     }
 
-    public static final String ID = "id";
-    public static final String CATEGORY_ID = "category_id";
-    public static final String CATEGORY = "category";
-    public static final String CODE = "code";
-    public static final String NAME = "name";
-    public static final String PROPERTY_1 = "property_1";
-    public static final String PROPERTY_2 = "property_2";
-    public static final String PROPERTY_3 = "property_3";
-    public static final String PROPERTY_4 = "property_4";
-    public static final String STATE = "state";
-    public static final String SORT_ORDER = "sort_order";
-    public static final String NOTE = "note";
-
     @Override
     public String toString() {
         return "SysDictionary{" +
-            "id=" + id +
-            ", categoryId=" + categoryId +
-            ", category=" + category +
-            ", code=" + code +
-            ", name=" + name +
-            ", property1=" + property1 +
-            ", property2=" + property2 +
-            ", property3=" + property3 +
-            ", property4=" + property4 +
-            ", state=" + state +
-            ", sortOrder=" + sortOrder +
-            ", note=" + note +
-            "}";
+                "id=" + id +
+                ", categoryId=" + categoryId +
+                ", category=" + category +
+                ", code=" + code +
+                ", name=" + name +
+                ", property1=" + property1 +
+                ", property2=" + property2 +
+                ", property3=" + property3 +
+                ", property4=" + property4 +
+                ", state=" + state +
+                ", sortOrder=" + sortOrder +
+                ", note=" + note +
+                "}";
     }
 }

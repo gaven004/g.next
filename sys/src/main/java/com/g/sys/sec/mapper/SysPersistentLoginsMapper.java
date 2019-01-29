@@ -1,12 +1,14 @@
 package com.g.sys.sec.mapper;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.g.sys.sec.model.SysPersistentLogin;
 import org.apache.ibatis.annotations.CacheNamespaceRef;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import com.g.sys.sec.model.SysPersistentLogin;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author Gaven

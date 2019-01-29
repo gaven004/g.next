@@ -26,8 +26,8 @@
         <slf4j.version>1.7.25</slf4j.version>
         <logback.version>1.2.3</logback.version>
         <mysql-connector.version>5.1.42</mysql-connector.version>
-        <druid.version>1.1.0</druid.version>
-        <mybatis-plus.version>2.1.6</mybatis-plus.version>
+        <druid.version>1.1.12</druid.version>
+        <mybatis-plus.version>3.0.7.1</mybatis-plus.version>
         <jedis.version>2.8.0</jedis.version>
         <mybatis-redis>1.0.0-beta2</mybatis-redis>
         <javax.validation.version>1.1.0.Final</javax.validation.version>
@@ -42,6 +42,7 @@
         <commons-text.version>1.1</commons-text.version>
         <commons-beanutils.version>1.9.3</commons-beanutils.version>
         <commons-io.version>2.4</commons-io.version>
+        <lombok.version>1.18.4</lombok.version>
 		<httpclient.version>4.5.3</httpclient.version>
         <junit.version>4.12</junit.version>
     </properties>
@@ -254,6 +255,11 @@
 			<artifactId>org.apache.commons.io</artifactId>
 			<version>${commons-io.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

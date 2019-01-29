@@ -2,13 +2,13 @@ package com.g.sys.dict.mapper;
 
 import org.apache.ibatis.annotations.CacheNamespaceRef;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import com.g.sys.dict.model.SysDictCategory;
 
 /**
  * <p>
-  * 系统字典类型表 Mapper 接口
+ * 系统字典类型表 Mapper 接口
  * </p>
  *
  * @author Alfred Huang

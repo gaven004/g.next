@@ -2,7 +2,7 @@ package com.g.sys.dict.mapper;
 
 import org.apache.ibatis.annotations.CacheNamespaceRef;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import com.g.sys.dict.model.SysDictionary;
 

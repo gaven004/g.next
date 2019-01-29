@@ -9,8 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import com.g.sys.sec.model.SecurityUser;
 import com.g.sys.sec.model.SysPersistentLogin;
@@ -33,7 +32,7 @@ public class GPersistentTokenRepository implements PersistentTokenRepository {
         record.setUid(user.getUid());
         record.setToken(token.getTokenValue());
         record.setLastUsed(token.getDate());
-        sysPersistentLoginsService.insert(record);
+        sysPersistentLoginsService.save(record);
     }
 
     @Override
@@ -47,7 +46,7 @@ public class GPersistentTokenRepository implements PersistentTokenRepository {
 
     @Override
     public PersistentRememberMeToken getTokenForSeries(String seriesId) {
-        SysPersistentLogin persistent = sysPersistentLoginsService.selectById(seriesId);
+        SysPersistentLogin persistent = sysPersistentLoginsService.getById(seriesId);
 
         if (persistent == null) {
             if (logger.isDebugEnabled()) {
@@ -57,7 +56,7 @@ public class GPersistentTokenRepository implements PersistentTokenRepository {
             return null;
         }
 
-        SysUser user = sysUsersService.selectById(persistent.getUid());
+        SysUser user = sysUsersService.getById(persistent.getUid());
         if (user == null) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Querying token for uid '" + persistent.getUid() + "' returned no results.");
@@ -72,17 +71,17 @@ public class GPersistentTokenRepository implements PersistentTokenRepository {
 
     @Override
     public void removeUserTokens(String username) {
-        Wrapper wrapper = new EntityWrapper<SysUser>();
+        QueryWrapper wrapper = new QueryWrapper<SysUser>();
         wrapper.eq(SysUser.ACCOUNT, username);
 
-        SysUser user = sysUsersService.selectOne(wrapper);
+        SysUser user = sysUsersService.getOne(wrapper);
         if (user == null) {
             return;
         }
 
-        wrapper = new EntityWrapper<SysPersistentLogin>();
+        wrapper = new QueryWrapper<SysPersistentLogin>();
         wrapper.eq(SysPersistentLogin.UID, user.getUid());
 
-        sysPersistentLoginsService.delete(wrapper);
+        sysPersistentLoginsService.remove(wrapper);
     }
 }

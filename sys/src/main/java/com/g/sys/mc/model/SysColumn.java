@@ -2,10 +2,10 @@ package com.g.sys.mc.model;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
@@ -17,6 +17,11 @@ import com.baomidou.mybatisplus.enums.IdType;
  */
 @TableName("sys_column")
 public class SysColumn implements Serializable {
+    public static final String ID = "id";
+    public static final String CNAME = "cname";
+    public static final String CURL = "curl";
+    public static final String PARENT_ID = "parent_id";
+    public static final String STATE = "state";
     private static final long serialVersionUID = 7903918815117523629L;
     /**
      * 栏目ID
@@ -85,12 +90,6 @@ public class SysColumn implements Serializable {
         this.state = state;
         return this;
     }
-
-    public static final String ID = "id";
-    public static final String CNAME = "cname";
-    public static final String CURL = "curl";
-    public static final String PARENT_ID = "parent_id";
-    public static final String STATE = "state";
 
     @Override
     public String toString() {

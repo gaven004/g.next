@@ -1,8 +1,10 @@
 package com.g.sys.mc.mapper;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.g.sys.mc.model.SysArticle;
 import org.apache.ibatis.annotations.CacheNamespaceRef;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import com.g.sys.mc.model.SysArticle;
 
 /**
  * <p>

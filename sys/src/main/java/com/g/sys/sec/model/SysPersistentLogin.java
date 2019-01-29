@@ -1,11 +1,12 @@
 package com.g.sys.sec.model;
 
-import java.util.Date;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.enums.IdType;
+import java.util.Date;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
@@ -17,8 +18,11 @@ import com.baomidou.mybatisplus.enums.IdType;
  */
 @TableName("sys_persistent_logins")
 public class SysPersistentLogin implements Serializable {
+    public static final String UID = "uid";
+    public static final String SERIES = "series";
+    public static final String TOKEN = "token";
+    public static final String LAST_USED = "last_used";
     private static final long serialVersionUID = -5029482496694740738L;
-
     private String uid;
     @TableId(value = "series", type = IdType.INPUT)
     private String series;
@@ -61,11 +65,6 @@ public class SysPersistentLogin implements Serializable {
         this.lastUsed = lastUsed;
         return this;
     }
-
-    public static final String UID = "uid";
-    public static final String SERIES = "series";
-    public static final String TOKEN = "token";
-    public static final String LAST_USED = "last_used";
 
     @Override
     public String toString() {

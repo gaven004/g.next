@@ -3,10 +3,10 @@ package com.g.sys.mc.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
@@ -18,6 +18,17 @@ import com.baomidou.mybatisplus.enums.IdType;
  */
 @TableName("sys_article")
 public class SysArticle implements Serializable {
+    public static final String ID = "id";
+    public static final String COLUMN_ID = "column_id";
+    public static final String TITLE = "title";
+    public static final String BODY = "body";
+    public static final String REDIRECTURL = "redirecturl";
+    public static final String CREATE_BY = "create_by";
+    public static final String CTIME = "ctime";
+    public static final String UPDATE_BY = "update_by";
+    public static final String MTIME = "mtime";
+    public static final String SORT_ORDER = "sort_order";
+    public static final String STATE = "state";
     private static final long serialVersionUID = 67686678462169102L;
     /**
      * 主键id
@@ -167,18 +178,6 @@ public class SysArticle implements Serializable {
         this.state = state;
         return this;
     }
-
-    public static final String ID = "id";
-    public static final String COLUMN_ID = "column_id";
-    public static final String TITLE = "title";
-    public static final String BODY = "body";
-    public static final String REDIRECTURL = "redirecturl";
-    public static final String CREATE_BY = "create_by";
-    public static final String CTIME = "ctime";
-    public static final String UPDATE_BY = "update_by";
-    public static final String MTIME = "mtime";
-    public static final String SORT_ORDER = "sort_order";
-    public static final String STATE = "state";
 
     @Override
     public String toString() {

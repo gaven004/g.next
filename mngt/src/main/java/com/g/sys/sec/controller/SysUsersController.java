@@ -1,13 +1,18 @@
 package com.g.sys.sec.controller;
 
 import java.util.EnumSet;
+import javax.validation.Valid;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.g.commons.controller.ControllerHelper;
 import com.g.commons.controller.GeneralController;
@@ -21,21 +26,6 @@ import com.g.sys.sec.model.Role;
 import com.g.sys.sec.model.SecurityUser;
 import com.g.sys.sec.model.SysUser;
 import com.g.sys.sec.service.SysUsersService;
-
-import java.util.Set;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * <p>
@@ -75,7 +65,7 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
 
         if (su != null) {
             try {
-                user = service.selectById(su.getUid());
+                user = service.getById(su.getUid());
             } catch (Exception e) {
                 ControllerHelper.setErrorMsg(model, "系统操作异常！", e);
             }

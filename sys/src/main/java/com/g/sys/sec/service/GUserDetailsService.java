@@ -9,8 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import com.g.sys.sec.model.SecurityUser;
 import com.g.sys.sec.model.SysUser;
@@ -32,10 +31,10 @@ public class GUserDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Wrapper wrapper = new EntityWrapper<SysUser>();
+        QueryWrapper wrapper = new QueryWrapper<SysUser>();
         wrapper.eq(SysUser.ACCOUNT, username);
 
-        SysUser user = sysUsersService.selectOne(wrapper);
+        SysUser user = sysUsersService.getOne(wrapper);
         if (user == null) {
             logger.debug("Query returned no results for user '" + username + "'");
 

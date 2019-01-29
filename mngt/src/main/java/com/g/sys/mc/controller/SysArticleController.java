@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.baomidou.mybatisplus.mapper.Condition;
-
 import com.g.commons.controller.GeneralController;
 import com.g.commons.model.RestApiResponse;
 import com.g.sys.mc.mapper.SysArticleMapper;
@@ -52,7 +50,7 @@ public class SysArticleController extends GeneralController<SysArticleService, S
      */
     @RequestMapping("browse")
     public String view(@RequestParam(name = "id") String id, ModelMap modelMap) {
-        SysArticle record = service.selectById(id);
+        SysArticle record = service.getById(id);
         modelMap.addAttribute("article", record);
         return "/sys/mc_article_view";
     }
@@ -64,7 +62,7 @@ public class SysArticleController extends GeneralController<SysArticleService, S
     @ResponseBody
     public RestApiResponse<?> insert(SysArticle record) {
         setUser(record, Action.NEW);
-        return RestApiResponse.create(service.insert(record));
+        return RestApiResponse.create(service.save(record));
     }
 
     /**
@@ -81,8 +79,7 @@ public class SysArticleController extends GeneralController<SysArticleService, S
     public void addAttribute(ModelMap modelMap) {
         EnumSet<ArticleState> states = EnumSet.allOf(ArticleState.class);
         modelMap.addAttribute("states", states);
-        @SuppressWarnings("unchecked")
-        List<SysColumn> columns = sysColumnService.selectList(Condition.EMPTY);
+        List<SysColumn> columns = sysColumnService.list();
         modelMap.addAttribute("mc_columns", columns);
     }
 

@@ -2,9 +2,9 @@ package com.g.sys.dict.model;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
@@ -17,8 +17,12 @@ import com.baomidou.mybatisplus.enums.IdType;
 @TableName("sys_dict_category")
 public class SysDictCategory implements Serializable {
 
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String CODE = "code";
+    public static final String REMARK = "remark";
+    public static final String STATE = "state";
     private static final long serialVersionUID = 1L;
-
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
@@ -83,20 +87,14 @@ public class SysDictCategory implements Serializable {
         return this;
     }
 
-    public static final String ID = "id";
-    public static final String NAME = "name";
-    public static final String CODE = "code";
-    public static final String REMARK = "remark";
-    public static final String STATE = "state";
-
     @Override
     public String toString() {
         return "SysDictCategory{" +
-            "id=" + id +
-            ", name=" + name +
-            ", code=" + code +
-            ", remark=" + remark +
-            ", state=" + state +
-            "}";
+                "id=" + id +
+                ", name=" + name +
+                ", code=" + code +
+                ", remark=" + remark +
+                ", state=" + state +
+                "}";
     }
 }

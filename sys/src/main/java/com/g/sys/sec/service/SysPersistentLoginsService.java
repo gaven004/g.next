@@ -1,13 +1,15 @@
 package com.g.sys.sec.service;
 
-import com.g.sys.sec.model.SysPersistentLogin;
-import com.g.sys.sec.mapper.SysPersistentLoginsMapper;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+
+import com.g.sys.sec.mapper.SysPersistentLoginsMapper;
+import com.g.sys.sec.model.SysPersistentLogin;
 
 /**
  * <p>
- *  服务实现类
+ * 服务实现类
  * </p>
  *
  * @author Gaven

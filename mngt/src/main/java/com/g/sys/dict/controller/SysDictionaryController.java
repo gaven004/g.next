@@ -9,7 +9,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.baomidou.mybatisplus.mapper.Condition;
 import com.g.commons.controller.GeneralController;
 import com.g.commons.enums.Status;
 import com.g.sys.dict.mapper.SysDictionaryMapper;
@@ -24,8 +23,8 @@ import com.g.sys.dict.service.SysDictionaryService;
  * </p>
  *
  * @author Alfred Huang
- * @since 1.0
  * @version 2017-07-18
+ * @since 1.0
  */
 @Controller
 @RequestMapping("/sys/dict")
@@ -50,8 +49,7 @@ public class SysDictionaryController
 
     @Override
     public void addAttribute(ModelMap modelMap) {
-        @SuppressWarnings("unchecked")
-        List<SysDictCategory> dictCategorys = sysDictCategoryService.selectList(Condition.EMPTY);
+        List<SysDictCategory> dictCategorys = sysDictCategoryService.list();
         modelMap.addAttribute("dict_category", dictCategorys);
         EnumSet<Status> status = EnumSet.allOf(Status.class);
         modelMap.addAttribute("status", status);

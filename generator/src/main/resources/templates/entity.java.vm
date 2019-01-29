@@ -9,13 +9,11 @@ import ${pkg};
 #end
 #if(${entityLombokModel})
 
-import com.baomidou.mybatisplus.annotations.Version;
+import com.baomidou.mybatisplus.annotation.Version;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 #end
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.enums.IdType;
 
 /**
  * <p>

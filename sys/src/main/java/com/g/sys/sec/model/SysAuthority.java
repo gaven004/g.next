@@ -2,8 +2,8 @@ package com.g.sys.sec.model;
 
 import java.io.Serializable;
 
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 
 /**
  * <p>
@@ -15,6 +15,8 @@ import com.baomidou.mybatisplus.annotations.TableName;
  */
 @TableName("sys_authorities")
 public class SysAuthority implements Serializable {
+    public static final String UID = "uid";
+    public static final String AUTHORITY = "authority";
     private static final long serialVersionUID = -8974936343023751543L;
     @TableId
     private String uid;
@@ -38,9 +40,6 @@ public class SysAuthority implements Serializable {
         this.authority = authority;
         return this;
     }
-
-    public static final String UID = "uid";
-    public static final String AUTHORITY = "authority";
 
     @Override
     public String toString() {

@@ -2,7 +2,7 @@ package com.g.sys.mc.service;
 
 import org.springframework.stereotype.Service;
 
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import com.g.sys.mc.mapper.SysArticleMapper;
 import com.g.sys.mc.model.SysArticle;
