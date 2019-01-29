@@ -24,6 +24,19 @@
         });
     }
 
+    function showErrMsg(msg, title) {
+        if (!msg || /^\s*$/.test(msg)) {
+            msg = '<p>无法从服务器获取数据，请试试以下办法：</p><ul><li>检查输入的条件是否有问题</li><li>重新登录系统再试</li></ul>';
+        }
+        if (!title || /^\s*$/.test(title)) {
+            title = '系统异常';
+        }
+        bootbox.dialog({
+            message: msg,
+            title: title
+        });
+    }
+
     function resultMsg(data, postdata, oper) {
         var response = eval('(' + data.responseText + ')');
 
@@ -44,10 +57,11 @@
             delData: {
                 "_csrf": token
             },
-            top: $(window).height() / 3,
-            left: $(window).width() / 2.5,
+            top: $(window).height() / 5,
+            left: $(window).width() / 3,
+            width: $(window).width() / 3,
             closeAfterEdit: true,
-            afterSubmit: resultMsg,
+            afterSubmit: resultMsg
         };
     }
 
@@ -65,7 +79,7 @@
             recreateForm: true,
             closeAfterAdd: true,
             closeAfterEdit: true,
-            afterSubmit: resultMsg,
+            afterSubmit: resultMsg
         };
     }
 
@@ -141,20 +155,19 @@
                 return $.extend($("#" + (o.form ? o.form : "form")).serializeObject(), postData);
             },
             loadError: function (xhr, status, error) { // 弹出错误信息
-                var res = xhr.responseJSON;
-                if (res && res.msg) {
-                    bootbox.autoCloseDialog({
-                        message: res.msg || "发生系统错误",
-                        title: "提示"
-                    });
-                }
+                showErrMsg(xhr.responseJSON.msg);
             },
-            loadComplete: function () {
+            loadComplete: function (data) {
+                if (data && data.result && data.result === 'ERROR') {
+                    showErrMsg(data.msg);
+                    return;
+                }
+
                 var table = this;
                 setTimeout(function () {
                     updatePagerIcons(table);
                     enableTooltips(table);
-                }, 0);
+                }, 20);
             }
         }, o);
 
