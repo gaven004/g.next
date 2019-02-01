@@ -1,0 +1,59 @@
+[#import "/views/common/base.html" as base]
+[@base.page]
+
+[#include "/views/common/grid-table.html"/]
+
+<script type="text/javascript">
+    $(function () {
+        $("#grid-table").grid({
+            url: "${traceUrl}",
+            token: "${_csrf.token}",
+            colModel: [{
+                label: '',
+                name: 'id',
+                key: true,
+                hidden: true,
+                editable: false
+            }, {
+                label: '操作时间',
+                name: 'ctime',
+                editable: false,
+                width: 150
+            }, {
+                label: '操作人',
+                name: 'operator',
+                editable: false,
+                width: 120
+            }, {
+                label: '操作指令',
+                name: 'operation',
+                editable: false,
+                align : "center",
+                width: 60
+            }, {
+                label: '最后状态',
+                name: 'content',
+                editable: false,
+                formatter: formatJSON,
+                width: 250
+            }, {
+                label: '编辑内容',
+                name: 'diff',
+                editable: false,
+                formatter: formatJSON,
+                width: 250
+            }]
+        });
+
+        function formatJSON(cellValue, options, rowObject) {
+            if (!cellValue || (/^\s*$/.test(cellValue))) {
+                return '';
+            }
+
+            var obj = JSON.parse(cellValue);
+            return JSON.stringify(obj, null, 4);
+        }
+    });
+</script>
+
+[/@base.page]

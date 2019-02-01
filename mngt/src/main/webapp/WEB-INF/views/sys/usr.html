@@ -144,10 +144,20 @@
                 editoptions : {
                     value : validOrInvalidOptionsJson
                 }
+            }, {
+                label : ' ',
+                name : 'trace',
+                width : 60,
+                align : "center",
+                editable : false,
+                formatter : formatTrace,
             }, ],
             sortname : 'account',
             sortorder : "asc"
         });
+        function formatTrace(cellValue, options, rowObject) {
+            return "<a href='sys/usr/trace.view?id=" + rowObject.uid + "'>修订记录</a>";
+        }
         $("#btnSearch").click(function() {
             $("#grid-table").trigger("reloadGrid");
         });

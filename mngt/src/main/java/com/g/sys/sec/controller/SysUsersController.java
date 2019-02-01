@@ -1,22 +1,25 @@
 package com.g.sys.sec.controller;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.g.commons.controller.ControllerHelper;
 import com.g.commons.controller.GeneralController;
 import com.g.commons.enums.Status;
+import com.g.commons.model.RestApiResponse;
+import com.g.sys.log.model.SysLog;
+import com.g.sys.log.service.SysLogService;
 import com.g.sys.sec.exception.DuplicateEmailException;
 import com.g.sys.sec.exception.DuplicateUserAccountException;
 import com.g.sys.sec.exception.PasswordMismatchException;
@@ -39,6 +42,9 @@ import com.g.sys.sec.service.SysUsersService;
 @Controller
 @RequestMapping("/sys/usr")
 public class SysUsersController extends GeneralController<SysUsersService, SysUsersMapper, SysUser> {
+    @Autowired
+    SysLogService sysLogService;
+
     public SysUsersController() {
         super("/sys/usr");
     }
@@ -52,6 +58,36 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
     }
 
     /**
+     * 添加记录
+     */
+    @RequestMapping("add")
+    @ResponseBody
+    @Override
+    public RestApiResponse<?> insert(SysUser record) {
+        return RestApiResponse.create(service.save(getSecurityUser().getUid(), record));
+    }
+
+    /**
+     * 修改记录
+     */
+    @RequestMapping("edit")
+    @ResponseBody
+    @Override
+    public RestApiResponse<?> updateById(SysUser record) {
+        return RestApiResponse.create(service.updateById(getSecurityUser().getUid(), record));
+    }
+
+    /**
+     * 删除记录
+     */
+    @RequestMapping("del")
+    @ResponseBody
+    @Override
+    public RestApiResponse<?> deleteById(String[] id) {
+        return RestApiResponse.create(service.removeByIds(getSecurityUser().getUid(), Arrays.asList(id)));
+    }
+
+    /**
      * 个人信息，展示、保存
      *
      * @param model
@@ -61,7 +97,7 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
     public String profile(Model model) {
         SysUser user = null;
 
-        SecurityUser su = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        SecurityUser su = getSecurityUser();
 
         if (su != null) {
             try {
@@ -81,9 +117,9 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
         if (result.hasErrors()) {
             ControllerHelper.setErrorMsg(model, "请检查您的输入是否有误！");
         } else {
-            SecurityUser cu = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            SecurityUser cu = getSecurityUser();
 
-            if (cu.getUid() != su.getUid()) {
+            if (!cu.getUid().equals(su.getUid())) {
                 ControllerHelper.setErrorMsg(model, "请检查您的操作是否有误，系统检测到您的登录信息不正常，或者可以退出系统后再登录重试！");
             } else {
                 try {
@@ -91,7 +127,7 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
                     du.setUid(su.getUid());
                     du.setUsername(su.getUsername());
                     du.setEmail(su.getEmail());
-                    service.updateById(du);
+                    service.updateById(cu.getUid(), du);
                     ControllerHelper.setSuccessMsg(model, "成功保存记录！");
                 } catch (DuplicateUserAccountException due) {
                     FieldError error = new FieldError("User", "account", su.getAccount(), false, null, null,
@@ -149,8 +185,8 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
     @RequestMapping(value = "/save-pwd", method = RequestMethod.POST)
     public String savePwd(String oldpwd, String newpwd, Model model) {
         try {
-            SecurityUser user = (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            service.changePassword(user.getUid(), oldpwd, newpwd);
+            SecurityUser user = getSecurityUser();
+            service.changePassword(user.getUid(), user.getUid(), oldpwd, newpwd);
             ControllerHelper.setSuccessMsg(model, "成功修改密码！");
         } catch (UserNotFoundException e) {
             ControllerHelper.setErrorMsg(model, "系统无法找到对应的用户，请检查您的输入是否正确！");
@@ -161,5 +197,28 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
         }
 
         return "/sys/usr_chg_pwd";
+    }
+
+    /**
+     * 个人信息，展示、保存
+     *
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/trace", method = RequestMethod.GET)
+    public String trace(Model model, String id) {
+        model.addAttribute("traceUrl", String.format("rest/sys/usr/trace/%s", id));
+        return "/sys/log";
+    }
+
+    @RequestMapping("/trace/{id}")
+    @ResponseBody
+    public List<SysLog> listTrace(@PathVariable("id") String id) {
+        final SysUser user = service.getById(id);
+        return sysLogService.getTrace(user);
+    }
+
+    private SecurityUser getSecurityUser() {
+        return (SecurityUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

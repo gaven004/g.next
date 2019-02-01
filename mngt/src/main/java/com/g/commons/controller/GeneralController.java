@@ -61,7 +61,7 @@ public abstract class GeneralController<S extends ServiceImpl<M, T>, M extends B
      */
     @RequestMapping("list")
     @ResponseBody
-    public List<T> selectList(T param) {
+    public List<T> list(T param) {
         return service.list(buildWrapper(param));
     }
 

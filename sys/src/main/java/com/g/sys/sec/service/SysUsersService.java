@@ -27,6 +27,8 @@ import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 
 import com.g.commons.mail.MailSender;
+import com.g.sys.log.model.SysLog;
+import com.g.sys.log.service.SysLogService;
 import com.g.sys.sec.exception.DuplicateEmailException;
 import com.g.sys.sec.exception.DuplicateUserAccountException;
 import com.g.sys.sec.exception.PasswordMismatchException;
@@ -54,6 +56,8 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
 
     private static final String REGISTER_MAIL_SUBJECT = "新用户注册";
     private static final String RESET_PASSWORD_MAIL_SUBJECT = "密码重置";
+    @Autowired
+    SysLogService sysLogService;
     @Autowired
     private SysAuthoritiesService sysAuthoritiesService;
     @Autowired
@@ -106,8 +110,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean save(SysUser entity) {
+    public boolean save(String operator, SysUser entity) {
         checkAccount(entity);
         checkEmail(entity);
 
@@ -117,13 +120,12 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
             entity.setPassword(pwd);
         }
 
-        return retBool(baseMapper.insert(entity))
-                && sysAuthoritiesService.insertAuthorities(entity.getUid(), entity.getRoles());
+        return retBool(baseMapper.insert(entity)) && retBool(sysLogService.logCreate(operator, entity))
+                && sysAuthoritiesService.insertAuthorities(operator, entity.getUid(), entity.getRoles());
     }
 
     @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean updateById(SysUser entity) {
+    public boolean updateById(String operator, SysUser entity) {
         if (entity.getAccount() != null) {
             checkAccount(entity);
         }
@@ -133,17 +135,20 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
         }
 
         if (entity.getRoles() != null) {
-            sysAuthoritiesService.updateAuthorities(entity.getUid(), entity.getRoles());
+            sysAuthoritiesService.updateAuthorities(operator, entity.getUid(), entity.getRoles());
         }
 
-        return retBool(baseMapper.updateById(entity));
+        return retBool(baseMapper.updateById(entity)) && retBool(sysLogService.logUpdate(operator, getById(entity.getUid())));
     }
 
     @Transactional(rollbackFor = Exception.class)
-    @Override
-    public boolean removeByIds(Collection<? extends Serializable> idList) {
-        for (Serializable uid : idList) {
-            sysAuthoritiesService.deleteAuthorities((String) uid);
+    public boolean removeByIds(String operator, Collection<String> idList) {
+        SysUser entity = new SysUser();
+        for (String uid : idList) {
+            entity.setUid(uid);
+            if (!sysAuthoritiesService.deleteAuthorities(operator, uid) || !retBool(sysLogService.logDelete(operator, uid))) {
+                return false;
+            }
         }
         return retBool(baseMapper.deleteBatchIds(idList));
     }
@@ -168,7 +173,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean changePassword(String uid, String oldpwd, String newpwd)
+    public boolean changePassword(String operator, String uid, String oldpwd, String newpwd)
             throws UserNotFoundException, PasswordMismatchException {
         SysUser record = getById(uid);
         if (record == null) {
@@ -182,7 +187,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
         record = new SysUser();
         record.setUid(uid);
         record.setPassword(passwordEncoder.encode(newpwd));
-        return retBool(baseMapper.updateById(record));
+        return retBool(baseMapper.updateById(record)) && retBool(sysLogService.logUpdate(operator, getById(uid)));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -202,7 +207,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
         record = new SysUser();
         record.setUid(uid);
         record.setPassword(passwordEncoder.encode(pwd));
-        return retBool(baseMapper.updateById(record));
+        return retBool(baseMapper.updateById(record)) && retBool(sysLogService.logUpdate(SysLog.SYSTEM_USER, getById(uid)));
     }
 
     /*

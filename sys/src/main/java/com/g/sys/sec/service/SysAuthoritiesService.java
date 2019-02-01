@@ -4,12 +4,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import com.g.sys.log.service.SysLogService;
 import com.g.sys.sec.mapper.SysAuthoritiesMapper;
 import com.g.sys.sec.model.SysAuthority;
 
@@ -23,6 +25,9 @@ import com.g.sys.sec.model.SysAuthority;
  */
 @Service
 public class SysAuthoritiesService extends ServiceImpl<SysAuthoritiesMapper, SysAuthority> {
+    @Autowired
+    SysLogService sysLogService;
+
     public Set<String> getAuthorities(String uid) {
         QueryWrapper<SysAuthority> wrapper = new QueryWrapper<>();
         wrapper.eq(SysAuthority.UID, uid);
@@ -36,22 +41,22 @@ public class SysAuthoritiesService extends ServiceImpl<SysAuthoritiesMapper, Sys
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean insertAuthorities(String uid, Set<String> authorities) {
+    public boolean insertAuthorities(String operator, String uid, Set<String> authorities) {
         for (String authority : authorities) {
-            if (!saveAuthority(uid, authority)) return false;
+            if (!saveAuthority(operator, uid, authority)) return false;
         }
         return true;
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteAuthorities(String uid) {
+    public boolean deleteAuthorities(String operator, String uid) {
         QueryWrapper<SysAuthority> wrapper = new QueryWrapper<>();
         wrapper.eq(SysAuthority.UID, uid);
-        return remove(wrapper);
+        return removeAuthority(operator, wrapper);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateAuthorities(String uid, Set<String> authorities) {
+    public boolean updateAuthorities(String operator, String uid, Set<String> authorities) {
         Set<String> original = getAuthorities(uid);
 
         // Del old authority
@@ -60,23 +65,27 @@ public class SysAuthoritiesService extends ServiceImpl<SysAuthoritiesMapper, Sys
                 QueryWrapper<SysAuthority> wrapper = new QueryWrapper<>();
                 wrapper.eq(SysAuthority.UID, uid);
                 wrapper.eq(SysAuthority.AUTHORITY, authority);
-                remove(wrapper);
+                if (!removeAuthority(operator, wrapper)) return false;
             }
         }
 
         // Add new authority
         for (String authority : authorities) {
             if (!original.contains(authority)) {
-                if (!saveAuthority(uid, authority)) return false;
+                if (!saveAuthority(operator, uid, authority)) return false;
             }
         }
         return true;
     }
 
-    private boolean saveAuthority(String uid, String authority) {
+    private boolean saveAuthority(String operator, String uid, String authority) {
         SysAuthority entity = new SysAuthority();
         entity.setUid(uid);
         entity.setAuthority(authority);
         return save(entity);
+    }
+
+    private boolean removeAuthority(String operator, QueryWrapper<SysAuthority> wrapper) {
+        return remove(wrapper);
     }
 }

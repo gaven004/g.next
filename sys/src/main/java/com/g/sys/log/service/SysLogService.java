@@ -1,14 +1,17 @@
 package com.g.sys.log.service;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
@@ -24,6 +27,8 @@ import com.flipkart.zjsonpatch.JsonDiff;
 import com.g.commons.utils.EnumUtil;
 import com.g.sys.log.mapper.SysLogMapper;
 import com.g.sys.log.model.SysLog;
+import com.g.sys.sec.model.SysUser;
+import com.g.sys.sec.service.SysUsersService;
 
 /**
  * <p>
@@ -35,6 +40,9 @@ import com.g.sys.log.model.SysLog;
  */
 @Service
 public class SysLogService extends ServiceImpl<SysLogMapper, SysLog> {
+    @Autowired
+    private SysUsersService usersService;
+
     private EnumSet<DiffFlags> diffFlags = DiffFlags.dontNormalizeOpIntoMoveAndCopy().clone();
 
     public int logCreate(String uid, Object obj) {
@@ -111,11 +119,16 @@ public class SysLogService extends ServiceImpl<SysLogMapper, SysLog> {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         SysLog item = list.get(0);
+        SysUser user = usersService.getById(item.getUid());
+        item.setOperator(user == null ? item.getUid() : user.getUsername());
         item.setOperation(EnumUtil.getDescription(SysLog.OPERATIONS.class, item.getOperation()));
         source = mapper.readTree(item.getContent());
 
         for (int i = 1; i < list.size(); i++) {
             item = list.get(i);
+
+            user = usersService.getById(item.getUid());
+            item.setOperator(user == null ? item.getUid() : user.getUsername());
 
             String operation = item.getOperation();
             item.setOperation(EnumUtil.getDescription(SysLog.OPERATIONS.class, operation));
@@ -153,11 +166,28 @@ public class SysLogService extends ServiceImpl<SysLogMapper, SysLog> {
     }
 
     private JSONObject getKeyObject(Object obj, Class<?> clz, TableInfo tableInfo) {
+        boolean done = false;
         JSONObject keyObj = new JSONObject();
-        for (String prop : tableInfo.getKeyProperty().split(StringPool.COMMA)) {
-            Object value = ReflectionKit.getMethodValue(clz, obj, prop);
-            keyObj.put(prop, value);
+
+        // Mybatis plus中，tableInfo的KeyProperty暂不支持复合主键，所以先用标注获取主键
+        List<Field> list = TableInfoHelper.getAllFields(clz);
+        for (Field field : list) {
+            TableId tableId = field.getAnnotation(TableId.class);
+            if (tableId != null) {
+                Object value = ReflectionKit.getMethodValue(clz, obj, field.getName());
+                keyObj.put(field.getName(), value);
+                done = true;
+            }
         }
+
+        if (!done) {
+            // 没有标注，使用Mybatis plus默认主键，即id字段
+            for (String prop : tableInfo.getKeyProperty().split(StringPool.COMMA)) {
+                Object value = ReflectionKit.getMethodValue(clz, obj, prop);
+                keyObj.put(prop, value);
+            }
+        }
+
         return keyObj;
     }
 }

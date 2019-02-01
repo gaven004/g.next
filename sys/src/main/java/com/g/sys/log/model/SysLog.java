@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -22,6 +23,8 @@ import com.g.commons.enums.DescribableEnum;
 @TableName("sys_log")
 public class SysLog implements Serializable {
     private static final long serialVersionUID = -1723330177414871527L;
+
+    public static final String SYSTEM_USER = "SYSTEM";
 
     public enum OPERATIONS implements DescribableEnum {
         CREATE("新建"), UPDATE("修改"), DELETE("删除");
@@ -49,9 +52,14 @@ public class SysLog implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     /**
-     * 用户ID
+     * 操作人ID
      */
     private String uid;
+    /**
+     * 操作人名称
+     */
+    @TableField(exist = false)
+    private String operator;
     /**
      * 操作时间
      */
@@ -75,5 +83,6 @@ public class SysLog implements Serializable {
     /**
      * 变更内容，不记库，按时间顺序比较content得出
      */
-    transient private String diff;
+    @TableField(exist = false)
+    private String diff;
 }
