@@ -21,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.ibatis.cache.Cache;
 import org.apache.ibatis.cache.CacheKey;
+import org.apache.ibatis.cache.TransactionalCacheManager;
 import org.apache.ibatis.executor.CachingExecutor;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -46,7 +48,7 @@ import com.baomidou.mybatisplus.extension.toolkit.JdbcUtils;
 /**
  * MyBatis-Plus的分页插件，是StatementHandler的切入，在StatementHandler执行时才修改boundSql.sql
  * 及boundSql.parameterMappings实现数据端分页。
- *
+ * <p>
  * 开启MyBatis的缓存时，则会使用CachingExecutor来执行查询，在StatementHandler介入前，判断是否存在缓存，存在则直接返回。
  * 缓存的KEY由MappedStatement ms, Object parameterObject, RowBounds rowBounds, BoundSql boundSql几个参数构成。
  * 显然，MyBatis-Plus的分页插件此时还未调用，所以KEY中未带有分页信息。
@@ -56,6 +58,8 @@ import com.baomidou.mybatisplus.extension.toolkit.JdbcUtils;
 @Intercepts({@Signature(type = Executor.class, method = "query",
         args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
 public class CachePaginationInterceptor extends PaginationInterceptor implements Interceptor {
+    private final TransactionalCacheManager tcm = new TransactionalCacheManager();
+
     /**
      * 方言类型
      */
@@ -64,6 +68,10 @@ public class CachePaginationInterceptor extends PaginationInterceptor implements
      * 方言实现类
      */
     private String dialectClazz;
+    /**
+     * 是否处理分页数溢出的情况
+     */
+    private boolean overflow = false;
 
     /**
      * Physical Pagination Interceptor for all the queries with parameter
@@ -121,7 +129,30 @@ public class CachePaginationInterceptor extends PaginationInterceptor implements
         CacheKey cacheKey = cachingExecutor.createCacheKey(mappedStatement, paramObj, RowBounds.DEFAULT, cacheBoundSql);
 
         // 执行查询。因为查询语句已经带了limit，所以RowBounds传入RowBounds.DEFAULT
-        return cachingExecutor.query(mappedStatement, paramObj, RowBounds.DEFAULT, resultHandler, cacheKey, boundSql);
+        final List<?> list = cachingExecutor.query(mappedStatement, paramObj, RowBounds.DEFAULT, resultHandler, cacheKey, boundSql);
+
+        // 补充处理分页时需要记录总数的情况
+        if (page.isSearchCount()) {
+            cacheKey.update("TOTAL_");
+            Cache cache = mappedStatement.getCache();
+            if (cache != null) {
+                if (mappedStatement.isUseCache() && resultHandler == null) {
+                    Long total = (Long) tcm.getObject(cache, cacheKey);
+                    if (total == null) {
+                        total = page.getTotal();
+                        tcm.putObject(cache, cacheKey, total); // issue #578 and #116
+                    } else {
+                        page.setTotal(total);
+                        long pages = page.getPages();
+                        if (overflow && page.getCurrent() > pages) {
+                            page.setCurrent(1L);
+                        }
+                    }
+                }
+            }
+        }
+
+        return list;
     }
 
     @Override
