@@ -142,7 +142,7 @@
                 editable : true,
                 edittype : "select",
                 editoptions : {
-                    value : validOrInvalidOptionsJson
+                    value : getValidOrInvalidOptionsJson
                 }
             }, {
                 label : ' ',
@@ -150,6 +150,7 @@
                 width : 60,
                 align : "center",
                 editable : false,
+                sortable : false,
                 formatter : formatTrace,
             }, ],
             sortname : 'account',

@@ -4,17 +4,27 @@
  */
 
 var validOrInvalidOptionsJson;
-$.getJSON("rest/enums/status", function(data) {
-    validOrInvalidOptionsJson = data;
-});
+function getValidOrInvalidOptionsJson() {
+    if (!validOrInvalidOptionsJson) {
+        $.ajax({
+            dataType: "json",
+            url: "rest/enums/status",
+            async: false,
+            success: function(data) {
+                validOrInvalidOptionsJson = data;
+            }
+        });
+    }
+    return validOrInvalidOptionsJson;
+}
 
 jQuery.extend($.fn.fmatter, {
     fmValidOrInvalid : function(cellvalue, options, rowdata) {
-        return JsonUtil.getValue(validOrInvalidOptionsJson, cellvalue);
+        return JsonUtil.getValue(getValidOrInvalidOptionsJson(), cellvalue);
     }
 });
 jQuery.extend($.fn.fmatter.fmValidOrInvalid, {
     unformat : function(cellvalue, options) {
-        return JsonUtil.getKey(validOrInvalidOptionsJson, cellvalue);
+        return JsonUtil.getKey(getValidOrInvalidOptionsJson(), cellvalue);
     }
 });

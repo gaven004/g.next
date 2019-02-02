@@ -13,33 +13,39 @@
                 name: 'id',
                 key: true,
                 hidden: true,
-                editable: false
+                editable: false,
+                sortable: false
             }, {
                 label: '操作时间',
                 name: 'ctime',
                 editable: false,
-                width: 150
+                sortable: false,
+                width: 120
             }, {
                 label: '操作人',
                 name: 'operator',
                 editable: false,
-                width: 120
+                sortable: false,
+                width: 80
             }, {
                 label: '操作指令',
                 name: 'operation',
                 editable: false,
+                sortable: false,
                 align : "center",
                 width: 60
             }, {
                 label: '最后状态',
                 name: 'content',
                 editable: false,
+                sortable: false,
                 formatter: formatJSON,
                 width: 250
             }, {
                 label: '编辑内容',
                 name: 'diff',
                 editable: false,
+                sortable: false,
                 formatter: formatJSON,
                 width: 250
             }]
