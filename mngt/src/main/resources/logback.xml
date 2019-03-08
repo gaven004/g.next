@@ -11,7 +11,7 @@
         <file>mngt.log</file>
         <!-- 每天滚动 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${env.log.path}/clam.mngt-all-%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+            <fileNamePattern>${env.log.path}/mngt.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
             <!-- 保存90天 -->
             <maxHistory>90</maxHistory>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">

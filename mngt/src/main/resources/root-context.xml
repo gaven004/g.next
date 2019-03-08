@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context
@@ -20,11 +20,10 @@
     <import resource="classpath:spring-security.xml"/>
 
     <bean id="articleImgUploader" class="com.g.commons.web.UploadFileUtil">
-        <qualifier value="articleImgUploader" />
-        <property name="uploadPath"
-                  value="C:\work\.metadata\.plugins\org.eclipse.wst.server.core\tmp0\wtpwebapps\s5.upload\cms" />
-        <property name="browseUrl" value="/s5.upload/cms" />
-        <property name="maxFileSize" value="10485760" />
+        <qualifier value="articleImgUploader"/>
+        <property name="uploadPath" value="${env.upload.path}"/>
+        <property name="browseUrl" value="${env.image.url}"/>
+        <property name="maxFileSize" value="10485760"/>
         <property name="supportFileTypes">
             <set>
                 <value>jpg</value>
