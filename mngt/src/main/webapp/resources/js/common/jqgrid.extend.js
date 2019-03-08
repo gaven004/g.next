@@ -155,7 +155,7 @@
                 return $.extend($("#" + (o.form ? o.form : "form")).serializeObject(), postData);
             },
             loadError: function (xhr, status, error) { // 弹出错误信息
-                showErrMsg(xhr.responseJSON.msg);
+                showErrMsg(xhr && xhr.responseJSON && xhr.responseJSON.msg ? xhr.responseJSON.msg : null);
             },
             loadComplete: function (data) {
                 if (data && data.result && data.result === 'ERROR') {
