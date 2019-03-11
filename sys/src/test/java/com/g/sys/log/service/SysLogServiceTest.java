@@ -21,34 +21,34 @@ public class SysLogServiceTest {
 
     public void logCreate() {
         SysUser user = new SysUser();
-        user.setUid("test");
+        user.setUid(1L);
         user.setAccount("test");
         user.setUsername("test");
         user.setEnabled("VALID");
 
-        service.logCreate("gg", user);
+        service.logCreate(0L, user);
     }
 
     public void logUpdate() {
         SysUser user = new SysUser();
-        user.setUid("test");
+        user.setUid(1L);
         user.setAccount("test");
         user.setUsername("test_user");
         user.setEnabled("INVALID");
 
-        service.logUpdate("gg", user);
+        service.logUpdate(0L, user);
     }
 
     public void logDelete() {
         SysUser user = new SysUser();
-        user.setUid("test");
+        user.setUid(1L);
 
-        service.logDelete("gg", user);
+        service.logDelete(0L, user);
     }
 
     public void getTrace() {
         SysUser user = new SysUser();
-        user.setUid("test");
+        user.setUid(1L);
 
         List<SysLog> list = service.getTrace(user);
         System.out.println(list);

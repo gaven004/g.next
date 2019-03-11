@@ -65,7 +65,7 @@ public class GPersistentTokenRepository implements PersistentTokenRepository {
             return null;
         }
 
-        return new PersistentRememberMeToken(user.getUid(), seriesId, persistent.getToken(),
+        return new PersistentRememberMeToken(user.getUid().toString(), seriesId, persistent.getToken(),
                 persistent.getLastUsed());
     }
 

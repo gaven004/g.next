@@ -28,7 +28,7 @@ public class SysAuthoritiesService extends ServiceImpl<SysAuthoritiesMapper, Sys
     @Autowired
     SysLogService sysLogService;
 
-    public Set<String> getAuthorities(String uid) {
+    public Set<String> getAuthorities(Long uid) {
         QueryWrapper<SysAuthority> wrapper = new QueryWrapper<>();
         wrapper.eq(SysAuthority.UID, uid);
         List<SysAuthority> list = list(wrapper);
@@ -41,7 +41,7 @@ public class SysAuthoritiesService extends ServiceImpl<SysAuthoritiesMapper, Sys
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean insertAuthorities(String operator, String uid, Set<String> authorities) {
+    public boolean insertAuthorities(Long operator, Long uid, Set<String> authorities) {
         for (String authority : authorities) {
             if (!saveAuthority(operator, uid, authority)) return false;
         }
@@ -49,14 +49,14 @@ public class SysAuthoritiesService extends ServiceImpl<SysAuthoritiesMapper, Sys
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean deleteAuthorities(String operator, String uid) {
+    public boolean deleteAuthorities(Long operator, Long uid) {
         QueryWrapper<SysAuthority> wrapper = new QueryWrapper<>();
         wrapper.eq(SysAuthority.UID, uid);
         return removeAuthority(operator, wrapper);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateAuthorities(String operator, String uid, Set<String> authorities) {
+    public boolean updateAuthorities(Long operator, Long uid, Set<String> authorities) {
         Set<String> original = getAuthorities(uid);
 
         // Del old authority
@@ -78,14 +78,14 @@ public class SysAuthoritiesService extends ServiceImpl<SysAuthoritiesMapper, Sys
         return true;
     }
 
-    private boolean saveAuthority(String operator, String uid, String authority) {
+    private boolean saveAuthority(Long operator, Long uid, String authority) {
         SysAuthority entity = new SysAuthority();
         entity.setUid(uid);
         entity.setAuthority(authority);
         return save(entity);
     }
 
-    private boolean removeAuthority(String operator, QueryWrapper<SysAuthority> wrapper) {
+    private boolean removeAuthority(Long operator, QueryWrapper<SysAuthority> wrapper) {
         return remove(wrapper);
     }
 }

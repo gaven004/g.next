@@ -13,7 +13,7 @@ import org.springframework.util.Assert;
 public class SecurityUser implements UserDetails, CredentialsContainer {
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;
 
-    private final String uid;
+    private final Long uid;
     private final String username; // Spring Security中，username对应S5系统中的account
     private final String nickname; // Spring Security中，nickname对应S5系统中的username
     private final String email;
@@ -39,12 +39,12 @@ public class SecurityUser implements UserDetails, CredentialsContainer {
         this.credentialsNonExpired = true;
     }
 
-    public SecurityUser(String uid, String username, String nickname, String password, String email,
+    public SecurityUser(Long uid, String username, String nickname, String password, String email,
                         boolean enabled, Collection<? extends GrantedAuthority> authorities) {
         this(uid, username, nickname, password, email, authorities, true, true, true, enabled);
     }
 
-    public SecurityUser(String uid, String username, String nickname, String password, String email,
+    public SecurityUser(Long uid, String username, String nickname, String password, String email,
                         Collection<? extends GrantedAuthority> authorities, boolean accountNonExpired, boolean accountNonLocked,
                         boolean credentialsNonExpired, boolean enabled) {
         this.uid = uid;
@@ -99,7 +99,7 @@ public class SecurityUser implements UserDetails, CredentialsContainer {
         return authorities;
     }
 
-    public String getUid() {
+    public Long getUid() {
         return uid;
     }
 

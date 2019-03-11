@@ -3,9 +3,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/tx
-       http://www.springframework.org/schema/tx/spring-tx.xsd">
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean id="masterDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
           destroy-method="close">
@@ -49,16 +49,11 @@
         <!-- ID生成器配置 -->
         <property name="datacenterId" value="0"/>
         <property name="workerId" value="0"/>
-        <!-- 字段填充处理器 -->
-        <property name="metaObjectHandler" ref="idFillMetaObjectHandler"/>
     </bean>
 
     <bean id="dbConfig" class="com.baomidou.mybatisplus.core.config.GlobalConfig.DbConfig">
         <property name="dbType" value="MYSQL"/>
     </bean>
-
-    <!-- 字符串类型的id字段insert时自动填充 -->
-    <bean id="idFillMetaObjectHandler" class="com.g.commons.db.IdFillMetaObjectHandler"/>
 
     <!-- scan for mappers and let them be autowired -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

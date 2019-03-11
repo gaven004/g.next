@@ -26,8 +26,8 @@ public class SysColumn implements Serializable {
     /**
      * 栏目ID
      */
-    @TableId(value = "id", type = IdType.INPUT)
-    private String id;
+    @TableId(value = "id", type = IdType.ID_WORKER)
+    private Long id;
     /**
      * 栏目名称
      */
@@ -40,17 +40,17 @@ public class SysColumn implements Serializable {
      * 父栏目
      */
     @TableField("parent_id")
-    private String parentId;
+    private Long parentId;
     /**
      * 状态
      */
     private String state;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public SysColumn setId(String id) {
+    public SysColumn setId(Long id) {
         this.id = id;
         return this;
     }
@@ -73,11 +73,11 @@ public class SysColumn implements Serializable {
         return this;
     }
 
-    public String getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public SysColumn setParentId(String parentId) {
+    public SysColumn setParentId(Long parentId) {
         this.parentId = parentId;
         return this;
     }

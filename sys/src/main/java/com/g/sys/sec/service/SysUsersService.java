@@ -56,6 +56,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
 
     private static final String REGISTER_MAIL_SUBJECT = "新用户注册";
     private static final String RESET_PASSWORD_MAIL_SUBJECT = "密码重置";
+
     @Autowired
     SysLogService sysLogService;
     @Autowired
@@ -73,7 +74,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     public SysUser getById(Serializable id) {
         SysUser user = super.getById(id);
         if (user != null) {
-            user.setRoles(sysAuthoritiesService.getAuthorities((String) id));
+            user.setRoles(sysAuthoritiesService.getAuthorities((Long) id));
         }
         return user;
     }
@@ -110,7 +111,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean save(String operator, SysUser entity) {
+    public boolean save(Long operator, SysUser entity) {
         checkAccount(entity);
         checkEmail(entity);
 
@@ -125,7 +126,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean updateById(String operator, SysUser entity) {
+    public boolean updateById(Long operator, SysUser entity) {
         if (entity.getAccount() != null) {
             checkAccount(entity);
         }
@@ -142,11 +143,11 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean removeByIds(String operator, Collection<String> idList) {
+    public boolean removeByIds(Long operator, Collection<Long> idList) {
         SysUser entity = new SysUser();
-        for (String uid : idList) {
+        for (Long uid : idList) {
             entity.setUid(uid);
-            if (!sysAuthoritiesService.deleteAuthorities(operator, uid) || !retBool(sysLogService.logDelete(operator, uid))) {
+            if (!sysAuthoritiesService.deleteAuthorities(operator, uid) || !retBool(sysLogService.logDelete(operator, entity))) {
                 return false;
             }
         }
@@ -173,7 +174,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public boolean changePassword(String operator, String uid, String oldpwd, String newpwd)
+    public boolean changePassword(Long operator, Long uid, String oldpwd, String newpwd)
             throws UserNotFoundException, PasswordMismatchException {
         SysUser record = getById(uid);
         if (record == null) {
@@ -201,7 +202,7 @@ public class SysUsersService extends ServiceImpl<SysUsersMapper, SysUser> {
         }
 
         SysUser record = list.get(0);
-        String uid = record.getUid();
+        Long uid = record.getUid();
         String pwd = generatePwdAndSendMail(record, Action.RESET);
 
         record = new SysUser();

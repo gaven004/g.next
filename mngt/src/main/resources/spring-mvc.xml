@@ -9,8 +9,8 @@
 
     <mvc:annotation-driven>
         <mvc:message-converters>
-            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
             <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
             <!-- FastJson -->
             <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
                 <property name="supportedMediaTypes">
@@ -20,35 +20,37 @@
                         <value>application/json;charset=UTF-8</value>
                     </list>
                 </property>
-                <property name="features">
-                    <array value-type="com.alibaba.fastjson.serializer.SerializerFeature">
-                        <!-- 避免循环引用 -->
-                        <value>DisableCircularReferenceDetect</value>
-                        <!-- 是否输出值为null的字段 -->
-                        <value>WriteMapNullValue</value>
-                        <!-- 数值字段如果为null,输出为0,而非null -->
-                        <value>WriteNullNumberAsZero</value>
-                        <!-- 字符类型字段如果为null,输出为"",而非null -->
-                        <value>WriteNullStringAsEmpty</value>
-                        <!-- List字段如果为null,输出为[],而非null -->
-                        <value>WriteNullListAsEmpty</value>
-                        <!-- Boolean字段如果为null,输出为false,而非null -->
-                        <value>WriteNullBooleanAsFalse</value>
-                        <!-- 用枚举toString()值输出 -->
-                        <value>WriteEnumUsingToString</value>
-                    </array>
-                </property>
-                <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss" />
+                <property name="fastJsonConfig" ref="fastJsonConfig"/>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
-    <!-- 拦截器 -->
-    <!-- <mvc:interceptors> <mvc:interceptor> <mvc:mapping path="/**"/> <bean class="com.hs.clam.common.interceptor.TokenInterceptor"/> 
-        </mvc:interceptor> </mvc:interceptors> -->
-
     <!-- 静态资源处理 -->
     <mvc:default-servlet-handler />
+
+    <bean id="fastJsonConfig" class="com.alibaba.fastjson.support.config.FastJsonConfig">
+        <property name="serializerFeatures">
+            <array value-type="com.alibaba.fastjson.serializer.SerializerFeature">
+                <!-- 避免循环引用 -->
+                <value>DisableCircularReferenceDetect</value>
+                <!-- 是否输出值为null的字段 -->
+                <value>WriteMapNullValue</value>
+                <!-- 数值字段如果为null,输出为0,而非null -->
+                <value>WriteNullNumberAsZero</value>
+                <!-- 字符类型字段如果为null,输出为"",而非null -->
+                <value>WriteNullStringAsEmpty</value>
+                <!-- List字段如果为null,输出为[],而非null -->
+                <value>WriteNullListAsEmpty</value>
+                <!-- Boolean字段如果为null,输出为false,而非null -->
+                <value>WriteNullBooleanAsFalse</value>
+                <!-- 用枚举toString()值输出 -->
+                <value>WriteEnumUsingToString</value>
+                <!-- 将数值变成字符串返回，解决精度问题 -->
+                <value>BrowserCompatible</value>
+            </array>
+        </property>
+        <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss" />
+    </bean>
 
     <!-- 文件上传处理 -->
     <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />

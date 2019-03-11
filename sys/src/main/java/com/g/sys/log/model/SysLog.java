@@ -24,7 +24,7 @@ import com.g.commons.enums.DescribableEnum;
 public class SysLog implements Serializable {
     private static final long serialVersionUID = -1723330177414871527L;
 
-    public static final String SYSTEM_USER = "SYSTEM";
+    public static final Long SYSTEM_USER = 0L; // SYSTEM
 
     public enum OPERATIONS implements DescribableEnum {
         CREATE("新建"), UPDATE("修改"), DELETE("删除");
@@ -54,7 +54,7 @@ public class SysLog implements Serializable {
     /**
      * 操作人ID
      */
-    private String uid;
+    private Long uid;
     /**
      * 操作人名称
      */

@@ -33,13 +33,13 @@ public class SysArticle implements Serializable {
     /**
      * 主键id
      */
-    @TableId(value = "id", type = IdType.INPUT)
-    private String id;
+    @TableId(value = "id", type = IdType.ID_WORKER)
+    private Long id;
     /**
      * 栏目ID
      */
     @TableField("column_id")
-    private String columnId;
+    private Long columnId;
     /**
      * 标题
      */
@@ -56,7 +56,7 @@ public class SysArticle implements Serializable {
      * 创建人
      */
     @TableField("create_by")
-    private String createBy;
+    private Long createBy;
     /**
      * 创建日期
      */
@@ -65,7 +65,7 @@ public class SysArticle implements Serializable {
      * 修改人
      */
     @TableField("update_by")
-    private String updateBy;
+    private Long updateBy;
     /**
      * 修改时间
      */
@@ -80,20 +80,20 @@ public class SysArticle implements Serializable {
      */
     private String state;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public SysArticle setId(String id) {
+    public SysArticle setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public String getColumnId() {
+    public Long getColumnId() {
         return columnId;
     }
 
-    public SysArticle setColumnId(String columnId) {
+    public SysArticle setColumnId(Long columnId) {
         this.columnId = columnId;
         return this;
     }
@@ -125,11 +125,11 @@ public class SysArticle implements Serializable {
         return this;
     }
 
-    public String getCreateBy() {
+    public Long getCreateBy() {
         return createBy;
     }
 
-    public SysArticle setCreateBy(String createBy) {
+    public SysArticle setCreateBy(Long createBy) {
         this.createBy = createBy;
         return this;
     }
@@ -143,11 +143,11 @@ public class SysArticle implements Serializable {
         return this;
     }
 
-    public String getUpdateBy() {
+    public Long getUpdateBy() {
         return updateBy;
     }
 
-    public SysArticle setUpdateBy(String updateBy) {
+    public SysArticle setUpdateBy(Long updateBy) {
         this.updateBy = updateBy;
         return this;
     }

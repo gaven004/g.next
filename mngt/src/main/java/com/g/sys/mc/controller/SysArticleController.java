@@ -88,8 +88,8 @@ public class SysArticleController extends GeneralController<SysArticleService, S
                 SecurityContextHolder.getContext().getAuthentication();
         SecurityUser user = authentication == null ? null : (SecurityUser) authentication.getPrincipal();
         if (action == Action.NEW) {
-            record.setCreateBy(user == null ? "" : user.getUid());
+            record.setCreateBy(user == null ? null : user.getUid());
         }
-        record.setUpdateBy(user == null ? "" : user.getUid());
+        record.setUpdateBy(user == null ? null : user.getUid());
     }
 }

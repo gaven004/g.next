@@ -38,9 +38,9 @@ public class SysColumnService extends ServiceImpl<SysColumnMapper, SysColumn> {
     }
 
     private void checkParent(SysColumn entity) throws InvalidParentException {
-        String parentId = entity.getParentId();
-        if (parentId == null || !StringUtils.hasText(parentId)) {
-            entity.setParentId("");
+        Long parentId = entity.getParentId();
+        if (parentId == null) {
+            entity.setParentId(0L);
             return;
         }
 
@@ -48,13 +48,13 @@ public class SysColumnService extends ServiceImpl<SysColumnMapper, SysColumn> {
             throw new InvalidParentException();
         }
 
-        Set<String> family = new HashSet<String>();
+        Set<Long> family = new HashSet<>();
         family.add(parentId);
 
         SysColumn parent = getById(parentId);
         while (parent != null) {
             parentId = parent.getParentId();
-            if (parentId == null) {
+            if (parentId == null || parentId == 0L) {
                 return;
             }
 

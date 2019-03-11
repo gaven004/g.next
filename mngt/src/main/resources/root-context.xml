@@ -19,6 +19,11 @@
     <import resource="classpath:spring-mvc.xml"/>
     <import resource="classpath:spring-security.xml"/>
 
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:org/springframework/security/mymessages"/>
+    </bean>
+
     <bean id="articleImgUploader" class="com.g.commons.web.UploadFileUtil">
         <qualifier value="articleImgUploader"/>
         <property name="uploadPath" value="${env.upload.path}"/>

@@ -16,23 +16,33 @@
 
     <properties>
         <tomcat7Version>7.0.92</tomcat7Version>
+        <g.next.version>0.0.1</g.next.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.g</groupId>
             <artifactId>commons</artifactId>
-            <version>0.0.1</version>
+            <version>${g.next.version}</version>
         </dependency>
         <dependency>
             <groupId>com.g</groupId>
             <artifactId>sys</artifactId>
-            <version>0.0.1</version>
+            <version>${g.next.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <finalName>mngt</finalName>
+        <filters>
+            <filter>src/main/filter/${env}.properties</filter>
+        </filters>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -173,5 +183,17 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env>dev</env>
+            </properties>
+        </profile>
+    </profiles>
 </project>
 

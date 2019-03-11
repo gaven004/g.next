@@ -1,5 +1,6 @@
 package com.g.sys.sec.controller;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -84,7 +85,16 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
     @ResponseBody
     @Override
     public RestApiResponse<?> deleteById(String[] id) {
-        return RestApiResponse.create(service.removeByIds(getSecurityUser().getUid(), Arrays.asList(id)));
+        if (id == null || id.length == 0) {
+            return RestApiResponse.success();
+        }
+
+        ArrayList<Long> idList = new ArrayList<>(id.length);
+        for (String s : id) {
+            idList.add(Long.parseLong(s));
+        }
+
+        return RestApiResponse.create(service.removeByIds(getSecurityUser().getUid(), idList));
     }
 
     /**
@@ -206,14 +216,14 @@ public class SysUsersController extends GeneralController<SysUsersService, SysUs
      * @return
      */
     @RequestMapping(value = "/trace", method = RequestMethod.GET)
-    public String trace(Model model, String id) {
+    public String trace(Model model, Long id) {
         model.addAttribute("traceUrl", String.format("rest/sys/usr/trace/%s", id));
         return "/sys/log";
     }
 
     @RequestMapping("/trace/{id}")
     @ResponseBody
-    public List<SysLog> listTrace(@PathVariable("id") String id) {
+    public List<SysLog> listTrace(@PathVariable("id") Long id) {
         final SysUser user = service.getById(id);
         return sysLogService.getTrace(user);
     }

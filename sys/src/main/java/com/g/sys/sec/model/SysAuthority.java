@@ -15,19 +15,21 @@ import com.baomidou.mybatisplus.annotation.TableName;
  */
 @TableName("sys_authorities")
 public class SysAuthority implements Serializable {
+    private static final long serialVersionUID = -8974936343023751543L;
+
     public static final String UID = "uid";
     public static final String AUTHORITY = "authority";
-    private static final long serialVersionUID = -8974936343023751543L;
+
     @TableId
-    private String uid;
+    private Long uid;
     @TableId
     private String authority;
 
-    public String getUid() {
+    public Long getUid() {
         return uid;
     }
 
-    public SysAuthority setUid(String uid) {
+    public SysAuthority setUid(Long uid) {
         this.uid = uid;
         return this;
     }

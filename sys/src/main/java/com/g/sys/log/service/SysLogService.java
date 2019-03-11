@@ -45,30 +45,26 @@ public class SysLogService extends ServiceImpl<SysLogMapper, SysLog> {
 
     private EnumSet<DiffFlags> diffFlags = DiffFlags.dontNormalizeOpIntoMoveAndCopy().clone();
 
-    public int logCreate(String uid, Object obj) {
+    public int logCreate(Long uid, Object obj) {
         return log(uid, SysLog.OPERATIONS.CREATE, obj);
     }
 
-    public int logUpdate(String uid, Object obj) {
+    public int logUpdate(Long uid, Object obj) {
         return log(uid, SysLog.OPERATIONS.UPDATE, obj);
     }
 
-    public int logDelete(String uid, Object obj) {
+    public int logDelete(Long uid, Object obj) {
         return log(uid, SysLog.OPERATIONS.DELETE, obj);
     }
 
-    public int log(String uid, SysLog.OPERATIONS operation, Object obj) {
-        Assert.hasText(uid, "操作员不能为空");
+    public int log(Long uid, SysLog.OPERATIONS operation, Object obj) {
+        Assert.notNull(uid, "操作员不能为空");
         Assert.notNull(operation, "操作指令不能为空");
         Assert.notNull(obj, "操作对象不能为空");
 
-        Class<?> clz = obj.getClass();
-        TableInfo tableInfo = TableInfoHelper.getTableInfo(clz);
-        Assert.notNull(tableInfo, "传入的对象不是数据中的实体");
-        Assert.hasText(tableInfo.getKeyProperty(), "传入的对象没有主键");
-
         try {
-            JSONObject keyObj = getKeyObject(obj, clz, tableInfo);
+            Class<?> clz = obj.getClass();
+            JSONObject keyObj = getKeyObject(obj, clz);
 
             SysLog entity = new SysLog();
             entity.setUid(uid);
@@ -88,13 +84,9 @@ public class SysLogService extends ServiceImpl<SysLogMapper, SysLog> {
     public List<SysLog> getTrace(Object obj) {
         Assert.notNull(obj, "目标对象不能为空");
 
-        Class<?> clz = obj.getClass();
-        TableInfo tableInfo = TableInfoHelper.getTableInfo(clz);
-        Assert.notNull(tableInfo, "传入的对象不是数据中的实体");
-        Assert.hasText(tableInfo.getKeyProperty(), "传入的对象没有主键");
-
         try {
-            JSONObject keyObj = getKeyObject(obj, clz, tableInfo);
+            Class<?> clz = obj.getClass();
+            JSONObject keyObj = getKeyObject(obj, clz);
 
             QueryWrapper<SysLog> wrapper = new QueryWrapper();
             wrapper.eq(SysLog.CLAZZ, clz.getName());
@@ -120,7 +112,7 @@ public class SysLogService extends ServiceImpl<SysLogMapper, SysLog> {
 
         SysLog item = list.get(0);
         SysUser user = usersService.getById(item.getUid());
-        item.setOperator(user == null ? item.getUid() : user.getUsername());
+        item.setOperator(user == null ? item.getUid().toString() : user.getUsername());
         item.setOperation(EnumUtil.getDescription(SysLog.OPERATIONS.class, item.getOperation()));
         source = mapper.readTree(item.getContent());
 
@@ -128,7 +120,7 @@ public class SysLogService extends ServiceImpl<SysLogMapper, SysLog> {
             item = list.get(i);
 
             user = usersService.getById(item.getUid());
-            item.setOperator(user == null ? item.getUid() : user.getUsername());
+            item.setOperator(user == null ? item.getUid().toString() : user.getUsername());
 
             String operation = item.getOperation();
             item.setOperation(EnumUtil.getDescription(SysLog.OPERATIONS.class, operation));
@@ -165,8 +157,13 @@ public class SysLogService extends ServiceImpl<SysLogMapper, SysLog> {
         }
     }
 
-    private JSONObject getKeyObject(Object obj, Class<?> clz, TableInfo tableInfo) {
+    private JSONObject getKeyObject(Object obj, Class<?> clz) {
         boolean done = false;
+
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(clz);
+        Assert.notNull(tableInfo, "传入的对象不是数据中的实体");
+        Assert.hasText(tableInfo.getKeyProperty(), "传入的对象没有主键");
+
         JSONObject keyObj = new JSONObject();
 
         // Mybatis plus中，tableInfo的KeyProperty暂不支持复合主键，所以先用标注获取主键

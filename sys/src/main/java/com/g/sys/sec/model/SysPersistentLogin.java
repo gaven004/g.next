@@ -18,23 +18,28 @@ import com.baomidou.mybatisplus.annotation.TableName;
  */
 @TableName("sys_persistent_logins")
 public class SysPersistentLogin implements Serializable {
+    private static final long serialVersionUID = -5029482496694740738L;
+
     public static final String UID = "uid";
     public static final String SERIES = "series";
     public static final String TOKEN = "token";
     public static final String LAST_USED = "last_used";
-    private static final long serialVersionUID = -5029482496694740738L;
-    private String uid;
+
+    private Long uid;
+
     @TableId(value = "series", type = IdType.INPUT)
     private String series;
+
     private String token;
+
     @TableField("last_used")
     private Date lastUsed;
 
-    public String getUid() {
+    public Long getUid() {
         return uid;
     }
 
-    public SysPersistentLogin setUid(String uid) {
+    public SysPersistentLogin setUid(Long uid) {
         this.uid = uid;
         return this;
     }

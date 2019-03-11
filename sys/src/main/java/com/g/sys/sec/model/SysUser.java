@@ -22,15 +22,18 @@ import com.baomidou.mybatisplus.annotation.TableName;
  */
 @TableName("sys_users")
 public class SysUser implements Serializable {
+    private static final long serialVersionUID = -6511918582479158479L;
+
     public static final String UID = "uid";
     public static final String ACCOUNT = "account";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
     public static final String EMAIL = "email";
     public static final String ENABLED = "enabled";
-    private static final long serialVersionUID = -6511918582479158479L;
-    @TableId(value = "uid", type = IdType.INPUT)
-    private String uid;
+
+    @TableId(value = "uid", type = IdType.ID_WORKER)
+    private Long uid;
+
     /**
      * 用户账号
      */
@@ -38,6 +41,7 @@ public class SysUser implements Serializable {
     @NotEmpty(message = "用户账号是必须的")
     @Size(max = 15, message = "用户账号最长为15个字符")
     private String account;
+
     /**
      * 用户名称
      */
@@ -45,20 +49,24 @@ public class SysUser implements Serializable {
     @NotEmpty(message = "用户名是必须的")
     @Size(max = 50, message = "用户名最长为50个字符")
     private String username;
+
     private String password;
+
     @NotNull(message = "邮箱是必须的")
     @NotEmpty(message = "邮箱是必须的")
     @Size(max = 60, message = "邮箱最长为60个字符")
     private String email;
+
     private String enabled;
+
     @TableField(exist = false)
     private Set<String> roles;
 
-    public String getUid() {
+    public Long getUid() {
         return uid;
     }
 
-    public SysUser setUid(String uid) {
+    public SysUser setUid(Long uid) {
         this.uid = uid;
         return this;
     }
