@@ -18,13 +18,36 @@
 
     <properties>
         <tomcat7Version>7.0.92</tomcat7Version>
+        <logbook.version>1.9.1</logbook.version>
+        <jwt.verison>3.7.0</jwt.verison>
+        <g.next.version>0.0.1</g.next.version>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-core</artifactId>
+            <version>${logbook.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zalando</groupId>
+            <artifactId>logbook-servlet</artifactId>
+            <version>${logbook.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>${jwt.verison}</version>
+        </dependency>
+        <dependency>
             <groupId>com.g</groupId>
             <artifactId>commons</artifactId>
-            <version>0.0.1</version>
+            <version>${g.next.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.g</groupId>
+            <artifactId>sys</artifactId>
+            <version>${g.next.version}</version>
         </dependency>
     </dependencies>
 
