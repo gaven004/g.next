@@ -15,6 +15,7 @@
 
     <import resource="classpath:spring-task.xml"/>
     <import resource="classpath:spring-mybatis.xml"/>
+    <import resource="classpath:user-config.xml"/>
     <import resource="classpath:spring-mvc.xml"/>
-    <!--<import resource="classpath:spring-security.xml"/>-->
+    <import resource="classpath:spring-security.xml"/>
 </beans>

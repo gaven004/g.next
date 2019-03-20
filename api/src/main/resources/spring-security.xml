@@ -7,19 +7,48 @@
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/security
            http://www.springframework.org/schema/security/spring-security.xsd">
-<!--
-    <bean id="secUserDetailsService" class="com.g.sys.sec.service.GUserDetailsService"/>
 
-    &lt;!&ndash; 启用注解 &ndash;&gt;
+    <!-- 启用注解 -->
     <sec:global-method-security pre-post-annotations="enabled" jsr250-annotations="enabled"/>
 
-    <sec:authentication-manager>
+    <bean id="secUserDetailsService" class="com.g.sys.sec.service.GUserDetailsService"/>
+
+    <sec:authentication-manager id="restAuthenticationManager">
         <sec:authentication-provider user-service-ref="secUserDetailsService">
             <sec:password-encoder ref="passwordEncoder"/>
         </sec:authentication-provider>
     </sec:authentication-manager>
--->
 
-    <sec:http>
+    <sec:http pattern="/test" create-session="stateless" security="none"/>
+    <sec:http pattern="/login" create-session="stateless" security="none"/>
+
+    <bean id="jwtService" class="com.g.security.JwtService">
+        <property name="secret" value="abcde12345"/>
+        <property name="issuer" value="G.Next"/>
+        <property name="duration" value="86400"/>
+    </bean>
+
+    <bean id="jwtAuthenticationProvider" class="org.springframework.security.authentication.JwtAuthenticationProvider">
+        <property name="userDetailsService" ref="secUserDetailsService"/>
+    </bean>
+
+    <sec:authentication-manager id="jwtAuthenticationManager">
+        <sec:authentication-provider ref="jwtAuthenticationProvider"/>
+    </sec:authentication-manager>
+
+    <bean id="jwtAuthenticationEntryPoint"
+          class="org.springframework.security.web.authentication.www.JwtAuthenticationEntryPoint"/>
+
+    <bean id="jwtAuthenticationFilter"
+          class="org.springframework.security.web.authentication.www.JwtAuthenticationFilter">
+        <constructor-arg name="authenticationEntryPoint" ref="jwtAuthenticationEntryPoint"/>
+        <constructor-arg name="authenticationManager" ref="jwtAuthenticationManager"/>
+    </bean>
+
+    <sec:http entry-point-ref="jwtAuthenticationEntryPoint" create-session="stateless">
+        <sec:intercept-url pattern="/**" access="authenticated"/>
+        <sec:custom-filter before="FORM_LOGIN_FILTER" ref="jwtAuthenticationFilter"/>
+        <sec:anonymous enabled="false"/>
+        <sec:csrf disabled="true"/>
     </sec:http>
 </beans>
