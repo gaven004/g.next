@@ -18,4 +18,9 @@
     <import resource="classpath:user-config.xml"/>
     <import resource="classpath:spring-mvc.xml"/>
     <import resource="classpath:spring-security.xml"/>
+
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:org/springframework/security/mymessages"/>
+    </bean>
 </beans>
