@@ -75,7 +75,6 @@ public class CachePaginationInterceptor extends PaginationInterceptor implements
 
     /**
      * Physical Pagination Interceptor for all the queries with parameter
-     * {@link org.apache.ibatis.session.RowBounds}
      */
     public Object intercept(Invocation invocation) throws Throwable {
         CachingExecutor cachingExecutor = PluginUtils.realTarget(invocation.getTarget());
@@ -126,21 +125,22 @@ public class CachePaginationInterceptor extends PaginationInterceptor implements
 
         // 生成二级缓存的key（重点！默认invocation.proceed()会调用CachingExecutor的另外一个query方法，
         // 因为翻页时传入的BoundSql和RowBounds一样，所以生成的key一样，导致翻页时总数能从二级缓存取到数据）
-        CacheKey cacheKey = cachingExecutor.createCacheKey(mappedStatement, paramObj, RowBounds.DEFAULT, cacheBoundSql);
+        CacheKey cacheKey4Data = cachingExecutor.createCacheKey(mappedStatement, paramObj, RowBounds.DEFAULT, cacheBoundSql);
 
         // 执行查询。因为查询语句已经带了limit，所以RowBounds传入RowBounds.DEFAULT
-        final List<?> list = cachingExecutor.query(mappedStatement, paramObj, RowBounds.DEFAULT, resultHandler, cacheKey, boundSql);
+        final List<?> list = cachingExecutor.query(mappedStatement, paramObj, RowBounds.DEFAULT, resultHandler, cacheKey4Data, boundSql);
 
         // 补充处理分页时需要记录总数的情况
         if (page.isSearchCount()) {
-            cacheKey.update("TOTAL_");
+            CacheKey cacheKey4Count = cachingExecutor.createCacheKey(mappedStatement, paramObj, RowBounds.DEFAULT, cacheBoundSql);
+            cacheKey4Count.update("TOTAL_");
             Cache cache = mappedStatement.getCache();
             if (cache != null) {
                 if (mappedStatement.isUseCache() && resultHandler == null) {
-                    Long total = (Long) tcm.getObject(cache, cacheKey);
+                    Long total = (Long) tcm.getObject(cache, cacheKey4Count);
                     if (total == null) {
                         total = page.getTotal();
-                        tcm.putObject(cache, cacheKey, total); // issue #578 and #116
+                        tcm.putObject(cache, cacheKey4Count, total); // issue #578 and #116
                     } else {
                         page.setTotal(total);
                         long pages = page.getPages();
