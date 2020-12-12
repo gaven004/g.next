@@ -1,6 +1,9 @@
 package com.g.commons.model;
 
 public class ApiResponse<T> {
+    public static final String SUCCESS = "SUCCESS";
+    public static final String ERROR = "ERROR";
+
     private String result;
     private String message;
 
@@ -22,27 +25,27 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> success() {
-        return new ApiResponse<T>("SUCCESS", "成功");
+        return new ApiResponse<T>(SUCCESS, "成功");
     }
 
     public static <T> ApiResponse<T> success(String message) {
-        return new ApiResponse<T>("SUCCESS", message);
+        return new ApiResponse<T>(SUCCESS, message);
     }
 
     public static <T> ApiResponse<T> success(String message, T body) {
-        return new ApiResponse<T>("SUCCESS", message, body);
+        return new ApiResponse<T>(SUCCESS, message, body);
     }
 
     public static <T> ApiResponse<T> error() {
-        return new ApiResponse<T>("ERROR", "失败");
+        return new ApiResponse<T>(ERROR, "失败");
     }
 
     public static <T> ApiResponse<T> error(String message) {
-        return new ApiResponse<T>("ERROR", message);
+        return new ApiResponse<T>(ERROR, message);
     }
 
     public static <T> ApiResponse<T> error(String message, T body) {
-        return new ApiResponse<T>("ERROR", message, body);
+        return new ApiResponse<T>(ERROR, message, body);
     }
 
     public static <T> ApiResponse<T> create(boolean result) {
@@ -76,7 +79,7 @@ public class ApiResponse<T> {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("RestApiResponse [result=");
+        builder.append("ApiResponse [result=");
         builder.append(result);
         builder.append(", message=");
         builder.append(message);
