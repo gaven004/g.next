@@ -7,5 +7,5 @@ package com.g.commons.enums;
  * @version 2017/5/26
  */
 public interface DescribableEnum {
-    public String getDescription();
+    String getDescription();
 }
