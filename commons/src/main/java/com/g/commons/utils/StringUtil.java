@@ -69,7 +69,7 @@ public class StringUtil {
     }
 
     public static String format(short shortValue) {
-        String formatted = Integer.toHexString(shortValue);
+        String formatted = Integer.toHexString(Short.toUnsignedInt(shortValue));
         StringBuilder buf = new StringBuilder("0000");
         buf.replace(4 - formatted.length(), 4, formatted);
         return buf.toString();

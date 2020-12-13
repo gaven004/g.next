@@ -18,4 +18,12 @@ class StringUtilTest {
             System.out.println(StringUtil.randomString(10, true, true, true, true));
         }
     }
+
+    @Test
+    void testFormatNumber() {
+        System.out.println(StringUtil.format(32));
+        System.out.println(StringUtil.format((short) 32));
+        System.out.println(StringUtil.format(15));
+        System.out.println(StringUtil.format((short) 225));
+    }
 }

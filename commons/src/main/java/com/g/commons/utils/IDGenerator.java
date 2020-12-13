@@ -1,5 +1,6 @@
 package com.g.commons.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +28,7 @@ public class IDGenerator {
     /**
      * 起始的时间戳
      */
-    private final static long START_TIMESTAMP = 1514736000000L; // 2018-01-01
+    private final static long START_TIMESTAMP = 1577808000000L; // 2020-01-01
 
     /**
      * 每一部分占用的位数
@@ -50,18 +51,17 @@ public class IDGenerator {
     private final static long TIMESTAMP_LEFT_SHIFT = SEQUENCE_BITS + WORKER_ID_BITS + DATACENTER_ID_BITS;
     private final static long SEQUENCE_MASK = -1L ^ (-1L << SEQUENCE_BITS);
 
-    @Value("${IDGenerator.datacenterId:0}")
-    private long datacenterId;  //数据中心
-    @Value("${IDGenerator.workerId:0}")
-    private long workerId;     //机器标识
 
-    private long sequence = 0L; //序列号
-    private long lastTimestamp = -1L;//上一次时间戳
+    private long datacenterId; // 数据中心
 
-    public IDGenerator() {
-    }
+    private long workerId; // 机器标识
 
-    public IDGenerator(long datacenterId, long workerId) {
+    private long sequence = 0L; // 序列号
+    private long lastTimestamp = -1L; // 上一次时间戳
+
+    @Autowired
+    public IDGenerator(@Value("${IDGenerator.datacenterId:0}") long datacenterId,
+                       @Value("${IDGenerator.workerId:0}") long workerId) {
         if (datacenterId > MAX_DATACENTER_ID || datacenterId < 0) {
             throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", MAX_DATACENTER_ID));
         }
