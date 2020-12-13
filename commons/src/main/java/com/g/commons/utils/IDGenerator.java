@@ -60,8 +60,8 @@ public class IDGenerator {
     private long lastTimestamp = -1L; // 上一次时间戳
 
     @Autowired
-    public IDGenerator(@Value("${IDGenerator.datacenterId:0}") long datacenterId,
-                       @Value("${IDGenerator.workerId:0}") long workerId) {
+    public IDGenerator(@Value("${commons.IDGenerator.datacenterId:0}") long datacenterId,
+                       @Value("${commons.IDGenerator.workerId:0}") long workerId) {
         if (datacenterId > MAX_DATACENTER_ID || datacenterId < 0) {
             throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", MAX_DATACENTER_ID));
         }

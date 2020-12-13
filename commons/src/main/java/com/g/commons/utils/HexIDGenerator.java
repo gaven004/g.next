@@ -34,7 +34,7 @@ public class HexIDGenerator {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     @Autowired
-    public HexIDGenerator(@Value("${HexIDGenerator.workerId}") String workerId) {
+    public HexIDGenerator(@Value("${commons.HexIDGenerator.workerId}") String workerId) {
         if (!StringUtils.hasText(workerId)) {
             throw new IllegalArgumentException("Worker id must be set");
         }
