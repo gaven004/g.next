@@ -12,19 +12,18 @@ import java.util.UUID;
  * @version 3.0, 2017-10-24, Gaven, 恢复message的格式，增加getDetail方法
  */
 public class GenericAppException extends RuntimeException {
-    public static final String DEFAULT_ERROR_CORE = "CORE-00-0000";
-    public static final String DEFAULT_ERROR_MESSAGE = "App Exception";
     private static final long serialVersionUID = -1925535512076669332L;
+
     private String code;
 
     private String sn; // 异常唯一标识，用于日志跟踪
 
     public GenericAppException() {
-        this(DEFAULT_ERROR_CORE, UUID.randomUUID().toString(), DEFAULT_ERROR_MESSAGE);
+        this(ErrorCode.Generic, UUID.randomUUID().toString(), ErrorMessage.Generic);
     }
 
     public GenericAppException(String message) {
-        this(DEFAULT_ERROR_CORE, UUID.randomUUID().toString(), message);
+        this(ErrorCode.Generic, UUID.randomUUID().toString(), message);
     }
 
     public GenericAppException(String code, String message) {
@@ -38,7 +37,7 @@ public class GenericAppException extends RuntimeException {
     }
 
     public GenericAppException(String message, Throwable cause) {
-        this(DEFAULT_ERROR_CORE, UUID.randomUUID().toString(), message, cause);
+        this(ErrorCode.Generic, UUID.randomUUID().toString(), message, cause);
     }
 
     public GenericAppException(String code, String message, Throwable cause) {
