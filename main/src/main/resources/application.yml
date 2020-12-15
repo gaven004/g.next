@@ -21,14 +21,14 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: create #指定为update，每次启动项目检测表结构有变化的时候会新增字段，表不存在时会新建，如果指定create，则每次启动项目都会清空数据并删除表，再新建
+      ddl-auto: none
       naming:
         #指定jpa的自动表生成策略，驼峰自动映射为下划线格式
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
         #physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect # 使用JPA创建表时，默认使用的存储引擎是MyISAM，通过指定数据库版本，可以使用InnoDB
+        dialect: org.hibernate.dialect.MySQL8Dialect
 
 commons:
   IDGenerator:
