@@ -23,6 +23,14 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
     private String status;
     private String note;
 
+    public SysProperties() {
+    }
+
+    public SysProperties(String category, String name) {
+        this.category = category;
+        this.name = name;
+    }
+
     @Id
     @Column(name = "category")
     public String getCategory() {

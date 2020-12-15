@@ -1,8 +1,13 @@
 package com.g.sys.prop;
 
+import java.util.Optional;
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.querydsl.core.types.Predicate;
 
 import com.g.sys.log.SysLogService;
 
@@ -32,8 +37,21 @@ public class SysPropertiesService {
     }
 
     @Transactional
+    public void delete(Long operator, String category, String name) {
+        delete(operator, new SysProperties(category, name));
+    }
+
+    @Transactional
     public void delete(Long operator, SysProperties entity) {
         repository.delete(entity);
         logService.logDelete(operator, entity);
+    }
+
+    public Optional<SysProperties> get(String category, String name) {
+        return repository.findById(new SysPropertiesPK(category, name));
+    }
+
+    public Page<SysProperties> findAll(Predicate predicate, Pageable pageable) {
+        return repository.findAll(predicate, pageable);
     }
 }
