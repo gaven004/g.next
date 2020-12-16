@@ -1,7 +1,6 @@
 package com.g.sys.prop;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ class SysPropertiesServiceTest extends NextApplicationTests {
 
         SysProperties entity = new SysProperties();
         entity.setCategory("Test");
-        entity.setName("Hello");
+        entity.setName("Hi");
         entity.setValue("World");
 
         entity = service.save(0L, entity);
@@ -34,11 +33,23 @@ class SysPropertiesServiceTest extends NextApplicationTests {
         SysProperties entity = new SysProperties();
         entity.setCategory("Test");
         entity.setName("Hello");
-        entity.setValue("Gaven");
+        entity.setValue("World2");
 
         entity = service.update(0L, entity);
         assertNotNull(entity);
 
         System.out.println("entity = " + entity);
+    }
+
+    @Test
+    void findByCategory() {
+        assertNotNull(service);
+
+        final Iterable<SysProperties> result = service.findByCategory("Test", null);
+        assertNotNull(result);
+
+        result.forEach(item->{
+            System.out.printf("Item [Category: %s, Name: %s, Value: %s]\n", item.getCategory(), item.getName(), item.getValue());
+        });
     }
 }
