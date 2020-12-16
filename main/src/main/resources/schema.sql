@@ -29,6 +29,7 @@ CREATE TABLE `sys_properties` (
   `name` varchar(32) NOT NULL COMMENT '参数名',
   `value` varchar(32) DEFAULT NULL COMMENT '参数值',
   `properties` json DEFAULT NULL COMMENT '扩展属性',
+  `sort_order` int DEFAULT 0 NULL COMMENT '参考排序',
   `status` enum('VALID','INVALID') DEFAULT 'VALID' COMMENT '状态',
   `note` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`category`,`name`)

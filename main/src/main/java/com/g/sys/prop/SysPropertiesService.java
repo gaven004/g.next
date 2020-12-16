@@ -5,10 +5,13 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.querydsl.core.types.Predicate;
 
+import com.g.commons.enums.Status;
 import com.g.sys.log.SysLogService;
 
 @Service
@@ -53,5 +56,18 @@ public class SysPropertiesService {
 
     public Page<SysProperties> findAll(Predicate predicate, Pageable pageable) {
         return repository.findAll(predicate, pageable);
+    }
+
+    public Iterable<SysProperties> findByCategory(String category, String status) {
+        if (!StringUtils.hasText(status)) {
+            status = Status.VALID.name();
+        }
+
+        var qSysProperties = QSysProperties.sysProperties;
+        Predicate predicate = qSysProperties.category.eq(category)
+                .and(qSysProperties.status.eq(status));
+        Sort.TypedSort<SysProperties> sort = Sort.sort(SysProperties.class);
+
+        return repository.findAll(predicate, sort.by(SysProperties::getSortOrder).ascending());
     }
 }
