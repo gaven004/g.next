@@ -20,6 +20,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
     private String name;
     private String value;
     private String properties;
+    private Integer sortOrder;
     private String status;
     private String note;
 
@@ -72,6 +73,16 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
     }
 
     @Basic
+    @Column(name = "sort_order")
+    public Integer getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(Integer sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    @Basic
     @Column(name = "status")
     public String getStatus() {
         return status;
@@ -98,10 +109,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
         SysProperties that = (SysProperties) o;
         return Objects.equals(category, that.category) &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(value, that.value) &&
-                Objects.equals(properties, that.properties) &&
-                Objects.equals(status, that.status) &&
-                Objects.equals(note, that.note);
+                Objects.equals(value, that.value);
     }
 
     @Override

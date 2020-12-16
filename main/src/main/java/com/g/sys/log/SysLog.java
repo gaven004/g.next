@@ -144,8 +144,7 @@ public class SysLog extends AbstractEntity<Long> {
                 Objects.equals(ctime, sysLog.ctime) &&
                 Objects.equals(operation, sysLog.operation) &&
                 Objects.equals(clazz, sysLog.clazz) &&
-                Objects.equals(oid, sysLog.oid) &&
-                Objects.equals(content, sysLog.content);
+                Objects.equals(oid, sysLog.oid);
     }
 
     @Override
