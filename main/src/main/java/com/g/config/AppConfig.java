@@ -1,4 +1,4 @@
-package com.g;
+package com.g.config;
 
 import java.text.SimpleDateFormat;
 
@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.g.commons.utils.DateTimePattern;
 
 @Configuration
-public class AppConfiguration {
+public class AppConfig {
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper mapper = new ObjectMapper();
