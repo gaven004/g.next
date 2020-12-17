@@ -3,6 +3,7 @@ package com.g.config;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -27,6 +28,7 @@ public class AppConfig {
     }
 
     @Bean
+    @Qualifier("gsgdgcyxgs_pm@163.com")
     public JavaMailSender javaMailSender() {
         Properties properties = new Properties();
         properties.put("mail.smtp.host", "smtp.163.com");
@@ -46,7 +48,7 @@ public class AppConfig {
     }
 
     @Bean
-    public MailSender mailSender(JavaMailSender javaMailSender) {
+    public MailSender mailSender(@Qualifier("gsgdgcyxgs_pm@163.com") JavaMailSender javaMailSender) {
         return new MailSender("gsgdgcyxgs_pm@163.com", javaMailSender);
     }
 }
