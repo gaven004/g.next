@@ -32,6 +32,19 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+# Actuator
+management:
+  endpoint:
+    httptrace:
+      enabled: true
+  trace:
+    http:
+      include: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
 commons:
   IDGenerator:
     datacenterId: 0

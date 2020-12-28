@@ -29,7 +29,9 @@ public class QSysProperties extends EntityPathBase<SysProperties> {
 
     public final StringPath properties = createString("properties");
 
-    public final StringPath status = createString("status");
+    public final NumberPath<Integer> sortOrder = createNumber("sortOrder", Integer.class);
+
+    public final EnumPath<com.g.commons.enums.Status> status = createEnum("status", com.g.commons.enums.Status.class);
 
     public final StringPath value = createString("value");
 

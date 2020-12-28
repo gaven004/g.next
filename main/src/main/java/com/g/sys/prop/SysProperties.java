@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import com.g.commons.enums.Status;
 import com.g.commons.model.AbstractEntity;
 
 @Entity
@@ -21,7 +22,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
     private String value;
     private String properties;
     private Integer sortOrder;
-    private String status;
+    private Status status;
     private String note;
 
     public SysProperties() {
@@ -84,11 +85,12 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
 
     @Basic
     @Column(name = "status")
-    public String getStatus() {
+    @Enumerated(EnumType.STRING)
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

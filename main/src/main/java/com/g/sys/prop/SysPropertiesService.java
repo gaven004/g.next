@@ -4,7 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import javax.transaction.Transactional;
 
-import org.apache.commons.beanutils.BeanUtilsBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,6 +23,7 @@ public class SysPropertiesService {
     private final SysPropertiesRepository repository;
     private final SysLogService logService;
 
+    @Autowired
     public SysPropertiesService(SysPropertiesRepository repository, SysLogService logService) {
         this.repository = repository;
         this.logService = logService;
@@ -77,9 +78,9 @@ public class SysPropertiesService {
         return findByCategory(category, null);
     }
 
-    public Iterable<SysProperties> findByCategory(String category, String status) {
-        if (!StringUtils.hasText(status)) {
-            status = Status.VALID.name();
+    public Iterable<SysProperties> findByCategory(String category, Status status) {
+        if (null == status) {
+            status = Status.VALID;
         }
 
         var qSysProperties = QSysProperties.sysProperties;
