@@ -13,6 +13,7 @@ public final class ErrorCode {
     }
 
     public static final String Generic = "CORE-00-0000";
+    public static final String IllegalArgument = "CORE-00-0001";
 
     public static final String UnsupportedFileType = "CORE-00-0101";
     public static final String ExceedMaxSize = "CORE-00-0102";
