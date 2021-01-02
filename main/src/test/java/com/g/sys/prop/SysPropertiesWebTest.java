@@ -14,7 +14,7 @@ import com.g.WebApplicationTest;
 public class SysPropertiesWebTest extends WebApplicationTest {
     @Test
     void find() throws Exception {
-        mockMvc.perform(get("/sys/properties?status=VALID&page=0&size=10&sort=category,asc&sort=name,asc")
+        mockMvc.perform(get("/sys/properties?status=VALID&sortOrder=0&sortOrder=10&page=0&size=10&sort=category,asc&sort=name,asc")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())

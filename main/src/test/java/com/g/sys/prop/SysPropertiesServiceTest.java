@@ -4,12 +4,24 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import com.querydsl.core.types.Predicate;
 
 import com.g.NextApplicationTests;
 
 class SysPropertiesServiceTest extends NextApplicationTests {
     @Autowired
     SysPropertiesService service;
+
+    @Test
+    void findAll() {
+        var qSysProperties = QSysProperties.sysProperties;
+        Predicate predicate = qSysProperties.category.containsIgnoreCase("test");
+        Page<SysProperties> page = service.findAll(predicate, PageRequest.of(0, 10));
+        System.out.println("page = " + page);
+    }
 
     @Test
     void save() {
