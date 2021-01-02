@@ -1,4 +1,4 @@
-package com.g.web;
+package com.g.commons.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,8 @@ public class GlobalControllerAdvice {
         BindingResult bindingResult = ex.getBindingResult();
         StringBuilder buff = new StringBuilder("输入参数校验失败：[");
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            buff.append(fieldError.getField()).append("：").append(fieldError.getDefaultMessage()).append(", ");
+            buff.append("属性").append(fieldError.getField()).append("：")
+                    .append(fieldError.getDefaultMessage()).append(", ");
         }
         buff.replace(buff.length() - 2, buff.length(), "]");
         return new ApiResponse(ErrorCode.IllegalArgument, buff.toString());

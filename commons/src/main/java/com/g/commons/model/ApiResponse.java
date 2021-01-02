@@ -4,6 +4,9 @@ public class ApiResponse<T> {
     public static final String SUCCESS = "SUCCESS";
     public static final String ERROR = "ERROR";
 
+    public static final String SUCCESS_MSG = "成功";
+    public static final String ERROR_MSG = "失败";
+
     private String result;
     private String message;
 
@@ -25,7 +28,7 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> success() {
-        return new ApiResponse<T>(SUCCESS, "成功");
+        return new ApiResponse<T>(SUCCESS, SUCCESS_MSG);
     }
 
     public static <T> ApiResponse<T> success(String message) {
@@ -37,7 +40,7 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> error() {
-        return new ApiResponse<T>(ERROR, "失败");
+        return new ApiResponse<T>(ERROR, ERROR_MSG);
     }
 
     public static <T> ApiResponse<T> error(String message) {
