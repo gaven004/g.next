@@ -2,6 +2,7 @@ package com.g.sys.prop;
 
 import java.util.Objects;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -35,6 +36,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
 
     @Id
     @Column(name = "category")
+    @NotEmpty
     public String getCategory() {
         return category;
     }
@@ -45,6 +47,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
 
     @Id
     @Column(name = "name")
+    @NotEmpty
     public String getName() {
         return name;
     }
@@ -55,6 +58,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
 
     @Basic
     @Column(name = "value")
+    @NotEmpty
     public String getValue() {
         return value;
     }
@@ -117,6 +121,20 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
     @Override
     public int hashCode() {
         return Objects.hash(category, name, value);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SysProperties{");
+        sb.append("category='").append(category).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", value='").append(value).append('\'');
+        sb.append(", properties='").append(properties).append('\'');
+        sb.append(", sortOrder=").append(sortOrder);
+        sb.append(", status=").append(status);
+        sb.append(", note='").append(note).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 
     /**
