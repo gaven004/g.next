@@ -31,8 +31,8 @@ public class ApiResponse<T> {
         return new ApiResponse<T>(SUCCESS, SUCCESS_MSG);
     }
 
-    public static <T> ApiResponse<T> success(String message) {
-        return new ApiResponse<T>(SUCCESS, message);
+    public static <T> ApiResponse<T> success(T body) {
+        return new ApiResponse<T>(SUCCESS, SUCCESS_MSG, body);
     }
 
     public static <T> ApiResponse<T> success(String message, T body) {

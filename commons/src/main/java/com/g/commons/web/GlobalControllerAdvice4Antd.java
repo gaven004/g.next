@@ -13,24 +13,24 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.g.commons.exception.ErrorCode;
 import com.g.commons.exception.GenericAppException;
-import com.g.commons.model.ApiResponse;
+import com.g.commons.model.AntdResponse;
 
-//@ControllerAdvice
-public class GlobalControllerAdvice {
-    private static final Logger log = LoggerFactory.getLogger(GlobalControllerAdvice.class);
+@ControllerAdvice
+public class GlobalControllerAdvice4Antd {
+    private static final Logger log = LoggerFactory.getLogger(GlobalControllerAdvice4Antd.class);
 
     @ExceptionHandler(GenericAppException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResponse<?> generalSystemErrorHandler(GenericAppException exception) {
+    public AntdResponse<?> generalSystemErrorHandler(GenericAppException exception) {
         log.warn(exception.getDetail(), exception);
-        return ApiResponse.error(exception.getMessage());
+        return AntdResponse.error(exception.getCode(), exception.getMessage(), exception.getSn());
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ApiResponse<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public AntdResponse<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         StringBuilder buff = new StringBuilder("输入参数校验失败：[");
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -38,14 +38,14 @@ public class GlobalControllerAdvice {
                     .append(fieldError.getDefaultMessage()).append(", ");
         }
         buff.replace(buff.length() - 2, buff.length(), "]");
-        return new ApiResponse(ErrorCode.IllegalArgument, buff.toString());
+        return AntdResponse.error(ErrorCode.IllegalArgument, buff.toString());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
-    public ApiResponse<?> exceptionHandler(Exception exception) {
+    public AntdResponse<?> exceptionHandler(Exception exception) {
         log.error("操作失败", exception);
-        return ApiResponse.error("操作失败，" + exception.getMessage());
+        return AntdResponse.error(ErrorCode.Generic, exception.getMessage());
     }
 }

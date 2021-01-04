@@ -11,7 +11,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 import com.querydsl.core.types.Predicate;
 
-import com.g.commons.model.ApiResponse;
+import com.g.commons.model.AntdPageRequest;
+import com.g.commons.model.AntdResponse;
 import com.g.commons.service.GeneralService;
 import com.g.commons.utils.GenericsUtils;
 
@@ -30,43 +31,45 @@ public abstract class GeneralController<S extends GeneralService<R, T, ID>,
     }
 
     @GetMapping
-    ApiResponse<?> find(NativeWebRequest webRequest, Pageable pageable) throws Exception {
+    AntdResponse<?> find(NativeWebRequest webRequest, AntdPageRequest pageRequest) throws Exception {
         // 是否分页
-        boolean isPage = webRequest.getParameter("size") != null;
+        boolean isPage = webRequest.getParameter("pageSize") != null;
         // 是否排序
-        boolean isSort = webRequest.getParameter("sort") != null;
+        boolean isSort = webRequest.getParameter("sorter") != null;
+
+        Pageable pageable = (pageRequest != null ? pageRequest.toPageable() : null);
 
         Predicate predicate = argumentResolver.resolveArgument(webRequest, domainClass);
 
         if (isPage) {
-            return ApiResponse.success(ApiResponse.SUCCESS_MSG, service.findAll(predicate, pageable));
+            return AntdResponse.success(service.findAll(predicate, pageable));
         }
 
         if (isSort) {
-            return ApiResponse.success(ApiResponse.SUCCESS_MSG, service.findAll(predicate, pageable.getSort()));
+            return AntdResponse.success(service.findAll(predicate, pageable.getSort()));
         }
 
-        return ApiResponse.success(ApiResponse.SUCCESS_MSG, service.findAll(predicate));
+        return AntdResponse.success(service.findAll(predicate));
     }
 
     @GetMapping("/{id}")
-    ApiResponse<T> get(@PathVariable ID id) {
-        return ApiResponse.success(ApiResponse.SUCCESS_MSG, service.get(id));
+    AntdResponse<T> get(@PathVariable ID id) {
+        return AntdResponse.success(service.get(id));
     }
 
     @PostMapping
-    ApiResponse<T> save(@RequestBody @Valid T entity) {
-        return ApiResponse.success(ApiResponse.SUCCESS_MSG, service.save(entity));
+    AntdResponse<T> save(@RequestBody @Valid T entity) {
+        return AntdResponse.success(service.save(entity));
     }
 
     @PutMapping
-    ApiResponse<T> update(@RequestBody @Valid T entity) {
-        return ApiResponse.success(ApiResponse.SUCCESS_MSG, service.update(entity));
+    AntdResponse<T> update(@RequestBody @Valid T entity) {
+        return AntdResponse.success(service.update(entity));
     }
 
     @DeleteMapping("/{id}")
-    ApiResponse<T> delete(@PathVariable ID id) {
+    AntdResponse<T> delete(@PathVariable ID id) {
         service.delete(id);
-        return ApiResponse.success();
+        return AntdResponse.success();
     }
 }
