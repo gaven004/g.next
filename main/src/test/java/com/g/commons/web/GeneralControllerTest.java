@@ -20,24 +20,50 @@ class GeneralControllerTest extends WebApplicationTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result", is("SUCCESS")))
-                .andExpect(jsonPath("$.body.content", notNullValue()));
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", notNullValue()));
 
         mockMvc.perform(get("/test/sys/properties?status=VALID&sort=category,asc&sort=name,asc")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result", is("SUCCESS")))
-                .andExpect(jsonPath("$.body", notNullValue()))
-                .andExpect(jsonPath("$.body", not(hasItem("pageable"))));
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", notNullValue()))
+                .andExpect(jsonPath("$", not(hasItem("pageSize"))));
 
         mockMvc.perform(get("/test/sys/properties?status=VALID")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result", is("SUCCESS")))
-                .andExpect(jsonPath("$.body", notNullValue()))
-                .andExpect(jsonPath("$.body", not(hasItem("pageable"))));
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", notNullValue()))
+                .andExpect(jsonPath("$", not(hasItem("pageSize"))));
+    }
+
+    @Test
+    void findAntd() throws Exception {
+        mockMvc.perform(get("/test/sys/properties?current=1&pageSize=20&sorter=%7B%22category%22%3A%22ascend%22%7D&filter=%7B%7D")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", notNullValue()));
+
+        mockMvc.perform(get("/test/sys/properties?status=VALID&sorter=%7B%22category%22%3A%22ascend%22%7D")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", notNullValue()))
+                .andExpect(jsonPath("$", not(hasItem("pageSize"))));
+
+        mockMvc.perform(get("/test/sys/properties?status=VALID")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.data", notNullValue()))
+                .andExpect(jsonPath("$", not(hasItem("pageSize"))));
     }
 
     @Test
