@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Id;
+import javax.validation.constraints.NotEmpty;
 
 public class SysPropertiesPK implements Serializable {
     private String category;
@@ -19,6 +20,7 @@ public class SysPropertiesPK implements Serializable {
 
     @Column(name = "category")
     @Id
+    @NotEmpty
     public String getCategory() {
         return category;
     }
@@ -29,6 +31,7 @@ public class SysPropertiesPK implements Serializable {
 
     @Column(name = "name")
     @Id
+    @NotEmpty
     public String getName() {
         return name;
     }
