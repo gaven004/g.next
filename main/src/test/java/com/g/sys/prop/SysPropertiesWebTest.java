@@ -30,4 +30,14 @@ public class SysPropertiesWebTest extends WebApplicationTest {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
+
+    @Test
+    public void batchDelete() throws Exception {
+        final String value = "[{\"category\":\"Test\",\"name\":\"Hi\"},{\"category\":\"Test\",\"name\":\"Hello\"}]";
+        mockMvc.perform(delete("/sys/properties/$batch")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(value))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
+    }
 }
