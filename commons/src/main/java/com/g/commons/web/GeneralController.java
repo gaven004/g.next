@@ -33,11 +33,11 @@ public abstract class GeneralController<S extends GeneralService<R, T, ID>,
     @GetMapping
     AntdResponse<?> find(NativeWebRequest webRequest, AntdPageRequest pageRequest) throws Exception {
         // 是否分页
-        boolean isPage = webRequest.getParameter("pageSize") != null;
+        boolean isPage = isPage(webRequest);
         // 是否排序
-        boolean isSort = webRequest.getParameter("sorter") != null;
+        boolean isSort = isSort(webRequest);
 
-        Pageable pageable = (pageRequest != null ? pageRequest.toPageable() : null);
+        Pageable pageable = getPageable(pageRequest);
 
         Predicate predicate = argumentResolver.resolveArgument(webRequest, domainClass);
 
@@ -71,5 +71,17 @@ public abstract class GeneralController<S extends GeneralService<R, T, ID>,
     AntdResponse<T> delete(@PathVariable ID id) {
         service.delete(id);
         return AntdResponse.success();
+    }
+
+    public static Pageable getPageable(AntdPageRequest pageRequest) {
+        return pageRequest != null ? pageRequest.toPageable() : null;
+    }
+
+    public static boolean isSort(NativeWebRequest webRequest) {
+        return webRequest.getParameter("sorter") != null;
+    }
+
+    public static boolean isPage(NativeWebRequest webRequest) {
+        return webRequest.getParameter("pageSize") != null;
     }
 }
