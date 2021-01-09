@@ -107,5 +107,6 @@ const errorHandler = (error: ResponseError) => {
 };
 
 export const request: RequestConfig = {
+  timeout: 3000,
   errorHandler,
 };
