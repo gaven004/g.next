@@ -1,5 +1,5 @@
 import request from 'umi-request';
-import {TableListItem, TableListItemKey, TableListParams} from './data.d';
+import {TableListItemKey, TableListParams} from './data.d';
 
 export async function findProperties(params?: TableListParams) {
   return request('/api/sys/properties', {
@@ -16,22 +16,20 @@ export async function removeProperties(params: TableListItemKey[]) {
   });
 }
 
-export async function addRule(params: TableListParams) {
-  return request('/api/rule', {
+export async function addProperty(params: TableListParams) {
+  return request('/api/sys/properties', {
     method: 'POST',
     data: {
       ...params,
-      method: 'post',
     },
   });
 }
 
-export async function updateRule(params: TableListParams) {
-  return request('/api/rule', {
-    method: 'POST',
+export async function updateProperty(params: TableListParams) {
+  return request('/api/sys/properties', {
+    method: 'PUT',
     data: {
       ...params,
-      method: 'update',
     },
   });
 }

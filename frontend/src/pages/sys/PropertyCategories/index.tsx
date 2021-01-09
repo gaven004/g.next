@@ -7,9 +7,9 @@ import ProTable, {ActionType, ProColumns} from '@ant-design/pro-table';
 import {ModalForm, ProFormSelect, ProFormText, ProFormTextArea} from "@ant-design/pro-form";
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
 
-import {confirm} from '../../../utils/utils';
+import {confirm} from '@/utils/utils';
 import type {TableListItem} from './data.d';
-import {addProperty, findProperties, removeProperties, updateProperty} from "./service";
+import {addCategory, findCategories, removeCategories, updateCategory} from "./service";
 
 /**
  * 添加节点
@@ -19,7 +19,7 @@ const handleAdd = async (fields: TableListItem) => {
   const hide = message.loading('正在添加');
 
   try {
-    await addProperty({...fields});
+    await addCategory({...fields});
     hide();
     message.success('添加成功');
     return true;
@@ -38,7 +38,7 @@ const handleUpdate = async (fields: TableListItem) => {
   const hide = message.loading('正在更新');
 
   try {
-    await updateProperty({...fields});
+    await updateCategory({...fields});
     hide();
     message.success('更新成功');
     return true;
@@ -74,7 +74,7 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
 
   const hide = message.loading('正在删除');
   try {
-    await removeProperties(
+    await removeCategories(
       selectedRows.map((row) => {
         return row.id;
       }),
@@ -142,8 +142,8 @@ export default (): React.ReactNode => {
       render: (_, record) => [
         <a onClick={() => {
           setNew(false);
-          formRef.current!.resetFields();
-          formRef.current!.setFieldsValue(record);
+          formRef.current?.resetFields();
+          formRef.current?.setFieldsValue(record);
           handleModalVisible(true);
         }}>
           编辑
@@ -163,7 +163,7 @@ export default (): React.ReactNode => {
     <PageContainer>
       <ProTable<TableListItem>
         actionRef={actionRef}
-        request={(params, sorter, filter) => findProperties({...params, sorter, filter})}
+        request={(params, sorter, filter) => findCategories({...params, sorter, filter})}
         columns={columns}
         bordered
         rowKey="id"
@@ -173,7 +173,7 @@ export default (): React.ReactNode => {
         toolBarRender={() => [
           <Button type="primary" key="primary" onClick={() => {
             setNew(true);
-            formRef.current!.resetFields();
+            formRef.current?.resetFields();
             handleModalVisible(true)
           }}>
             <PlusOutlined/> 新建

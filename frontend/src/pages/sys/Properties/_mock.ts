@@ -11,8 +11,8 @@ export default {
       {"category": "Test", "name": "Hello2", "value": "World", "sortOrder": 0, "status": "INVALID"},
       {"category": "Test", "name": "Hi", "value": "World", "sortOrder": 0, "status": "VALID"}],
     "current": 1,
-    "pageSize": 10,
-    "total": 2
+    "pageSize": 20,
+    "total": 3
   }
 }
 ;
