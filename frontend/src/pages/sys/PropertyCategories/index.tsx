@@ -1,9 +1,10 @@
 import React, {useRef, useState} from 'react';
 
 import {Button, message, Space} from "antd";
-import {FormInstance} from "antd/lib/form/Form";
+import type {FormInstance} from "antd/lib/form/Form";
 import {PageContainer} from '@ant-design/pro-layout';
-import ProTable, {ActionType, ProColumns} from '@ant-design/pro-table';
+import type {ActionType, ProColumns} from '@ant-design/pro-table';
+import ProTable from '@ant-design/pro-table';
 import {ModalForm, ProFormSelect, ProFormText, ProFormTextArea} from "@ant-design/pro-form";
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
 
@@ -174,6 +175,7 @@ export default (): React.ReactNode => {
           <Button type="primary" key="primary" onClick={() => {
             setNew(true);
             formRef.current?.resetFields();
+            formRef.current?.setFieldsValue({'status': 'VALID'});
             handleModalVisible(true)
           }}>
             <PlusOutlined/> 新建
@@ -190,10 +192,10 @@ export default (): React.ReactNode => {
       />
       <ModalForm
         formRef={formRef}
+        name="form"
         title={isNew ? "新建" : "修改"}
         width="400px"
         visible={modalVisible}
-        initialValues={{'status': 'VALID'}}
         onVisibleChange={handleModalVisible}
         onFinish={async (value) => {
           const success = isNew ?
