@@ -2,13 +2,22 @@ package com.g.sys.sec.model;
 
 import java.util.Objects;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.g.commons.enums.Status;
+import com.g.commons.model.AbstractEntity;
 
 @Entity
 @Table(name = "sys_roles")
-public class SysRoles {
+@DynamicInsert
+@DynamicUpdate
+public class SysRoles extends AbstractEntity {
     private Long id;
     private String name;
-    private String status;
+    private Status status;
 
     @Id
     @Column(name = "id")
@@ -22,6 +31,7 @@ public class SysRoles {
 
     @Basic
     @Column(name = "name")
+    @NotEmpty
     public String getName() {
         return name;
     }
@@ -32,11 +42,12 @@ public class SysRoles {
 
     @Basic
     @Column(name = "status")
-    public String getStatus() {
+    @Enumerated(EnumType.STRING)
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -53,5 +64,15 @@ public class SysRoles {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, status);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("SysRoles{");
+        sb.append("id=").append(id);
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", status=").append(status);
+        sb.append('}');
+        return sb.toString();
     }
 }

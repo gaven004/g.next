@@ -3,27 +3,37 @@ package com.g.sys.sec.model;
 import java.util.Objects;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.g.commons.enums.Status;
+import com.g.commons.model.AbstractEntity;
 
 @Entity
 @Table(name = "sys_action")
-public class SysAction {
-    private long id;
+@DynamicInsert
+@DynamicUpdate
+public class SysAction extends AbstractEntity {
+    private Long id;
     private String resource;
-    private Object method;
-    private Object status;
+    private ActionMethod method;
+    private Status status;
 
     @Id
     @Column(name = "id")
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "resource")
+    @NotEmpty
     public String getResource() {
         return resource;
     }
@@ -34,21 +44,24 @@ public class SysAction {
 
     @Basic
     @Column(name = "method")
-    public Object getMethod() {
+    @NotEmpty
+    @Enumerated(EnumType.STRING)
+    public ActionMethod getMethod() {
         return method;
     }
 
-    public void setMethod(Object method) {
+    public void setMethod(ActionMethod method) {
         this.method = method;
     }
 
     @Basic
     @Column(name = "status")
-    public Object getStatus() {
+    @Enumerated(EnumType.STRING)
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(Object status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
@@ -57,11 +70,13 @@ public class SysAction {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SysAction sysAction = (SysAction) o;
-        return id == sysAction.id && Objects.equals(resource, sysAction.resource) && Objects.equals(method, sysAction.method) && Objects.equals(status, sysAction.status);
+        return id == sysAction.id
+                && Objects.equals(resource, sysAction.resource)
+                && Objects.equals(method, sysAction.method);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, resource, method, status);
+        return Objects.hash(id);
     }
 }
