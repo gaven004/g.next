@@ -103,15 +103,22 @@ public class EnumUtil {
      * @param enumType 枚举类型
      * @return
      */
-    public static <T extends Enum<T> & DescribableEnum> List<Option> getDescOptions(Class<T> enumType) {
+    public static <T extends Enum<T>> List<Option> getDescOptions(Class<T> enumType) {
         if (enumType == null) {
             return null;
         }
 
         EnumSet<T> set = EnumSet.allOf(enumType);
         List<Option> list = new ArrayList<>(set.size());
-        for (T e : set) {
-            list.add(new Option(e.name(), e.getDescription()));
+
+        if (DescribableEnum.class.isAssignableFrom(enumType)) {
+            for (T e : set) {
+                list.add(new Option(e.name(), ((DescribableEnum) e).getDescription()));
+            }
+        } else {
+            for (T e : set) {
+                list.add(new Option(e.name(), e.name()));
+            }
         }
 
         return list;

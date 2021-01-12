@@ -15,7 +15,7 @@ import com.g.WebApplicationTest;
 class EnumsControllerTest extends WebApplicationTest {
     @Test
     void getStatus() throws Exception {
-        mockMvc.perform(get("/enums/status")
+        mockMvc.perform(get("/enums/Status")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
