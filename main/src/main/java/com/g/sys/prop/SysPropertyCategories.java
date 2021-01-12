@@ -8,12 +8,13 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.g.commons.enums.Status;
+import com.g.commons.model.AbstractEntity;
 
 @Entity
 @Table(name = "sys_property_categories")
 @DynamicInsert
 @DynamicUpdate
-public class SysPropertyCategories {
+public class SysPropertyCategories extends AbstractEntity {
     private String id;
     private String name;
     private String note;
