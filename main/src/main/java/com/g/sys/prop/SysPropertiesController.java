@@ -1,32 +1,71 @@
 package com.g.sys.prop;
 
+import static com.g.commons.web.GeneralController.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.NativeWebRequest;
 
 import com.querydsl.core.types.Predicate;
 
+import com.g.commons.enums.Option;
 import com.g.commons.exception.EntityNotFoundException;
+import com.g.commons.model.AntdPageRequest;
 import com.g.commons.model.AntdResponse;
 
 @RestController
 @RequestMapping("sys/properties")
 public class SysPropertiesController {
     final SysPropertiesService service;
+    final SysPropertiesRepository repository;
 
     @Autowired
-    public SysPropertiesController(SysPropertiesService service) {
+    public SysPropertiesController(SysPropertiesService service, SysPropertiesRepository repository) {
         this.service = service;
+        this.repository = repository;
     }
 
     @GetMapping
-    AntdResponse<Page<SysProperties>> find(@QuerydslPredicate(root = SysProperties.class) Predicate predicate,
-                                           Pageable pageable) {
-        return AntdResponse.success(service.findAll(predicate, pageable));
+    AntdResponse<?> find(NativeWebRequest webRequest,
+                         @QuerydslPredicate(root = SysProperties.class) Predicate predicate,
+                         AntdPageRequest pageRequest) {
+        // 是否分页
+        boolean isPage = isPage(webRequest);
+        // 是否排序
+        boolean isSort = isSort(webRequest);
+
+        Pageable pageable = getPageable(pageRequest);
+
+        if (isPage) {
+            return AntdResponse.success(repository.findAll(predicate, pageable));
+        }
+
+        if (isSort) {
+            return AntdResponse.success(repository.findAll(predicate, pageable.getSort()));
+        }
+
+        return AntdResponse.success(repository.findAll(predicate));
+    }
+
+    @GetMapping("/$options")
+    AntdResponse<List<Option>> getOptions() {
+        Iterable<SysProperties> properties = repository.findAll();
+        if (properties != null && properties.iterator().hasNext()) {
+            List<Option> result = new ArrayList();
+            properties.forEach(item -> {
+                result.add(new Option(item.getName(), item.getValue()));
+            });
+
+            return AntdResponse.success(result);
+        }
+        return AntdResponse.success();
     }
 
     @GetMapping("/{category}/{name}")
