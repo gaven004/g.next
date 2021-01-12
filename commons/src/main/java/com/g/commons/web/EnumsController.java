@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.g.commons.exception.ErrorCode;
 import com.g.commons.model.AntdResponse;
 import com.g.commons.utils.EnumUtil;
 
@@ -59,6 +60,6 @@ public class EnumsController implements InitializingBean {
         return Optional.ofNullable((type.indexOf('.') >= 0) ? type : NAME_MAP.get(type))
                 .map(fullname -> CLASS_MAP.get(fullname))
                 .map(clazz -> AntdResponse.success(EnumUtil.getDescOptions(clazz)))
-                .orElse(AntdResponse.success());
+                .orElse(AntdResponse.error(ErrorCode.EntityNotFound, "没有指定的枚举类"));
     }
 }
