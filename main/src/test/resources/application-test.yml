@@ -1,0 +1,60 @@
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+logging:
+  level:
+    root: INFO
+    org:
+      hibernate:
+        SQL: DEBUG
+        engine:
+          QueryParameters: TRACE
+          HQLQueryPlan: TRACE
+        type:
+          descriptor:
+            sql: TRACE
+
+spring:
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  # 配置数据源信息
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/app_db?serverTimezone=UTC&characterEncoding=utf-8
+    username: db_user
+    password: 123456
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: none
+      naming:
+        #指定jpa的自动表生成策略，驼峰自动映射为下划线格式
+        implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
+        #physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+# Actuator
+management:
+  endpoint:
+    httptrace:
+      enabled: true
+  trace:
+    http:
+      include: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+commons:
+  IDGenerator:
+    datacenterId: 0
+    workerId: 0
+  HexIDGenerator:
+    workerId: '00'
