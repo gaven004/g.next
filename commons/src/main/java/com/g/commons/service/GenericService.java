@@ -18,7 +18,7 @@ import com.querydsl.core.types.Predicate;
 import com.g.commons.exception.EntityNotFoundException;
 import com.g.commons.utils.NullAwareBeanUtilsBean;
 
-public abstract class GeneralService<R extends PagingAndSortingRepository<T, ID> & QuerydslPredicateExecutor<T>, T, ID> {
+public abstract class GenericService<R extends PagingAndSortingRepository<T, ID> & QuerydslPredicateExecutor<T>, T, ID> {
     @Autowired
     protected R repository;
     @Autowired

@@ -13,10 +13,10 @@ import com.querydsl.core.types.Predicate;
 
 import com.g.commons.model.AntdPageRequest;
 import com.g.commons.model.AntdResponse;
-import com.g.commons.service.GeneralService;
+import com.g.commons.service.GenericService;
 import com.g.commons.utils.GenericsUtils;
 
-public abstract class GeneralController<S extends GeneralService<R, T, ID>,
+public abstract class GenericController<S extends GenericService<R, T, ID>,
         R extends PagingAndSortingRepository<T, ID> & QuerydslPredicateExecutor<T>, T, ID> {
     @Autowired
     protected QuerydslPredicateArgumentCustomResolver argumentResolver;
@@ -26,7 +26,7 @@ public abstract class GeneralController<S extends GeneralService<R, T, ID>,
 
     private final Class<T> domainClass;
 
-    protected GeneralController() {
+    protected GenericController() {
         this.domainClass = GenericsUtils.getSuperClassGenricType(getClass(), 2);
     }
 
