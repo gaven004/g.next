@@ -11,5 +11,5 @@ import com.g.sys.prop.SysPropertiesRepository;
 @RestController
 @RequestMapping("test/sys/properties")
 public class SysPropertiesTestController extends
-        GeneralController<SysPropertiesTestService, SysPropertiesRepository, SysProperties, SysPropertiesPK> {
+        GenericController<SysPropertiesTestService, SysPropertiesRepository, SysProperties, SysPropertiesPK> {
 }

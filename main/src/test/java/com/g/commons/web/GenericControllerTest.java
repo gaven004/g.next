@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 
 import com.g.WebApplicationTest;
 
-class GeneralControllerTest extends WebApplicationTest {
+class GenericControllerTest extends WebApplicationTest {
 
     @Test
     void find() throws Exception {

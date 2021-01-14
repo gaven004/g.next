@@ -1,6 +1,6 @@
 package com.g.sys.prop;
 
-import static com.g.commons.web.GeneralController.*;
+import static com.g.commons.web.GenericController.*;
 
 import java.util.ArrayList;
 import java.util.List;

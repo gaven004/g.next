@@ -9,7 +9,7 @@ import com.g.NextApplicationTests;
 import com.g.sys.prop.SysProperties;
 import com.g.sys.prop.SysPropertiesPK;
 
-class GeneralServiceTest extends NextApplicationTests {
+class GenericServiceTest extends NextApplicationTests {
     @Autowired
     SysPropertiesTestService service;
 
