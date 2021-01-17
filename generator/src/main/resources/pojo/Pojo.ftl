@@ -11,6 +11,8 @@ ${pojo.getPackageDeclaration()}
    
 <#include "PojoPropertyAccessors.ftl"/>
 
+<#include "AbstractEntityImplement.ftl"/>
+
 <#include "PojoToString.ftl"/>
 
 <#include "PojoEqualsHashcode.ftl"/>
