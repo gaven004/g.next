@@ -2,7 +2,7 @@ import request from 'umi-request';
 import {TableListParams} from './data.d';
 
 export async function getOptions() {
-  return await request('/api/sys/property/categories/options')
+  return await request('/api/sys/property/categories/$options')
     .then(response => {
       console.log(response);
       if (response.success) {
@@ -26,9 +26,7 @@ export async function findCategories(params?: TableListParams) {
 export async function removeCategories(params: string[]) {
   return request('/api/sys/property/categories/$batch', {
     method: 'DELETE',
-    data: {
-      ...params,
-    },
+    data: params,
   });
 }
 

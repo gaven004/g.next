@@ -8,7 +8,7 @@ import ProTable from '@ant-design/pro-table';
 import {ModalForm, ProFormSelect, ProFormText, ProFormTextArea} from "@ant-design/pro-form";
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
 
-import {confirm} from '@/utils/utils';
+import {confirm, getErrorMessage} from '@/utils/utils';
 import type {TableListItem} from './data.d';
 import {addCategory, findCategories, removeCategories, updateCategory} from "./service";
 
@@ -26,7 +26,7 @@ const handleAdd = async (fields: TableListItem) => {
     return true;
   } catch (error) {
     hide();
-    message.error(`添加失败，请重试！详细信息：${error}`);
+    message.error(getErrorMessage('添加失败，请重试！', error), 10);
     return false;
   }
 };
@@ -45,7 +45,7 @@ const handleUpdate = async (fields: TableListItem) => {
     return true;
   } catch (error) {
     hide();
-    message.error(`更新失败，请重试！详细信息：${error}`);
+    message.error(getErrorMessage('更新失败，请重试！', error), 10);
     return false;
   }
 };
@@ -76,16 +76,14 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
   const hide = message.loading('正在删除');
   try {
     await removeCategories(
-      selectedRows.map((row) => {
-        return row.id;
-      }),
+      selectedRows.map((row) => row.id)
     );
     hide();
     message.success('删除成功，即将刷新');
     return true;
   } catch (error) {
     hide();
-    message.error(`删除失败，请重试！详细信息：${error}`);
+    message.error(getErrorMessage('删除失败，请重试！', error), 10);
     return false;
   }
 };

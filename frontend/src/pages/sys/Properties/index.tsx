@@ -7,7 +7,7 @@ import ProTable, {ActionType, ProColumns} from '@ant-design/pro-table';
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
 import {ModalForm, ProFormDigit, ProFormSelect, ProFormText, ProFormTextArea} from "@ant-design/pro-form";
 
-import {confirm} from '@/utils/utils';
+import {confirm, getErrorMessage} from '@/utils/utils';
 import type {TableListItem} from './data.d';
 import {addProperty, findProperties, removeProperties, updateProperty} from "./service";
 import {getOptions} from "@/pages/sys/PropertyCategories/service";
@@ -26,7 +26,7 @@ const handleAdd = async (fields: TableListItem) => {
     return true;
   } catch (error) {
     hide();
-    message.error(`添加失败，请重试！详细信息：${error}`);
+    message.error(getErrorMessage('添加失败，请重试！', error), 10);
     return false;
   }
 };
@@ -45,7 +45,7 @@ const handleUpdate = async (fields: TableListItem) => {
     return true;
   } catch (error) {
     hide();
-    message.error(`更新失败，请重试！详细信息：${error}`);
+    message.error(getErrorMessage('更新失败，请重试！', error), 10);
     return false;
   }
 };
@@ -85,7 +85,7 @@ const handleRemove = async (selectedRows: TableListItem[]) => {
     return true;
   } catch (error) {
     hide();
-    message.error(`删除失败，请重试！详细信息：${error}`);
+    message.error(getErrorMessage('删除失败，请重试！', error), 10);
     return false;
   }
 };
@@ -173,11 +173,9 @@ export default (): React.ReactNode => {
         }}>
           编辑
         </a>,
-        <a onClick={
-          async () => {
-            await onRemoveClick([record]);
-          }
-        }>
+        <a onClick={async () => {
+          await onRemoveClick([record]);
+        }}>
           删除
         </a>,
       ],

@@ -32,4 +32,9 @@ declare namespace API {
     extra: any;
     status: string;
   }
+
+  export interface SelectOption {
+    value: string;
+    label: string;
+  }
 }

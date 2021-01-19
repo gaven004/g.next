@@ -10,9 +10,7 @@ export async function findProperties(params?: TableListParams) {
 export async function removeProperties(params: TableListItemKey[]) {
   return request('/api/sys/properties/$batch', {
     method: 'DELETE',
-    data: {
-      ...params,
-    },
+    data: params,
   });
 }
 
