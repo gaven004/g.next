@@ -50,5 +50,6 @@ export default {
   'menu.editor.mind': 'Mind Editor',
   'menu.editor.koni': 'Koni Editor',
   'menu.sys': 'Settings',
-  'menu.sys.properties': 'Properties Settings'
+  'menu.sys.properties': 'Properties Settings',
+  'menu.sys.categories': 'Property Categories Settings',
 };

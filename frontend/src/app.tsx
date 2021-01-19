@@ -12,7 +12,7 @@ import defaultSettings from '../config/defaultSettings';
  * 获取用户信息比较慢的时候会展示一个 loading
  */
 export const initialStateConfig = {
-  loading: <PageLoading />,
+  loading: <PageLoading/>,
 };
 
 export async function getInitialState(): Promise<{
@@ -22,7 +22,58 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      const currentUser = await queryCurrent();
+      // const currentUser = await queryCurrent();
+      const currentUser = {
+        name: 'Serati Ma',
+        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+        userid: '00000001',
+        email: 'antdesign@alipay.com',
+        signature: '海纳百川，有容乃大',
+        title: '交互专家',
+        group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
+        tags: [
+          {
+            key: '0',
+            label: '很有想法的',
+          },
+          {
+            key: '1',
+            label: '专注设计',
+          },
+          {
+            key: '2',
+            label: '辣~',
+          },
+          {
+            key: '3',
+            label: '大长腿',
+          },
+          {
+            key: '4',
+            label: '川妹子',
+          },
+          {
+            key: '5',
+            label: '海纳百川',
+          },
+        ],
+        notifyCount: 12,
+        unreadCount: 11,
+        country: 'China',
+        access: 'admin',
+        geographic: {
+          province: {
+            label: '浙江省',
+            key: '330000',
+          },
+          city: {
+            label: '杭州市',
+            key: '330100',
+          },
+        },
+        address: '西湖区工专路 77 号',
+        phone: '0752-268888888',
+      };
       return currentUser;
     } catch (error) {
       history.push('/user/login');
@@ -44,13 +95,13 @@ export async function getInitialState(): Promise<{
   };
 }
 
-export const layout: RunTimeLayoutConfig = ({ initialState }) => {
+export const layout: RunTimeLayoutConfig = ({initialState}) => {
   return {
-    rightContentRender: () => <RightContent />,
+    rightContentRender: () => <RightContent/>,
     disableContentMargin: false,
-    footerRender: () => <Footer />,
+    footerRender: () => <Footer/>,
     onPageChange: () => {
-      const { location } = history;
+      const {location} = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== '/user/login') {
         history.push('/user/login');
@@ -86,10 +137,10 @@ const codeMessage = {
  * 异常处理程序
  */
 const errorHandler = (error: ResponseError) => {
-  const { response } = error;
+  const {response} = error;
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+    const {status, url} = response;
 
     notification.error({
       message: `请求错误 ${status}: ${url}`,

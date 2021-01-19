@@ -50,5 +50,6 @@ export default {
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
   'menu.sys': '系统管理',
-  'menu.sys.properties': '系统参数设置'
+  'menu.sys.properties': '参数设置',
+  'menu.sys.categories': '参数类型设置',
 };
