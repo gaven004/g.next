@@ -80,7 +80,7 @@
                             <propertyFile>${project.basedir}/src/main/resources/hibernate.properties</propertyFile>
                             <revengFile>${project.basedir}/src/main/resources/hibernate.reveng.xml</revengFile>
                             <templatePath>${project.basedir}/src/main/resources/</templatePath>
-                            <packageName>com.g.sys.model</packageName>
+                            <packageName>com.g.sys.sec.model</packageName>
                             <ejb3>true</ejb3>
                             <jdk5>true</jdk5>
                         </configuration>
@@ -95,8 +95,8 @@
                             <propertyFile>${project.basedir}/src/main/resources/hibernate.properties</propertyFile>
                             <revengFile>${project.basedir}/src/main/resources/hibernate.reveng.xml</revengFile>
                             <templatePath>${project.basedir}/src/main/resources/</templatePath>
-                            <packageName>com.g.sys.persistence</packageName>
-                            <entityPackageName>com.g.sys.model</entityPackageName>
+                            <packageName>com.g.sys.sec.persistence</packageName>
+                            <entityPackageName>com.g.sys.sec.model</entityPackageName>
                             <ejb3>true</ejb3>
                             <jdk5>true</jdk5>
                         </configuration>
@@ -111,9 +111,9 @@
                             <propertyFile>${project.basedir}/src/main/resources/hibernate.properties</propertyFile>
                             <revengFile>${project.basedir}/src/main/resources/hibernate.reveng.xml</revengFile>
                             <templatePath>${project.basedir}/src/main/resources/</templatePath>
-                            <packageName>com.g.sys.service</packageName>
-                            <entityPackageName>com.g.sys.model</entityPackageName>
-                            <repositoryPackageName>com.g.sys.persistence</repositoryPackageName>
+                            <packageName>com.g.sys.sec.service</packageName>
+                            <entityPackageName>com.g.sys.sec.model</entityPackageName>
+                            <repositoryPackageName>com.g.sys.sec.persistence</repositoryPackageName>
                             <ejb3>true</ejb3>
                             <jdk5>true</jdk5>
                         </configuration>
@@ -128,10 +128,10 @@
                             <propertyFile>${project.basedir}/src/main/resources/hibernate.properties</propertyFile>
                             <revengFile>${project.basedir}/src/main/resources/hibernate.reveng.xml</revengFile>
                             <templatePath>${project.basedir}/src/main/resources/</templatePath>
-                            <packageName>com.g.sys.web</packageName>
-                            <entityPackageName>com.g.sys.model</entityPackageName>
-                            <repositoryPackageName>com.g.sys.persistence</repositoryPackageName>
-                            <servicePackageName>com.g.sys.service</servicePackageName>
+                            <packageName>com.g.sys.sec.web</packageName>
+                            <entityPackageName>com.g.sys.sec.model</entityPackageName>
+                            <repositoryPackageName>com.g.sys.sec.persistence</repositoryPackageName>
+                            <servicePackageName>com.g.sys.sec.service</servicePackageName>
                             <requestMapping>sys/</requestMapping>
                             <ejb3>true</ejb3>
                             <jdk5>true</jdk5>
