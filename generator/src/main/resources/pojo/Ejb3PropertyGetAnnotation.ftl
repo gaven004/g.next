@@ -6,7 +6,6 @@
 <#-- explicitly set the column name for this property-->
 </#if>
 </#if>
-
 <#if c2h.isOneToOne(property)>
 ${pojo.generateOneToOneAnnotation(property, md)}
 <#elseif c2h.isManyToOne(property)>
