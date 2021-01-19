@@ -88,14 +88,14 @@ public class SysPropertiesController {
     @DeleteMapping("/$batch")
     AntdResponse<?> delete(@RequestBody @Valid SysPropertiesPK[] pks) {
         for (SysPropertiesPK pk : pks) {
-            service.delete(0L, pk.getCategory(), pk.getName());
+            service.delete(0L, pk);
         }
         return AntdResponse.success();
     }
 
     @DeleteMapping("/{category}/{name}")
     AntdResponse<?> delete(@PathVariable String category, @PathVariable String name) {
-        service.delete(0L, category, name);
+        service.delete(0L, new SysPropertiesPK(category, name));
         return AntdResponse.success();
     }
 }

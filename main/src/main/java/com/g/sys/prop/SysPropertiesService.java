@@ -56,14 +56,9 @@ public class SysPropertiesService {
     }
 
     @Transactional
-    public void delete(Long operator, String category, String name) {
-        delete(operator, new SysProperties(category, name));
-    }
-
-    @Transactional
-    public void delete(Long operator, SysProperties entity) {
-        repository.delete(entity);
-        logService.logDelete(operator, entity);
+    public void delete(Long operator, SysPropertiesPK pk) {
+        repository.deleteById(pk);
+        logService.logDelete(operator, new SysProperties(pk.getCategory(), pk.getName()));
     }
 
     public Optional<SysProperties> get(String category, String name) {
