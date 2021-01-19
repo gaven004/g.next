@@ -2,7 +2,7 @@
 <!DOCTYPE hibernate-reverse-engineering SYSTEM "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
 
 <hibernate-reverse-engineering>
-    <schema-selection match-schema="app_db" match-talbe="sys_properties"/>
+    <schema-selection match-schema="app_db"/>
 
     <type-mapping>
         <sql-type jdbc-type="TINYINT" hibernate-type="java.lang.Byte"/>
@@ -20,5 +20,7 @@
         <sql-type jdbc-type="TIMESTAMP" hibernate-type="java.time.LocalDateTime"/>
     </type-mapping>
 
-    <!--<table-filter match-name="sys_*" exclude="false"/>-->
+    <table-filter match-name="sys_log" exclude="true"/>
+    <table-filter match-name="sys_properties" exclude="true"/>
+    <table-filter match-name="sys_property_categories" exclude="true"/>
 </hibernate-reverse-engineering>
