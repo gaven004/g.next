@@ -1,6 +1,4 @@
-<#if pojo.isComponent()>
-@${pojo.importType("javax.persistence.Embeddable")}
-<#else>
+<#if !pojo.isComponent()>
 @${pojo.importType("org.hibernate.annotations.DynamicInsert")}
 @${pojo.importType("org.hibernate.annotations.DynamicUpdate")}
 </#if>
