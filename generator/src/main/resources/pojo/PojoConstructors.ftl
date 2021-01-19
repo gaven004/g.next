@@ -2,7 +2,6 @@
 <#--  /** default constructor */ -->
     public ${pojo.getDeclarationName()}() {
     }
-
 <#if pojo.needsMinimalConstructor()>	<#-- /** minimal constructor */ -->
     public ${pojo.getDeclarationName()}(${c2j.asParameterList(pojo.getPropertyClosureForMinimalConstructor(), jdk5, pojo)}) {
 <#if pojo.isSubclass() && !pojo.getPropertyClosureForSuperclassMinimalConstructor().isEmpty()>
@@ -12,7 +11,8 @@
         this.${c2j.keyWordCheck(field.name)} = ${c2j.keyWordCheck(field.name)};
 </#foreach>
     }
-</#if>    
+</#if>
+
 <#if pojo.needsFullConstructor()>
 <#-- /** full constructor */ -->
     public ${pojo.getDeclarationName()}(${c2j.asParameterList(pojo.getPropertyClosureForFullConstructor(), jdk5, pojo)}) {
