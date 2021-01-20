@@ -50,11 +50,27 @@ export default [
     },
     routes: [
       {
+        name: 'action',
+        path: '/sys/action',
+        component: './sys/Action',
+        menu: {
+          name: '系统功能',
+        },
+      },
+      {
+        name: 'categories',
+        path: '/sys/PropertyCategories',
+        component: './sys/PropertyCategories',
+        menu: {
+          name: '参数类型',
+        },
+      },
+      {
         name: 'properties',
         path: '/sys/Properties',
         component: './sys/Properties',
         menu: {
-          name: '系统参数', // icon: 'testicon',
+          name: '系统参数',
         },
       },
     ],
