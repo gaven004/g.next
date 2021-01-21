@@ -1,8 +1,6 @@
 export interface TableListItem {
   id: string;
-  resource: string;
-  method: string;
-  description: string;
+  name: string;
   status: string;
 }
 
@@ -19,9 +17,7 @@ export interface TableListData {
 
 export interface TableListParams {
   id?: string;
-  resource?: string;
-  method?: string;
-  description?: string;
+  name?: string;
   status?: string;
   pageSize?: number;
   currentPage?: number;

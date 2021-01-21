@@ -5,39 +5,33 @@ import {ProFormSelect, ProFormText} from "@ant-design/pro-form";
 
 import GenericPage from "@/pages/commons/General";
 import type {TableListItem} from './data.d';
-import {getActionMethodOptions} from './service'
 
 export default (): React.ReactNode => {
-  const addActionUrl: string = "/api/sys/action";
-  const removeActionUrl: string = "/api/sys/action/$batch";
-  const updateActionUrl: string = "/api/sys/action";
-  const findActionUrl: string = "/api/sys/action";
+  const addActionUrl: string = "/api/sys/users";
+  const removeActionUrl: string = "/api/sys/users/$batch";
+  const updateActionUrl: string = "/api/sys/users";
+  const findActionUrl: string = "/api/sys/users";
 
   const tableColumns: ProColumns<TableListItem>[] = [
     {
       title: 'ID',
       dataIndex: 'id',
-      width: '16%',
     },
     {
-      title: '资源',
-      dataIndex: 'resource',
+      title: '用户账号',
+      dataIndex: 'account',
       sorter: true,
       width: '28%',
     },
     {
-      title: '请求方法',
-      dataIndex: 'method',
-      valueType: 'select',
-      request: getActionMethodOptions,
-      params: {},
-      width: '8%',
+      title: '用户名称',
+      dataIndex: 'username',
+      sorter: true,
     },
     {
-      title: '描述',
-      dataIndex: 'description',
+      title: '邮箱',
+      dataIndex: 'email',
       sorter: true,
-      width: '20%',
     },
     {
       title: '状态',
@@ -47,7 +41,6 @@ export default (): React.ReactNode => {
         'INVALID': {text: '无效', status: 'Error'},
       },
       align: 'center',
-      width: '8%',
     },
   ];
 
@@ -60,29 +53,35 @@ export default (): React.ReactNode => {
         readonly={true}
       />
       <ProFormText
-        name="resource"
-        label="资源"
+        name="account"
+        label="用户账号"
         rules={[
           {
             required: true,
-            message: '资源为必填项',
-          },
-        ]}
-      />
-      <ProFormSelect
-        name="method"
-        label="请求方法"
-        request={getActionMethodOptions}
-        rules={[
-          {
-            required: true,
-            message: '请求方法为必填项',
+            message: '用户账号为必填项',
           },
         ]}
       />
       <ProFormText
-        name="description"
-        label="描述"
+        name="username"
+        label="用户名称"
+        rules={[
+          {
+            required: true,
+            message: '用户名称为必填项',
+          },
+        ]}
+      />
+      <ProFormText
+        name="email"
+        label="邮箱"
+        rules={[
+          {
+            required: true,
+            type: "email",
+            message: '邮箱为必填项，且格式正确',
+          },
+        ]}
       />
       <ProFormSelect
         name="status"
