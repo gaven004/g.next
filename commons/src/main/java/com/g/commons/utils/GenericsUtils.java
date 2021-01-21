@@ -5,12 +5,12 @@ import java.lang.reflect.Type;
 
 public class GenericsUtils {
     /**
-     * 通过反射,获得定义Class时声明的父类的范型参数的类型. 如public BookManager extends GenricManager<Book>
+     * 通过反射,获得定义Class时声明的父类的范型参数的类型. 如public BookManager extends GenericManager<Book>
      *
      * @param clazz clazz The class to introspect
-     * @param index the Index of the generic ddeclaration,start from 0.
+     * @param index the Index of the generic declaration, start from 0.
      */
-    public static Class getSuperClassGenricType(Class clazz, int index)
+    public static Class getSuperClassGenericType(Class clazz, int index)
             throws IndexOutOfBoundsException {
         Type genType = clazz.getGenericSuperclass();
         if (!(genType instanceof ParameterizedType)) {
