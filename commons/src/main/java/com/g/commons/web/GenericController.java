@@ -82,11 +82,17 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
         return AntdResponse.success();
     }
 
+    @DeleteMapping("/{id}")
+    AntdResponse<T> delete(@PathVariable ID id) {
+        service.delete(convert(id));
+        return AntdResponse.success();
+    }
+
     /**
      * 由于泛型在运行时，是没有精确的类型信息，如上面delete方法，传入的实际是一个Serializable数组，
      * 并不是期待的精确主键类型
      *
-     * 常见的主键类型为String、Number，这里尝试对常见的主键类型做一个转换，主要是针对String转换成
+     * 常见的主键类型为String、Number，这里尝试对常见的主键类型做一个转换，主要是针对String转换成Number
      */
     private ID convert(Object id) {
         if (id instanceof String && !String.class.equals(idClass)) {
@@ -124,12 +130,6 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
         }
 
         return (ID) id;
-    }
-
-    @DeleteMapping("/{id}")
-    AntdResponse<T> delete(@PathVariable ID id) {
-        service.delete(id);
-        return AntdResponse.success();
     }
 
     public static Pageable getPageable(AntdPageRequest pageRequest) {
