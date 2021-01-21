@@ -110,7 +110,6 @@ export default (): React.ReactNode => {
       title: '参数分类',
       dataIndex: 'category',
       valueType: 'select',
-      // @ts-ignore
       request: getOptions,
       params: {},
       sorter: true,

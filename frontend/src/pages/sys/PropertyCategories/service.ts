@@ -4,14 +4,11 @@ import {TableListParams} from './data.d';
 export async function getOptions() {
   return await request('/api/sys/property/categories/$options')
     .then(response => {
-      console.log(response);
       if (response.success) {
-        console.log(response.data);
         return response.data;
       }
       return [];
-    }).catch((error) => {
-        console.log(error);
+    }).catch(() => {
         return []
       }
     );
