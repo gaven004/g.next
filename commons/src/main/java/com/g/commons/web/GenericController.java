@@ -1,11 +1,15 @@
 package com.g.commons.web;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.util.NumberUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -21,13 +25,16 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
     @Autowired
     protected QuerydslPredicateArgumentCustomResolver argumentResolver;
 
+    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     protected S service;
 
     private final Class<T> domainClass;
+    private final Class<ID> idClass;
 
     protected GenericController() {
-        this.domainClass = GenericsUtils.getSuperClassGenricType(getClass(), 2);
+        this.domainClass = GenericsUtils.getSuperClassGenericType(getClass(), 2);
+        this.idClass = GenericsUtils.getSuperClassGenericType(getClass(), 3);
     }
 
     @GetMapping
@@ -65,6 +72,58 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
     @PutMapping
     AntdResponse<T> update(@RequestBody @Valid T entity) {
         return AntdResponse.success(service.update(entity));
+    }
+
+    @DeleteMapping("/$batch")
+    AntdResponse<?> delete(@RequestBody @Valid ID[] ids) {
+        for (ID id : ids) {
+            service.delete(convert(id));
+        }
+        return AntdResponse.success();
+    }
+
+    /**
+     * 由于泛型在运行时，是没有精确的类型信息，如上面delete方法，传入的实际是一个Serializable数组，
+     * 并不是期待的精确主键类型
+     *
+     * 常见的主键类型为String、Number，这里尝试对常见的主键类型做一个转换，主要是针对String转换成
+     */
+    private ID convert(Object id) {
+        if (id instanceof String && !String.class.equals(idClass)) {
+            if (Long.class.equals(idClass)) {
+                return (ID) NumberUtils.parseNumber((String) id, Long.class);
+            }
+
+            if (Integer.class.equals(idClass)) {
+                return (ID) NumberUtils.parseNumber((String) id, Integer.class);
+            }
+
+            if (Short.class.equals(idClass)) {
+                return (ID) NumberUtils.parseNumber((String) id, Short.class);
+            }
+
+            if (Byte.class.equals(idClass)) {
+                return (ID) NumberUtils.parseNumber((String) id, Byte.class);
+            }
+
+            if (BigInteger.class.equals(idClass)) {
+                return (ID) NumberUtils.parseNumber((String) id, BigInteger.class);
+            }
+
+            if (Float.class.equals(idClass)) {
+                return (ID) NumberUtils.parseNumber((String) id, Float.class);
+            }
+
+            if (Double.class.equals(idClass)) {
+                return (ID) NumberUtils.parseNumber((String) id, Double.class);
+            }
+
+            if (BigDecimal.class.equals(idClass)) {
+                return (ID) NumberUtils.parseNumber((String) id, BigDecimal.class);
+            }
+        }
+
+        return (ID) id;
     }
 
     @DeleteMapping("/{id}")
