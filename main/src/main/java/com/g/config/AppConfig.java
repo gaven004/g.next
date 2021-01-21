@@ -1,31 +1,26 @@
 package com.g.config;
 
-import java.text.SimpleDateFormat;
-import java.util.Properties;
-
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.g.commons.utils.DateTimePattern;
-import com.g.commons.utils.MailSender;
+import com.g.commons.utils.ObjectMapperUtil;
 
 @Configuration
+// 强制先于DataSourceAutoConfiguration执行，以先创建ApplicationContextHolder
+@AutoConfigureBefore(DataSourceAutoConfiguration.class)
 @ImportResource("classpath*:mail-config.xml")
 public class AppConfig {
     @Bean
+    // 强制先于DataSourceAutoConfiguration执行创建ApplicationContextHolder
+    // 并不是ObjectMapper本身依赖
+    @DependsOn("applicationContextHolder")
     public ObjectMapper objectMapper() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        mapper.setDateFormat(new SimpleDateFormat(DateTimePattern.DF_YYYY_MM_DD));
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper;
+        return ObjectMapperUtil.getObjectMapper();
     }
 }
