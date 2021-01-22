@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.GenericGenerator;
 
 import com.g.commons.enums.Status;
 import com.g.commons.model.AbstractEntity;
@@ -27,6 +28,7 @@ public class SysMenu extends AbstractEntity implements java.io.Serializable {
     private String title;
     private String icon;
     private String url;
+    private Integer order;
     private Status status;
 
     public SysMenu() {
@@ -39,18 +41,26 @@ public class SysMenu extends AbstractEntity implements java.io.Serializable {
         this.status = status;
     }
 
-    public SysMenu(Long id, Long parentId, String label, String title, String icon, String url, Status status) {
+    public SysMenu(Long id, Long parentId, String label, String title, String icon, String url, Integer order, Status status) {
         this.id = id;
         this.parentId = parentId;
         this.label = label;
         this.title = title;
         this.icon = icon;
         this.url = url;
+        this.order = order;
         this.status = status;
     }
 
     @Id
     @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(
+            generator = "snowflake_generator"
+    )
+    @GenericGenerator(
+            name = "snowflake_generator",
+            strategy = "com.g.commons.utils.HibernateSnowflakeGenerator"
+    )
     public Long getId() {
         return this.id;
     }
@@ -107,7 +117,16 @@ public class SysMenu extends AbstractEntity implements java.io.Serializable {
         this.url = url;
     }
 
-    @Column(name = "status", nullable = false, length = 7)
+    @Column(name = "\"order\"")
+    public Integer getOrder() {
+        return order;
+    }
+
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     public Status getStatus() {
         return this.status;

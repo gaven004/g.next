@@ -16,7 +16,7 @@ import com.g.sys.sec.persistence.SysMenuRepository;
 import com.g.sys.sec.service.SysMenuService;
 
 @RestController
-@RequestMapping("sys/SysMenu")
+@RequestMapping("sys/menu")
 public class SysMenuController
         extends GenericController<SysMenuService, SysMenuRepository, SysMenu, Long> {
 }

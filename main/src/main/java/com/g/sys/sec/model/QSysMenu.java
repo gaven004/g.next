@@ -35,6 +35,8 @@ public class QSysMenu extends EntityPathBase<SysMenu> {
 
     public final StringPath url = createString("url");
 
+    public final NumberPath<Integer> order = createNumber("order", Integer.class);
+
     public QSysMenu(String variable) {
         super(SysMenu.class, forVariable(variable));
     }
