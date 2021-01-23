@@ -58,8 +58,16 @@ export default [
         },
       },
       {
+        name: 'menu',
+        path: '/sys/menu',
+        component: './sys/Menu',
+        menu: {
+          name: '系统菜单',
+        },
+      },
+      {
         name: 'categories',
-        path: '/sys/PropertyCategories',
+        path: '/sys/property/categories',
         component: './sys/PropertyCategories',
         menu: {
           name: '参数类型',
@@ -67,10 +75,26 @@ export default [
       },
       {
         name: 'properties',
-        path: '/sys/Properties',
+        path: '/sys/properties',
         component: './sys/Properties',
         menu: {
           name: '系统参数',
+        },
+      },
+      {
+        name: 'roles',
+        path: '/sys/roles',
+        component: './sys/Roles',
+        menu: {
+          name: '角色管理',
+        },
+      },
+      {
+        name: 'users',
+        path: '/sys/users',
+        component: './sys/Users',
+        menu: {
+          name: '用户管理',
         },
       },
     ],
