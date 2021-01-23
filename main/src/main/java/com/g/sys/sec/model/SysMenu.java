@@ -28,6 +28,7 @@ public class SysMenu extends AbstractEntity implements java.io.Serializable {
     private String title;
     private String icon;
     private String url;
+    private String component;
     private Integer order;
     private Status status;
 
@@ -41,13 +42,14 @@ public class SysMenu extends AbstractEntity implements java.io.Serializable {
         this.status = status;
     }
 
-    public SysMenu(Long id, Long parentId, String label, String title, String icon, String url, Integer order, Status status) {
+    public SysMenu(Long id, Long parentId, String label, String title, String icon, String url, String component, Integer order, Status status) {
         this.id = id;
         this.parentId = parentId;
         this.label = label;
         this.title = title;
         this.icon = icon;
         this.url = url;
+        this.component = component;
         this.order = order;
         this.status = status;
     }
@@ -115,6 +117,15 @@ public class SysMenu extends AbstractEntity implements java.io.Serializable {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    @Column(name = "component", length = 255)
+    public String getComponent() {
+        return component;
+    }
+
+    public void setComponent(String component) {
+        this.component = component;
     }
 
     @Column(name = "\"order\"")

@@ -1,7 +1,9 @@
 import React from 'react';
 
+import {Button} from "antd";
 import {ProColumns} from "@ant-design/pro-table";
-import {ProFormDigit, ProFormSelect, ProFormText} from "@ant-design/pro-form";
+import ProForm, {ProFormDigit, ProFormSelect, ProFormText} from "@ant-design/pro-form";
+import {FileSearchOutlined} from "@ant-design/icons";
 
 import GenericPage from "@/pages/commons/General";
 import type {TableListItem} from './data.d';
@@ -35,22 +37,15 @@ export default (): React.ReactNode => {
       width: '12%',
     },
     {
-      title: '提示',
-      dataIndex: 'title',
-      search: false,
-      width: '12%',
-    },
-    {
-      title: '图标',
-      dataIndex: 'icon',
-      sorter: true,
-      search: false,
-      align: 'center',
-      width: '7%',
-    },
-    {
       title: 'URL',
       dataIndex: 'url',
+      ellipsis: true,
+      sorter: true,
+      width: '20%',
+    },
+    {
+      title: '页面组件',
+      dataIndex: 'component',
       ellipsis: true,
       sorter: true,
       width: '20%',
@@ -75,75 +70,111 @@ export default (): React.ReactNode => {
     },
   ];
 
+  const toolbarNodes = [
+    <Button key="primary" onClick={() => {
+      alert('预览');
+    }}>
+      <FileSearchOutlined/> 预览
+    </Button>,
+  ];
+
   const fromChildren = (
     <>
       <ProFormText
         name="id"
         label="ID"
-        readonly={true}
+        width="md"
+        readonly
       />
-      <ProFormSelect
-        name="parentId"
-        label="父节点ID"
-        request={getParentOptions}
-        rules={[
-          {
-            required: true,
-            message: '父节点ID为必填项',
-          },
-        ]}
-      />
-      <ProFormText
-        name="label"
-        label="菜单文本"
-        rules={[
-          {
-            required: true,
-            message: '菜单文本为必填项',
-          },
-        ]}
-      />
-      <ProFormText
-        name="title"
-        label="提示"
-      />
-      <ProFormText
-        name="icon"
-        label="图标"
-      />
-      <ProFormText
-        name="url"
-        label="URL"
-        rules={[
-          {
-            type: 'regexp',
-            pattern: new RegExp('(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?'),
-            message: 'URL必须合符规格',
-          },
-        ]}
-      />
-      <ProFormDigit
-        name="order"
-        label="排序"
-        tooltip="按升序排列"
-        min={0}
-        fieldProps={{precision: 0}}
-        rules={[
-          {
-            type: "number",
-            min: 0,
-            message: '排序为自然数',
-          },
-        ]}
-      />
-      <ProFormSelect
-        name="status"
-        label="状态"
-        valueEnum={{
-          'VALID': '有效',
-          'INVALID': '无效',
-        }}
-      />
+      <ProForm.Group>
+        <ProFormSelect
+          name="parentId"
+          label="父节点ID"
+          width="md"
+          request={getParentOptions}
+          rules={[
+            {
+              required: true,
+              message: '父节点ID为必填项',
+            },
+          ]}
+        />
+        <ProFormSelect
+          name="status"
+          label="状态"
+          width="md"
+          valueEnum={{
+            'VALID': '有效',
+            'INVALID': '无效',
+          }}
+        />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormText
+          name="label"
+          label="菜单文本"
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: '菜单文本为必填项',
+            },
+          ]}
+        />
+        <ProFormText
+          name="title"
+          label="提示"
+          width="md"
+        />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormText
+          name="url"
+          label="URL"
+          width="md"
+          rules={[
+            {
+              type: 'regexp',
+              pattern: new RegExp('(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?'),
+              message: 'URL必须合符规格',
+            },
+          ]}
+        />
+        <ProFormText
+          name="component"
+          label="页面组件"
+          width="md"
+          rules={[
+            {
+              type: 'regexp',
+              pattern: new RegExp('(//([^/?#]*))?([^?#]*)(\\?([^#]*))?(#(.*))?'),
+              message: '页面组件定义必须合符规格',
+            },
+          ]}
+        />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormText
+          name="icon"
+          label="图标"
+          width="md"
+        />
+        <ProFormDigit
+          name="order"
+          label="排序"
+          width="md"
+          tooltip="按升序排列"
+          min={0}
+          fieldProps={{precision: 0}}
+          rules={[
+            {
+              type: "number",
+              min: 0,
+              message: '排序为自然数',
+            },
+          ]}
+        />
+      </ProForm.Group>
     </>
   );
 
@@ -156,8 +187,10 @@ export default (): React.ReactNode => {
       updateActionUrl={updateActionUrl}
       findActionUrl={findActionUrl}
       tableColumns={tableColumns}
+      toolbarNodes={toolbarNodes}
       fromChildren={fromChildren}
       initValue={initValue}
+      modalWidth='740px'
     />
   );
 };

@@ -7,9 +7,9 @@ export async function getParentOptions() {
     .then(response => {
       if (response.success) {
         // @ts-ignore
-        return response.data.map(item => {
-          return {'value': item.id, 'label': item.label}
-        });
+        return response.data.map(item =>
+          ({value: item.id, label: `${item.id} - ${item.label}`})
+        );
       }
       return [];
     }).catch(() => {

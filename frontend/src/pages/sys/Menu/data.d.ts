@@ -5,6 +5,7 @@ export interface TableListItem {
   title: string;
   icon: string;
   url: string;
+  component: string;
   order: number;
   status: string;
 }
@@ -26,6 +27,7 @@ export interface TableListParams {
   label?: string;
   title?: string;
   url?: string;
+  component?: string;
   status?: string;
   pageSize?: number;
   currentPage?: number;
