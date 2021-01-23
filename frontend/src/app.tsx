@@ -1,12 +1,14 @@
 import React from 'react';
-import {PageLoading, Settings as LayoutSettings} from '@ant-design/pro-layout';
-import {notification} from 'antd';
 import {history, RequestConfig, RunTimeLayoutConfig} from 'umi';
+import {ResponseError} from 'umi-request';
+import {notification} from 'antd';
+import {MenuDataItem, PageLoading, Settings as LayoutSettings} from '@ant-design/pro-layout';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
-import {ResponseError} from 'umi-request';
-import {queryCurrent} from './services/user';
+// import {queryCurrent} from './services/user';
 import defaultSettings from '../config/defaultSettings';
+
+import {HomeOutlined, MenuOutlined, SettingOutlined} from '@ant-design/icons';
 
 /**
  * 获取用户信息比较慢的时候会展示一个 loading
@@ -19,6 +21,7 @@ export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  menuData: MenuDataItem[];
 }> {
   const fetchUserInfo = async () => {
     try {
@@ -80,18 +83,120 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
+
+  const queryMenuData  = async () => {
+    try {
+      // const currentUser = await queryCurrent();
+      return [
+        {
+          path: '/user',
+          layout: false,
+          routes: [
+            {
+              path: '/user',
+              routes: [
+                {
+                  name: 'login',
+                  path: '/user/login',
+                  component: './user/login',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          path: '/welcome',
+          name: '欢迎',
+          icon: <HomeOutlined/>,
+          component: './Welcome',
+        },
+        {
+          name: 'sys',
+          icon: <SettingOutlined/>,
+          menu: {
+            name: '系统管理',
+          },
+          routes: [
+            {
+              name: 'action',
+              path: '/sys/action',
+              component: './sys/Action',
+              menu: {
+                name: '系统功能',
+              },
+            },
+            {
+              name: 'menu',
+              path: '/sys/menu',
+              component: './sys/Menu',
+              icon: <MenuOutlined/>,
+              menu: {
+                name: '系统菜单',
+              },
+            },
+            {
+              name: 'categories',
+              path: '/sys/property/categories',
+              component: './sys/PropertyCategories',
+              menu: {
+                name: '参数类型',
+              },
+            },
+            {
+              name: 'properties',
+              path: '/sys/properties',
+              component: './sys/Properties',
+              menu: {
+                name: '系统参数',
+              },
+            },
+            {
+              name: 'roles',
+              path: '/sys/roles',
+              component: './sys/Roles',
+              menu: {
+                name: '角色管理',
+              },
+            },
+            {
+              name: 'users',
+              path: '/sys/users',
+              component: './sys/Users',
+              menu: {
+                name: '用户管理',
+              },
+            },
+          ],
+        },
+        {
+          path: '/',
+          redirect: '/welcome',
+        },
+        {
+          component: './404',
+        },
+      ];
+    } catch (error) {
+      history.push('/user/login');
+    }
+    return undefined;
+  };
+
   // 如果是登录页面，不执行
   if (history.location.pathname !== '/user/login') {
     const currentUser = await fetchUserInfo();
+    const menuData = await queryMenuData();
     return {
       fetchUserInfo,
       currentUser,
+      menuData,
       settings: defaultSettings,
     };
   }
   return {
     fetchUserInfo,
     settings: defaultSettings,
+    menuData: [],
   };
 }
 
@@ -108,8 +213,7 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
       }
     },
     menuHeaderRender: undefined,
-    // 自定义 403 页面
-    // unAccessible: <div>unAccessible</div>,
+    menuDataRender: (menuData) => initialState?.menuData || menuData,
     ...initialState?.settings,
   };
 };
