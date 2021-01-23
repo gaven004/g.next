@@ -18,6 +18,7 @@ export declare type GenericPageProps = {
   findActionUrl: string;
   tableColumns: ProColumns[];
   rowKey?: string | (() => string);
+  toolbarNodes?: React.ReactNode[];
   fromChildren: React.ReactNode;
   initValue?: {};
   modalWidth?: string | number;
@@ -31,6 +32,7 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
     findActionUrl,
     tableColumns,
     rowKey,
+    toolbarNodes,
     fromChildren,
     initValue,
     modalWidth
@@ -174,7 +176,8 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
           }}>
             <PlusOutlined/> 新建
           </Button>,
-        ]}
+          // @ts-ignore
+        ].concat(toolbarNodes || [])}
         tableAlertOptionRender={({onCleanSelected}) => {
           return (
             <Space size={16}>
