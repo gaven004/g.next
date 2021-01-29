@@ -10,6 +10,7 @@ package com.g.sys.sec.service;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
@@ -23,6 +24,10 @@ import com.g.sys.sec.persistence.SysMenuRepository;
 @Service
 public class SysMenuService
         extends GenericService<SysMenuRepository, SysMenu, Long> {
+    public Iterable<SysMenu> findAll() {
+        return repository.findAll(Sort.by("parentId", "order", "id"));
+    }
+
     @Override
     public SysMenu save(SysMenu entity) {
         checkParent(entity);
@@ -44,9 +49,11 @@ public class SysMenuService
     private void checkParent(SysMenu entity) {
         Set<Long> ancestors = new HashSet<>();
         SysMenu p = entity;
-        ancestors.add(p.getId());
+        if (p.getId() != null) {
+            ancestors.add(p.getId());
+        }
         while (p.getParentId() != 0) {
-            if (!ancestors.add(p.getId())) {
+            if (!ancestors.add(p.getParentId())) {
                 throw new GenericAppException("父菜单形成闭环，检验失败");
             }
             p = repository.findById(p.getParentId())
