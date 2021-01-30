@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.querydsl.core.types.Predicate;
 
+import com.g.commons.enums.Status;
 import com.g.commons.exception.GenericAppException;
 import com.g.commons.service.GenericService;
 import com.g.sys.sec.model.QSysMenu;
@@ -26,6 +27,10 @@ public class SysMenuService
         extends GenericService<SysMenuRepository, SysMenu, Long> {
     public Iterable<SysMenu> findAll() {
         return repository.findAll(Sort.by("parentId", "order", "id"));
+    }
+
+    public Iterable<SysMenu> findAllValid() {
+        return repository.findByStatus(Status.VALID, Sort.by("parentId", "order", "id"));
     }
 
     @Override
