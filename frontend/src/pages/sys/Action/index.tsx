@@ -95,7 +95,7 @@ export default (): React.ReactNode => {
     </>
   );
 
-  const initValue = {'status': 'VALID'};
+  const initValue = {'method': 'ALL', 'status': 'VALID'};
 
   return (
     <GenericPage
