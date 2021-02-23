@@ -12,8 +12,6 @@ import * as md from 'react-icons/md';
 export const buildIcon = (name: string, props?: IconBaseProps): JSX.Element => {
   let fn;
 
-  console.log(name);
-
   if (name.startsWith("Io5")) {
     fn = io5[name];
   } else if (name.startsWith("Io")) {
