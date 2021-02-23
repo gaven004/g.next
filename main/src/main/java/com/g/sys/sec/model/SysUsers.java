@@ -2,12 +2,17 @@
 
 package com.g.sys.sec.model;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.StringJoiner;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 
 import com.g.commons.enums.Status;
 import com.g.commons.model.AbstractEntity;
@@ -28,7 +33,15 @@ public class SysUsers extends AbstractEntity implements java.io.Serializable {
     private String email;
     private Status status;
 
+    private Set<SysRoles> roles = new HashSet<>();
+
     public SysUsers() {
+    }
+
+    public SysUsers(Long id, String account, String username) {
+        this.id = id;
+        this.account = account;
+        this.username = username;
     }
 
     public SysUsers(Long id, String account, String username, Status status) {
@@ -65,6 +78,7 @@ public class SysUsers extends AbstractEntity implements java.io.Serializable {
     }
 
     @Column(name = "account", unique = true, nullable = false, length = 15)
+    @NaturalId
     @NotEmpty
     public String getAccount() {
         return this.account;
@@ -112,6 +126,50 @@ public class SysUsers extends AbstractEntity implements java.io.Serializable {
         this.status = status;
     }
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "sys_role_members",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    @Fetch(FetchMode.JOIN)
+    public Set<SysRoles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<SysRoles> roles) {
+        this.roles = roles;
+    }
+
+    public void addRole(SysRoles role) {
+        roles.add(role);
+    }
+
+    public void removeRole(SysRoles role) {
+        roles.remove(role);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SysUsers sysUsers = (SysUsers) o;
+        return Objects.equals(id, sysUsers.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", SysUsers.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("account='" + account + "'")
+                .add("username='" + username + "'")
+                .add("password='" + password + "'")
+                .add("email='" + email + "'")
+                .add("status=" + status)
+                .toString();
+    }
 }
-
-
