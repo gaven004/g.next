@@ -4,6 +4,7 @@ import {ProColumns} from "@ant-design/pro-table";
 import {ProFormSelect, ProFormText} from "@ant-design/pro-form";
 
 import GenericPage from "@/pages/commons/General";
+import {findEntities, getOptions} from "@/pages/sys/Action/service";
 import type {TableListItem} from './data.d';
 
 export default (): React.ReactNode => {
@@ -16,13 +17,23 @@ export default (): React.ReactNode => {
     {
       title: 'ID',
       dataIndex: 'id',
-      width: '35%',
+      ellipsis: true,
+      width: '15%',
     },
     {
       title: '角色名称',
       dataIndex: 'name',
       sorter: true,
-      width: '35%',
+      width: '15%',
+    },
+    {
+      title: '功能权限',
+      dataIndex: 'authorities',
+      valueType: 'select',
+      request: getOptions,
+      params: {},
+      ellipsis: true,
+      width: '40%',
     },
     {
       title: '状态',
@@ -32,7 +43,7 @@ export default (): React.ReactNode => {
         'INVALID': {text: '无效', status: 'Error'},
       },
       align: 'center',
-      width: '15%',
+      width: '10%',
     },
   ];
 
@@ -62,6 +73,12 @@ export default (): React.ReactNode => {
           'INVALID': '无效',
         }}
       />
+      <ProFormSelect
+        name="authorities"
+        label="功能权限"
+        request={getOptions}
+        mode="multiple"
+      />
     </>
   );
 
@@ -73,9 +90,11 @@ export default (): React.ReactNode => {
       removeActionUrl={removeActionUrl}
       updateActionUrl={updateActionUrl}
       findActionUrl={findActionUrl}
+      findService={findEntities}
       tableColumns={tableColumns}
       fromChildren={fromChildren}
       initValue={initValue}
+      modalWidth={'600px'}
     />
   );
 };
