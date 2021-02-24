@@ -3,8 +3,7 @@ import React, {useRef, useState} from 'react';
 import {Button, message, Space} from "antd";
 import type {FormInstance} from "antd/lib/form/Form";
 import {PageContainer} from '@ant-design/pro-layout';
-import type {ActionType, ProColumns} from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
+import ProTable, {ActionType, ProColumns} from '@ant-design/pro-table';
 import {ModalForm} from "@ant-design/pro-form";
 import {ExclamationCircleOutlined, PlusOutlined} from '@ant-design/icons';
 
@@ -16,6 +15,13 @@ export declare type GenericPageProps = {
   removeActionUrl: string;
   updateActionUrl: string;
   findActionUrl: string;
+  addService?: () => any;
+  findService?: () => any;
+  removeService?: () => any;
+  updateService?: () => any;
+  addHandler?: () => any;
+  removeHandler?: () => any;
+  updateHandler?: () => any;
   tableColumns: ProColumns[];
   rowKey?: string | (() => string);
   toolbarNodes?: React.ReactNode[];
@@ -30,6 +36,13 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
     removeActionUrl,
     updateActionUrl,
     findActionUrl,
+    addService,
+    findService,
+    removeService,
+    updateService,
+    addHandler,
+    removeHandler,
+    updateHandler,
     tableColumns,
     rowKey,
     toolbarNodes,
@@ -37,6 +50,11 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
     initValue,
     modalWidth
   } = props;
+
+  const doAdd = addService || addEntity;
+  const doFind = findService || findEntities;
+  const doRemove = removeService || removeEntities;
+  const doUpdate = updateService || updateEntity;
 
   const actionRef = useRef<ActionType>();
   const formRef = useRef<FormInstance>();
@@ -48,11 +66,11 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
    * 添加节点
    * @param fields
    */
-  const handleAdd = async (fields: any) => {
+  const handleAdd = addHandler || (async (fields: any) => {
     const hide = message.loading('正在添加');
 
     try {
-      await addEntity(addActionUrl, {...fields});
+      await doAdd(addActionUrl, {...fields});
       hide();
       message.success('添加成功');
       return true;
@@ -61,17 +79,17 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
       message.error(getErrorMessage('添加失败，请重试！', error), 10);
       return false;
     }
-  };
+  });
 
   /**
    * 更新节点
    * @param fields
    */
-  const handleUpdate = async (fields: any) => {
+  const handleUpdate = updateHandler || (async (fields: any) => {
     const hide = message.loading('正在更新');
 
     try {
-      await updateEntity(updateActionUrl, {...fields});
+      await doUpdate(updateActionUrl, {...fields});
       hide();
       message.success('更新成功');
       return true;
@@ -80,13 +98,13 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
       message.error(getErrorMessage('更新失败，请重试！', error), 10);
       return false;
     }
-  };
+  });
 
   /**
    *  删除节点
    * @param selectedRows
    */
-  const handleRemove = async (selectedRows: any[]) => {
+  const handleRemove = removeHandler || (async (selectedRows: any[]) => {
     if (!selectedRows || selectedRows.length === 0) {
       message.success('请先选择需要删除的记录');
       return true;
@@ -107,7 +125,7 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
 
     const hide = message.loading('正在删除');
     try {
-      await removeEntities(
+      await doRemove(
         removeActionUrl,
         selectedRows.map((row) => row.id)
       );
@@ -119,7 +137,7 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
       message.error(getErrorMessage('删除失败，请重试！', error), 10);
       return false;
     }
-  };
+  });
 
   const onRemoveClick = async (selectedRows: any[]) => {
     const result = await handleRemove(selectedRows);
@@ -158,7 +176,7 @@ const GenericPage: React.FC<GenericPageProps> = (props: GenericPageProps) => {
       <ProTable
         actionRef={actionRef}
         request={(params, sorter, filter) =>
-          findEntities(findActionUrl, {...params, sorter, filter})}
+          doFind(findActionUrl, {...params, sorter, filter})}
         columns={tableColumns.concat(optionColumn)}
         bordered
         rowKey={rowKey || "id"}
