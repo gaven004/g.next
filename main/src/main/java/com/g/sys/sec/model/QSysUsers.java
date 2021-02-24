@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -28,6 +29,8 @@ public class QSysUsers extends EntityPathBase<SysUsers> {
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath password = createString("password");
+
+    public final SetPath<SysRoles, QSysRoles> roles = this.<SysRoles, QSysRoles>createSet("roles", SysRoles.class, QSysRoles.class, PathInits.DIRECT2);
 
     public final EnumPath<com.g.commons.enums.Status> status = createEnum("status", com.g.commons.enums.Status.class);
 
