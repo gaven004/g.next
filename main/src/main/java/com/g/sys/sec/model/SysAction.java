@@ -2,6 +2,9 @@
 
 package com.g.sys.sec.model;
 
+import java.util.Objects;
+import java.util.StringJoiner;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -29,6 +32,14 @@ public class SysAction extends AbstractEntity implements java.io.Serializable {
     private Status status;
 
     public SysAction() {
+    }
+
+    public SysAction(Long id) {
+        this.id = id;
+    }
+
+    public SysAction(String id) {
+        this.id = Long.valueOf(id);
     }
 
     public SysAction(Long id, String resource, ActionMethod method, String description, Status status) {
@@ -96,6 +107,29 @@ public class SysAction extends AbstractEntity implements java.io.Serializable {
         this.status = status;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SysAction sysAction = (SysAction) o;
+        return Objects.equals(id, sysAction.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", SysAction.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("resource='" + resource + "'")
+                .add("method=" + method)
+                .add("description='" + description + "'")
+                .add("status=" + status)
+                .toString();
+    }
 }
 
 

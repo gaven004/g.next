@@ -2,12 +2,17 @@
 
 package com.g.sys.sec.model;
 
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import java.util.StringJoiner;
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.*;
 
 import com.g.commons.enums.Status;
 import com.g.commons.model.AbstractEntity;
@@ -25,7 +30,22 @@ public class SysRoles extends AbstractEntity implements java.io.Serializable {
     private String name;
     private Status status;
 
+    private Set<SysAction> authorities = new HashSet<>();
+
     public SysRoles() {
+    }
+
+    public SysRoles(Long id) {
+        this.id = id;
+    }
+
+    public SysRoles(String id) {
+        this.id = Long.valueOf(id);
+    }
+
+    public SysRoles(Long id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public SysRoles(Long id, String name, Status status) {
@@ -52,6 +72,7 @@ public class SysRoles extends AbstractEntity implements java.io.Serializable {
     }
 
     @Column(name = "name", nullable = false, length = 60)
+    @NaturalId
     @NotEmpty
     public String getName() {
         return this.name;
@@ -71,6 +92,49 @@ public class SysRoles extends AbstractEntity implements java.io.Serializable {
         this.status = status;
     }
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "sys_role_authorities",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority")
+    )
+    @Fetch(FetchMode.JOIN)
+    public Set<SysAction> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<SysAction> authorities) {
+        this.authorities = authorities;
+    }
+
+    public void addAuthority(SysAction action) {
+        authorities.add(action);
+    }
+
+    public void removeAuthority(SysAction action) {
+        authorities.remove(action);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SysRoles sysRoles = (SysRoles) o;
+        return Objects.equals(id, sysRoles.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", SysRoles.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("name='" + name + "'")
+                .add("status=" + status)
+                .toString();
+    }
 }
 
 
