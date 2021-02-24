@@ -15,10 +15,10 @@ export declare type GenericPageProps = {
   removeActionUrl: string;
   updateActionUrl: string;
   findActionUrl: string;
-  addService?: () => any;
-  findService?: () => any;
-  removeService?: () => any;
-  updateService?: () => any;
+  addService?: (url: string, params?: any) => Promise<any>;
+  findService?: (url: string, params?: any) => Promise<any>;
+  removeService?: (url: string, params?: any) => Promise<any>;
+  updateService?: (url: string, params?: any) => Promise<any>;
   addHandler?: () => any;
   removeHandler?: () => any;
   updateHandler?: () => any;
