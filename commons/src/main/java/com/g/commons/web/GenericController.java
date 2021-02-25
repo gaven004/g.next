@@ -32,13 +32,13 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
     private final Class<T> domainClass;
     private final Class<ID> idClass;
 
-    protected GenericController() {
+    public GenericController() {
         this.domainClass = GenericsUtils.getSuperClassGenericType(getClass(), 2);
         this.idClass = GenericsUtils.getSuperClassGenericType(getClass(), 3);
     }
 
     @GetMapping
-    AntdResponse<?> find(NativeWebRequest webRequest, AntdPageRequest pageRequest) throws Exception {
+    public AntdResponse<?> find(NativeWebRequest webRequest, AntdPageRequest pageRequest) throws Exception {
         // 是否分页
         boolean isPage = isPage(webRequest);
         // 是否排序
@@ -60,22 +60,22 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
     }
 
     @GetMapping("/{id}")
-    AntdResponse<T> get(@PathVariable ID id) {
+    public AntdResponse<T> get(@PathVariable ID id) {
         return AntdResponse.success(service.get(id));
     }
 
     @PostMapping
-    AntdResponse<T> save(@RequestBody @Valid T entity) {
+    public AntdResponse<T> save(@RequestBody @Valid T entity) {
         return AntdResponse.success(service.save(entity));
     }
 
     @PutMapping
-    AntdResponse<T> update(@RequestBody @Valid T entity) {
+    public AntdResponse<T> update(@RequestBody @Valid T entity) {
         return AntdResponse.success(service.update(entity));
     }
 
     @DeleteMapping("/$batch")
-    AntdResponse<?> delete(@RequestBody @Valid ID[] ids) {
+    public AntdResponse<?> delete(@RequestBody @Valid ID[] ids) {
         for (ID id : ids) {
             service.delete(convert(id));
         }
@@ -83,7 +83,7 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
     }
 
     @DeleteMapping("/{id}")
-    AntdResponse<T> delete(@PathVariable ID id) {
+    public AntdResponse<T> delete(@PathVariable ID id) {
         service.delete(convert(id));
         return AntdResponse.success();
     }
