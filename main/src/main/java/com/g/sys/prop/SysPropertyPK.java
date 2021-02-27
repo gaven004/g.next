@@ -6,14 +6,14 @@ import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
-public class SysPropertiesPK implements Serializable {
+public class SysPropertyPK implements Serializable {
     private String category;
     private String name;
 
-    public SysPropertiesPK() {
+    public SysPropertyPK() {
     }
 
-    public SysPropertiesPK(String category, String name) {
+    public SysPropertyPK(String category, String name) {
         this.category = category;
         this.name = name;
     }
@@ -44,7 +44,7 @@ public class SysPropertiesPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SysPropertiesPK that = (SysPropertiesPK) o;
+        SysPropertyPK that = (SysPropertyPK) o;
         return Objects.equals(category, that.category) && Objects.equals(name, that.name);
     }
 

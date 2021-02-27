@@ -20,22 +20,22 @@ import com.g.commons.model.AbstractEntity;
 @Table(name = "sys_persistent_logins")
 @DynamicInsert
 @DynamicUpdate
-public class SysPersistentLogins extends AbstractEntity implements java.io.Serializable {
+public class SysPersistentLogin extends AbstractEntity implements java.io.Serializable {
 
     private String series;
     private Long uid;
     private String token;
     private LocalDateTime lastUsed;
 
-    public SysPersistentLogins() {
+    public SysPersistentLogin() {
     }
 
-    public SysPersistentLogins(String series, LocalDateTime lastUsed) {
+    public SysPersistentLogin(String series, LocalDateTime lastUsed) {
         this.series = series;
         this.lastUsed = lastUsed;
     }
 
-    public SysPersistentLogins(String series, Long uid, String token, LocalDateTime lastUsed) {
+    public SysPersistentLogin(String series, Long uid, String token, LocalDateTime lastUsed) {
         this.series = series;
         this.uid = uid;
         this.token = token;

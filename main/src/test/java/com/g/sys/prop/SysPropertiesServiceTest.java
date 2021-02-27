@@ -17,9 +17,9 @@ class SysPropertiesServiceTest extends NextApplicationTests {
 
     @Test
     void findAll() {
-        var qSysProperties = QSysProperties.sysProperties;
+        var qSysProperties = QSysProperty.sysProperties;
         Predicate predicate = qSysProperties.category.containsIgnoreCase("test");
-        Page<SysProperties> page = service.findAll(predicate, PageRequest.of(0, 10));
+        Page<SysProperty> page = service.findAll(predicate, PageRequest.of(0, 10));
         System.out.println("page = " + page);
     }
 
@@ -27,7 +27,7 @@ class SysPropertiesServiceTest extends NextApplicationTests {
     void save() {
         assertNotNull(service);
 
-        SysProperties entity = new SysProperties();
+        SysProperty entity = new SysProperty();
         entity.setCategory("Test");
         entity.setName("Hi");
         entity.setValue("World");
@@ -42,7 +42,7 @@ class SysPropertiesServiceTest extends NextApplicationTests {
     void update() {
         assertNotNull(service);
 
-        SysProperties entity = new SysProperties();
+        SysProperty entity = new SysProperty();
         entity.setCategory("Test");
         entity.setName("Hello");
         entity.setValue("World2");
@@ -57,7 +57,7 @@ class SysPropertiesServiceTest extends NextApplicationTests {
     void findByCategory() {
         assertNotNull(service);
 
-        final Iterable<SysProperties> result = service.findByCategory("Test", null);
+        final Iterable<SysProperty> result = service.findByCategory("Test", null);
         assertNotNull(result);
 
         result.forEach(item->{

@@ -24,7 +24,7 @@ import com.g.commons.model.AbstractEntity;
 @Table(name = "sys_users", uniqueConstraints = @UniqueConstraint(columnNames = "account"))
 @DynamicInsert
 @DynamicUpdate
-public class SysUsers extends AbstractEntity implements java.io.Serializable {
+public class SysUser extends AbstractEntity implements java.io.Serializable {
 
     private Long id;
     private String account;
@@ -33,25 +33,25 @@ public class SysUsers extends AbstractEntity implements java.io.Serializable {
     private String email;
     private Status status;
 
-    private Set<SysRoles> roles = new HashSet<>();
+    private Set<SysRole> roles = new HashSet<>();
 
-    public SysUsers() {
+    public SysUser() {
     }
 
-    public SysUsers(Long id, String account, String username) {
+    public SysUser(Long id, String account, String username) {
         this.id = id;
         this.account = account;
         this.username = username;
     }
 
-    public SysUsers(Long id, String account, String username, Status status) {
+    public SysUser(Long id, String account, String username, Status status) {
         this.id = id;
         this.account = account;
         this.username = username;
         this.status = status;
     }
 
-    public SysUsers(Long id, String account, String username, String password, String email, Status status) {
+    public SysUser(Long id, String account, String username, String password, String email, Status status) {
         this.id = id;
         this.account = account;
         this.username = username;
@@ -126,25 +126,25 @@ public class SysUsers extends AbstractEntity implements java.io.Serializable {
         this.status = status;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "sys_role_members",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    @Fetch(FetchMode.JOIN)
-    public Set<SysRoles> getRoles() {
+    @BatchSize(size=20)
+    public Set<SysRole> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<SysRoles> roles) {
+    public void setRoles(Set<SysRole> roles) {
         this.roles = roles;
     }
 
-    public void addRole(SysRoles role) {
+    public void addRole(SysRole role) {
         roles.add(role);
     }
 
-    public void removeRole(SysRoles role) {
+    public void removeRole(SysRole role) {
         roles.remove(role);
     }
 
@@ -152,7 +152,7 @@ public class SysUsers extends AbstractEntity implements java.io.Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SysUsers sysUsers = (SysUsers) o;
+        SysUser sysUsers = (SysUser) o;
         return Objects.equals(id, sysUsers.id);
     }
 
@@ -163,7 +163,7 @@ public class SysUsers extends AbstractEntity implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", SysUsers.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", SysUser.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("account='" + account + "'")
                 .add("username='" + username + "'")

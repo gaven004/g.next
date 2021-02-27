@@ -23,15 +23,15 @@ public class SysPropertyCategoriesService {
     }
 
     @Transactional
-    public SysPropertyCategories save(Long operator, SysPropertyCategories entity) {
+    public SysPropertyCategory save(Long operator, SysPropertyCategory entity) {
         entity = repository.save(entity);
         logService.logCreate(operator, entity);
         return entity;
     }
 
     @Transactional
-    public SysPropertyCategories update(final Long operator, final SysPropertyCategories entity) {
-        final Optional<SysPropertyCategories> optional = repository.findById(entity.getId());
+    public SysPropertyCategory update(final Long operator, final SysPropertyCategory entity) {
+        final Optional<SysPropertyCategory> optional = repository.findById(entity.getId());
         return optional
                 .map(source -> {
                     try {

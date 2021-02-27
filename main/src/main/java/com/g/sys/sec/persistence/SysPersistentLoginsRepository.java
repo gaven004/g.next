@@ -10,8 +10,9 @@ package com.g.sys.sec.persistence;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.g.sys.sec.model.SysPersistentLogins;
+import com.g.sys.sec.model.SysPersistentLogin;
 
 public interface SysPersistentLoginsRepository extends
-        PagingAndSortingRepository<SysPersistentLogins, String>, QuerydslPredicateExecutor<SysPersistentLogins> {
+        PagingAndSortingRepository<SysPersistentLogin, String>, QuerydslPredicateExecutor<SysPersistentLogin> {
+    long deleteByUid(Long uid);
 }

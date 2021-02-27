@@ -24,7 +24,7 @@ import com.g.commons.model.AbstractEntity;
 @Table(name = "sys_roles")
 @DynamicInsert
 @DynamicUpdate
-public class SysRoles extends AbstractEntity implements java.io.Serializable {
+public class SysRole extends AbstractEntity implements java.io.Serializable {
 
     private Long id;
     private String name;
@@ -32,23 +32,23 @@ public class SysRoles extends AbstractEntity implements java.io.Serializable {
 
     private Set<SysAction> authorities = new HashSet<>();
 
-    public SysRoles() {
+    public SysRole() {
     }
 
-    public SysRoles(Long id) {
+    public SysRole(Long id) {
         this.id = id;
     }
 
-    public SysRoles(String id) {
+    public SysRole(String id) {
         this.id = Long.valueOf(id);
     }
 
-    public SysRoles(Long id, String name) {
+    public SysRole(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public SysRoles(Long id, String name, Status status) {
+    public SysRole(Long id, String name, Status status) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -92,12 +92,12 @@ public class SysRoles extends AbstractEntity implements java.io.Serializable {
         this.status = status;
     }
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "sys_role_authorities",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "authority")
     )
-    @Fetch(FetchMode.JOIN)
+    @BatchSize(size=20)
     public Set<SysAction> getAuthorities() {
         return authorities;
     }
@@ -118,7 +118,7 @@ public class SysRoles extends AbstractEntity implements java.io.Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SysRoles sysRoles = (SysRoles) o;
+        SysRole sysRoles = (SysRole) o;
         return Objects.equals(id, sysRoles.id);
     }
 
@@ -129,7 +129,7 @@ public class SysRoles extends AbstractEntity implements java.io.Serializable {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", SysRoles.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", SysRole.class.getSimpleName() + "[", "]")
                 .add("id=" + id)
                 .add("name='" + name + "'")
                 .add("status=" + status)

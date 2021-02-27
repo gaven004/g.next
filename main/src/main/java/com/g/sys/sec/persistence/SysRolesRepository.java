@@ -10,8 +10,8 @@ package com.g.sys.sec.persistence;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.g.sys.sec.model.SysRoles;
+import com.g.sys.sec.model.SysRole;
 
 public interface SysRolesRepository extends
-        PagingAndSortingRepository<SysRoles, Long>, QuerydslPredicateExecutor<SysRoles> {
+        PagingAndSortingRepository<SysRole, Long>, QuerydslPredicateExecutor<SysRole> {
 }

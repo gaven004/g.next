@@ -18,28 +18,27 @@ import com.querydsl.jpa.impl.JPAQuery;
 
 import com.g.commons.service.GenericService;
 import com.g.commons.utils.QuerydslBuilder;
-import com.g.sys.sec.model.QSysRoles;
-import com.g.sys.sec.model.SysRoles;
-import com.g.sys.sec.model.SysUsers;
+import com.g.sys.sec.model.QSysRole;
+import com.g.sys.sec.model.SysRole;
 import com.g.sys.sec.persistence.SysRolesRepository;
 
 @Service
 public class SysRolesService
-        extends GenericService<SysRolesRepository, SysRoles, Long> {
+        extends GenericService<SysRolesRepository, SysRole, Long> {
     private Querydsl querydsl;
 
-    public Iterable<SysRoles> findAllEssential(Predicate predicate, Sort sort) {
-        QSysRoles qSysRoles = QSysRoles.sysRoles;
+    public Iterable<SysRole> findAllEssential(Predicate predicate, Sort sort) {
+        QSysRole qSysRoles = QSysRole.sysRoles;
         JPQLQuery query = new JPAQuery(em);
         query.from(qSysRoles)
-                .select(Projections.constructor(SysRoles.class, qSysRoles.id, qSysRoles.name))
+                .select(Projections.constructor(SysRole.class, qSysRoles.id, qSysRoles.name))
                 .where(predicate);
         return getQuerydsl().applySorting(sort, query).fetch();
     }
 
     private Querydsl getQuerydsl() {
         if (querydsl == null) {
-            querydsl = QuerydslBuilder.build(SysRoles.class, em);
+            querydsl = QuerydslBuilder.build(SysRole.class, em);
         }
 
         return querydsl;

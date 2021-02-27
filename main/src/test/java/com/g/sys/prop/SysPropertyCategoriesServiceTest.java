@@ -19,7 +19,7 @@ class SysPropertyCategoriesServiceTest extends NextApplicationTests {
     void save() {
         assertNotNull(service);
 
-        SysPropertyCategories entity = new SysPropertyCategories();
+        SysPropertyCategory entity = new SysPropertyCategory();
         entity.setId("FILE_TYPE");
         entity.setName("文件类型");
         service.save(0L, entity);
@@ -43,7 +43,7 @@ class SysPropertyCategoriesServiceTest extends NextApplicationTests {
 
         save();
 
-        SysPropertyCategories entity = new SysPropertyCategories();
+        SysPropertyCategory entity = new SysPropertyCategory();
         entity.setId("FILE_TYPE");
         entity.setName("文件类型");
         entity.setStatus(Status.INVALID);

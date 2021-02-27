@@ -14,7 +14,7 @@ import com.g.commons.model.AbstractEntity;
 @Table(name = "sys_property_categories")
 @DynamicInsert
 @DynamicUpdate
-public class SysPropertyCategories extends AbstractEntity {
+public class SysPropertyCategory extends AbstractEntity {
     private String id;
     private String name;
     private String note;
@@ -67,7 +67,7 @@ public class SysPropertyCategories extends AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SysPropertyCategories that = (SysPropertyCategories) o;
+        SysPropertyCategory that = (SysPropertyCategory) o;
         return Objects.equals(id, that.id) && Objects.equals(name, that.name);
     }
 
@@ -78,7 +78,7 @@ public class SysPropertyCategories extends AbstractEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("SysPropertyCategories{");
+        final StringBuilder sb = new StringBuilder("SysPropertyCategory{");
         sb.append("id='").append(id).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", note='").append(note).append('\'');

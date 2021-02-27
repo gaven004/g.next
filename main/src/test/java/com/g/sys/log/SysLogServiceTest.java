@@ -1,14 +1,12 @@
 package com.g.sys.log;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.querydsl.core.types.Predicate;
 
 import com.g.NextApplicationTests;
-import com.g.sys.prop.SysProperties;
+import com.g.sys.prop.SysProperty;
 
 class SysLogServiceTest extends NextApplicationTests {
     @Autowired
@@ -17,7 +15,7 @@ class SysLogServiceTest extends NextApplicationTests {
     @Test
     void getTrace() {
         var qSysLog = QSysLog.sysLog;
-        Predicate predicate = qSysLog.clazz.eq(SysProperties.class.getName());
+        Predicate predicate = qSysLog.clazz.eq(SysProperty.class.getName());
 
         final Iterable<SysLog> trace = service.getTrace(predicate);
         trace.forEach(log -> {

@@ -34,7 +34,7 @@ public class SysPropertiesController {
 
     @GetMapping
     AntdResponse<?> find(NativeWebRequest webRequest,
-                         @QuerydslPredicate(root = SysProperties.class) Predicate predicate,
+                         @QuerydslPredicate(root = SysProperty.class) Predicate predicate,
                          AntdPageRequest pageRequest) {
         // 是否分页
         boolean isPage = isPage(webRequest);
@@ -56,7 +56,7 @@ public class SysPropertiesController {
 
     @GetMapping("/$options")
     AntdResponse<List<Option>> getOptions() {
-        Iterable<SysProperties> properties = repository.findAll();
+        Iterable<SysProperty> properties = repository.findAll();
         if (properties != null && properties.iterator().hasNext()) {
             List<Option> result = new ArrayList();
             properties.forEach(item -> {
@@ -69,25 +69,25 @@ public class SysPropertiesController {
     }
 
     @GetMapping("/{category}/{name}")
-    AntdResponse<SysProperties> get(@PathVariable String category, @PathVariable String name) {
+    AntdResponse<SysProperty> get(@PathVariable String category, @PathVariable String name) {
         return service.get(category, name)
                 .map(entity -> AntdResponse.success(entity))
                 .orElseThrow(() -> new EntityNotFoundException());
     }
 
     @PostMapping
-    AntdResponse<SysProperties> save(@RequestBody SysProperties entity) {
+    AntdResponse<SysProperty> save(@RequestBody SysProperty entity) {
         return AntdResponse.success(service.save(0L, entity));
     }
 
     @PutMapping
-    AntdResponse<SysProperties> update(@RequestBody SysProperties entity) {
+    AntdResponse<SysProperty> update(@RequestBody SysProperty entity) {
         return AntdResponse.success(service.update(0L, entity));
     }
 
     @DeleteMapping("/$batch")
-    AntdResponse<?> delete(@RequestBody @Valid SysPropertiesPK[] pks) {
-        for (SysPropertiesPK pk : pks) {
+    AntdResponse<?> delete(@RequestBody @Valid SysPropertyPK[] pks) {
+        for (SysPropertyPK pk : pks) {
             service.delete(0L, pk);
         }
         return AntdResponse.success();
@@ -95,7 +95,7 @@ public class SysPropertiesController {
 
     @DeleteMapping("/{category}/{name}")
     AntdResponse<?> delete(@PathVariable String category, @PathVariable String name) {
-        service.delete(0L, new SysPropertiesPK(category, name));
+        service.delete(0L, new SysPropertyPK(category, name));
         return AntdResponse.success();
     }
 }

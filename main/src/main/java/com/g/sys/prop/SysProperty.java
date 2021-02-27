@@ -14,10 +14,10 @@ import com.g.commons.model.AbstractEntity;
 
 @Entity
 @Table(name = "sys_properties")
-@IdClass(SysPropertiesPK.class)
+@IdClass(SysPropertyPK.class)
 @DynamicInsert
 @DynamicUpdate
-public class SysProperties extends AbstractEntity<SysPropertiesPK> {
+public class SysProperty extends AbstractEntity<SysPropertyPK> {
     private String category;
     private String name;
     private String value;
@@ -26,10 +26,10 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
     private Status status;
     private String note;
 
-    public SysProperties() {
+    public SysProperty() {
     }
 
-    public SysProperties(String category, String name) {
+    public SysProperty(String category, String name) {
         this.category = category;
         this.name = name;
     }
@@ -112,7 +112,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SysProperties that = (SysProperties) o;
+        SysProperty that = (SysProperty) o;
         return Objects.equals(category, that.category) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(value, that.value);
@@ -125,7 +125,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("SysProperties{");
+        final StringBuilder sb = new StringBuilder("SysProperty{");
         sb.append("category='").append(category).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", value='").append(value).append('\'');
@@ -145,7 +145,7 @@ public class SysProperties extends AbstractEntity<SysPropertiesPK> {
     @Override
     @Transient
     @JsonIgnore
-    public SysPropertiesPK getId() {
-        return new SysPropertiesPK(category, name);
+    public SysPropertyPK getId() {
+        return new SysPropertyPK(category, name);
     }
 }

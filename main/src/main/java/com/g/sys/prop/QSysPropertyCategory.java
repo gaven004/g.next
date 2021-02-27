@@ -15,11 +15,11 @@ import com.querydsl.core.types.dsl.StringPath;
  * QSysPropertyCategories is a Querydsl query type for SysPropertyCategories
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QSysPropertyCategories extends EntityPathBase<SysPropertyCategories> {
+public class QSysPropertyCategory extends EntityPathBase<SysPropertyCategory> {
 
     private static final long serialVersionUID = -1046322017L;
 
-    public static final QSysPropertyCategories sysPropertyCategories = new QSysPropertyCategories("sysPropertyCategories");
+    public static final QSysPropertyCategory sysPropertyCategories = new QSysPropertyCategory("sysPropertyCategory");
 
     public final StringPath id = createString("id");
 
@@ -29,16 +29,16 @@ public class QSysPropertyCategories extends EntityPathBase<SysPropertyCategories
 
     public final EnumPath<com.g.commons.enums.Status> status = createEnum("status", com.g.commons.enums.Status.class);
 
-    public QSysPropertyCategories(String variable) {
-        super(SysPropertyCategories.class, forVariable(variable));
+    public QSysPropertyCategory(String variable) {
+        super(SysPropertyCategory.class, forVariable(variable));
     }
 
-    public QSysPropertyCategories(Path<? extends SysPropertyCategories> path) {
+    public QSysPropertyCategory(Path<? extends SysPropertyCategory> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QSysPropertyCategories(PathMetadata metadata) {
-        super(SysPropertyCategories.class, metadata);
+    public QSysPropertyCategory(PathMetadata metadata) {
+        super(SysPropertyCategory.class, metadata);
     }
 
 }

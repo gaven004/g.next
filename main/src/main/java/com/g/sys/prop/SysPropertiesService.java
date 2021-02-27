@@ -30,15 +30,15 @@ public class SysPropertiesService {
     }
 
     @Transactional
-    public SysProperties save(Long operator, SysProperties entity) {
+    public SysProperty save(Long operator, SysProperty entity) {
         entity = repository.save(entity);
         logService.logCreate(operator, entity);
         return entity;
     }
 
     @Transactional
-    public SysProperties update(final Long operator, final SysProperties entity) {
-        final Optional<SysProperties> optional = get(entity.getCategory(), entity.getName());
+    public SysProperty update(final Long operator, final SysProperty entity) {
+        final Optional<SysProperty> optional = get(entity.getCategory(), entity.getName());
         return optional
                 .map(source -> {
                     try {
@@ -56,33 +56,33 @@ public class SysPropertiesService {
     }
 
     @Transactional
-    public void delete(Long operator, SysPropertiesPK pk) {
+    public void delete(Long operator, SysPropertyPK pk) {
         repository.deleteById(pk);
-        logService.logDelete(operator, new SysProperties(pk.getCategory(), pk.getName()));
+        logService.logDelete(operator, new SysProperty(pk.getCategory(), pk.getName()));
     }
 
-    public Optional<SysProperties> get(String category, String name) {
-        return repository.findById(new SysPropertiesPK(category, name));
+    public Optional<SysProperty> get(String category, String name) {
+        return repository.findById(new SysPropertyPK(category, name));
     }
 
-    public Page<SysProperties> findAll(Predicate predicate, Pageable pageable) {
+    public Page<SysProperty> findAll(Predicate predicate, Pageable pageable) {
         return repository.findAll(predicate, pageable);
     }
 
-    public Iterable<SysProperties> findByCategory(String category) {
+    public Iterable<SysProperty> findByCategory(String category) {
         return findByCategory(category, null);
     }
 
-    public Iterable<SysProperties> findByCategory(String category, Status status) {
+    public Iterable<SysProperty> findByCategory(String category, Status status) {
         if (null == status) {
             status = Status.VALID;
         }
 
-        var qSysProperties = QSysProperties.sysProperties;
+        var qSysProperties = QSysProperty.sysProperties;
         Predicate predicate = qSysProperties.category.eq(category)
                 .and(qSysProperties.status.eq(status));
-        Sort.TypedSort<SysProperties> sort = Sort.sort(SysProperties.class);
+        Sort.TypedSort<SysProperty> sort = Sort.sort(SysProperty.class);
 
-        return repository.findAll(predicate, sort.by(SysProperties::getSortOrder).ascending());
+        return repository.findAll(predicate, sort.by(SysProperty::getSortOrder).ascending());
     }
 }

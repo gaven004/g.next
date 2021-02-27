@@ -10,8 +10,11 @@ package com.g.sys.sec.persistence;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-import com.g.sys.sec.model.SysUsers;
+import com.g.sys.sec.model.SysUser;
 
 public interface SysUsersRepository extends
-        PagingAndSortingRepository<SysUsers, Long>, QuerydslPredicateExecutor<SysUsers> {
+        PagingAndSortingRepository<SysUser, Long>, QuerydslPredicateExecutor<SysUser> {
+    SysUser findByAccount(String account);
+
+    SysUser findByEmail(String email);
 }

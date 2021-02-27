@@ -13,11 +13,11 @@ import com.querydsl.core.types.Path;
  * QSysPersistentLogins is a Querydsl query type for SysPersistentLogins
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QSysPersistentLogins extends EntityPathBase<SysPersistentLogins> {
+public class QSysPersistentLogin extends EntityPathBase<SysPersistentLogin> {
 
     private static final long serialVersionUID = 1865634231L;
 
-    public static final QSysPersistentLogins sysPersistentLogins = new QSysPersistentLogins("sysPersistentLogins");
+    public static final QSysPersistentLogin sysPersistentLogins = new QSysPersistentLogin("sysPersistentLogin");
 
     public final com.g.commons.model.QAbstractEntity _super = new com.g.commons.model.QAbstractEntity(this);
 
@@ -29,16 +29,16 @@ public class QSysPersistentLogins extends EntityPathBase<SysPersistentLogins> {
 
     public final NumberPath<Long> uid = createNumber("uid", Long.class);
 
-    public QSysPersistentLogins(String variable) {
-        super(SysPersistentLogins.class, forVariable(variable));
+    public QSysPersistentLogin(String variable) {
+        super(SysPersistentLogin.class, forVariable(variable));
     }
 
-    public QSysPersistentLogins(Path<? extends SysPersistentLogins> path) {
+    public QSysPersistentLogin(Path<? extends SysPersistentLogin> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QSysPersistentLogins(PathMetadata metadata) {
-        super(SysPersistentLogins.class, metadata);
+    public QSysPersistentLogin(PathMetadata metadata) {
+        super(SysPersistentLogin.class, metadata);
     }
 
 }

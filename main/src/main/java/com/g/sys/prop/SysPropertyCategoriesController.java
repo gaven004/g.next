@@ -34,7 +34,7 @@ public class SysPropertyCategoriesController {
 
     @GetMapping
     AntdResponse<?> find(NativeWebRequest webRequest,
-                         @QuerydslPredicate(root = SysPropertyCategories.class) Predicate predicate,
+                         @QuerydslPredicate(root = SysPropertyCategory.class) Predicate predicate,
                          AntdPageRequest pageRequest) {
         // 是否分页
         boolean isPage = isPage(webRequest);
@@ -56,7 +56,7 @@ public class SysPropertyCategoriesController {
 
     @GetMapping("/$options")
     AntdResponse<List<Option>> getOptions() {
-        Iterable<SysPropertyCategories> categories = repository.findAll();
+        Iterable<SysPropertyCategory> categories = repository.findAll();
         if (categories != null && categories.iterator().hasNext()) {
             List<Option> result = new ArrayList();
             categories.forEach(item -> {
@@ -69,19 +69,19 @@ public class SysPropertyCategoriesController {
     }
 
     @GetMapping("/{category}")
-    AntdResponse<SysPropertyCategories> get(@PathVariable String category) {
+    AntdResponse<SysPropertyCategory> get(@PathVariable String category) {
         return repository.findById(category)
                 .map(entiry -> AntdResponse.success(entiry))
                 .orElseThrow(() -> new EntityNotFoundException());
     }
 
     @PostMapping
-    AntdResponse<SysPropertyCategories> save(@RequestBody @Valid SysPropertyCategories entity) {
+    AntdResponse<SysPropertyCategory> save(@RequestBody @Valid SysPropertyCategory entity) {
         return AntdResponse.success(service.save(0L, entity));
     }
 
     @PutMapping
-    AntdResponse<SysPropertyCategories> update(@RequestBody @Valid SysPropertyCategories entity) {
+    AntdResponse<SysPropertyCategory> update(@RequestBody @Valid SysPropertyCategory entity) {
         return AntdResponse.success(service.update(0L, entity));
     }
 
@@ -94,7 +94,7 @@ public class SysPropertyCategoriesController {
     }
 
     @DeleteMapping("/{category}")
-    AntdResponse<SysPropertyCategories> delete(@PathVariable String category) {
+    AntdResponse<SysPropertyCategory> delete(@PathVariable String category) {
         service.delete(0L, category);
         return AntdResponse.success();
     }
