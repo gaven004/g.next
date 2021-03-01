@@ -13,10 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.g.commons.utils.ObjectMapperUtil;
 
 @Configuration
+@ImportResource("classpath*:sys-config.xml")
 // 强制先于DataSourceAutoConfiguration执行，以先创建ApplicationContextHolder
 // 强制先于WebMvcAutoConfiguration执行，以先创建ObjectMapper
 @AutoConfigureBefore({DataSourceAutoConfiguration.class, WebMvcAutoConfiguration.class})
-@ImportResource("classpath*:mail-config.xml")
 public class AppConfig {
     @Bean
     // 强制先于DataSourceAutoConfiguration执行创建ApplicationContextHolder
