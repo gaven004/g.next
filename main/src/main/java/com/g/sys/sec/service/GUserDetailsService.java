@@ -1,5 +1,7 @@
 package com.g.sys.sec.service;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,7 @@ public class GUserDetailsService implements UserDetailsService {
      * 所以登录时，是使用account来登录的，这个与Security有所区别
      */
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         SysUser user = sysUsersService.findByAccount(username);
         if (user == null) {

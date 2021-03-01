@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,8 +38,8 @@ public class MainController {
     private final JwtService jwtService;
 
     @Autowired
-    public MainController(@Qualifier("restAuthenticationManager") AuthenticationManager authenticationManager,
-                          @Qualifier("jwtService") JwtService jwtService) {
+    public MainController(AuthenticationManager authenticationManager,
+                          JwtService jwtService) {
         Assert.notNull(authenticationManager, "A AuthenticationManager must be set");
         Assert.notNull(jwtService, "A JwtService must be set");
 
