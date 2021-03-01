@@ -3,6 +3,7 @@ package com.g.commons.service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 
@@ -23,6 +24,8 @@ public abstract class GenericService<R extends PagingAndSortingRepository<T, ID>
     protected R repository;
     @Autowired
     protected EntityManagerFactory emf;
+    @Autowired
+    protected EntityManager em;
 
     @Transactional
     public T save(T entity) {
@@ -56,6 +59,10 @@ public abstract class GenericService<R extends PagingAndSortingRepository<T, ID>
     public T get(ID id) {
         return repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException());
+    }
+
+    public Iterable<T> findAll() {
+        return repository.findAll();
     }
 
     public Iterable<T> findAll(Predicate predicate) {
