@@ -17,6 +17,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -108,5 +109,28 @@ public class MainController {
         headers.set("Content-Type", "application/json;charset=UTF-8");
 
         return new ResponseEntity(response, headers, HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/refresh-token", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ApiResponse<JwtAccessToken> refreshToken(HttpServletRequest request) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+
+        Map<String, Object> payloads = new HashMap<>();
+        payloads.put(PayloadKey.username, authentication.getName());
+        payloads.put(PayloadKey.ip, RequestHelper.getClientIpAddr(request));
+
+        final Map<String, Object> signResult = jwtService.sign(payloads);
+
+        JwtAccessToken accessToken = new JwtAccessToken();
+        accessToken.setUsername(authentication.getName());
+        accessToken.setIssuer((String) signResult.get(JwtService.ISSUER));
+        accessToken.setIssuerAt((Date) signResult.get(JwtService.ISSUED_AT));
+        accessToken.setExpiresAt((Date) signResult.get(JwtService.EXPIRES_AT));
+        accessToken.setToken((String) signResult.get(JwtService.TOKEN));
+
+        ApiResponse<JwtAccessToken> response = ApiResponse.success();
+        response.setBody(accessToken);
+        return response;
     }
 }
