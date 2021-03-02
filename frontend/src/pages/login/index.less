@@ -64,7 +64,7 @@
 }
 
 .desc {
-  margin-top: 12px;
+  margin-top: 24px;
   margin-bottom: 40px;
   color: @text-color-secondary;
   font-size: @font-size-base;
@@ -81,7 +81,8 @@
   :global {
     .@{ant-prefix}-tabs-nav-list {
       margin: auto;
-      font-size: 16px;
+      margin-left: 12px;
+      font-size: 18px;
     }
   }
 
@@ -96,6 +97,19 @@
     &:hover {
       color: @primary-color;
     }
+  }
+
+  .subtitle {
+    margin-top: 12px;
+    margin-bottom: 24px;
+    color: @primary-color;
+    font-size: 16px;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+  }
+
+  .subtitleIcon {
+    margin: 8px;
   }
 
   .other {

@@ -13,6 +13,7 @@ import {buildIcon} from "@/utils/icons";
 
 import defaultSettings from '../config/defaultSettings';
 import {queryMenu} from './services/user';
+import {API} from "@/services/API";
 
 /**
  * 获取用户信息比较慢的时候会展示一个 loading
@@ -83,7 +84,7 @@ export async function getInitialState(): Promise<{
       };
       return currentUser;
     } catch (error) {
-      history.push('/user/login');
+      history.push('/login');
     }
     return undefined;
   };
@@ -100,8 +101,8 @@ export async function getInitialState(): Promise<{
               routes: [
                 {
                   name: 'login',
-                  path: '/user/login',
-                  component: './user/login',
+                  path: '/login',
+                  component: './login',
                 },
               ],
             },
@@ -133,14 +134,14 @@ export async function getInitialState(): Promise<{
         );
       }
     } catch (error) {
-      history.push('/user/login');
+      history.push('/login');
     }
 
     return undefined;
   };
 
   // 如果是登录页面，不执行
-  if (history.location.pathname !== '/user/login') {
+  if (history.location.pathname !== '/login') {
     const currentUser = await fetchUserInfo();
     const menuData = await queryMenuData();
     console.log(menuData);
@@ -151,6 +152,7 @@ export async function getInitialState(): Promise<{
       settings: defaultSettings,
     };
   }
+
   return {
     fetchUserInfo,
     settings: defaultSettings,
@@ -166,8 +168,8 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
     onPageChange: () => {
       const {location} = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== '/user/login') {
-        history.push('/user/login');
+      if (!initialState?.currentUser && location.pathname !== '/login') {
+        history.push('/login');
       }
     },
     menuHeaderRender: undefined,

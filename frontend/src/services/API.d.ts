@@ -1,4 +1,26 @@
+import {ErrorShowType} from "@@/plugin-request/request";
+
 declare namespace API {
+  export interface Response {
+    success?: boolean;
+    data?: any;
+    errorCode?: string;
+    errorMessage?: string;
+    showType?: ErrorShowType;
+    traceId?: string;
+    host?: string;
+    [key: string]: any;
+  }
+
+  export interface AccessToken {
+    username?: string;
+    token?: string;
+    status? :string;
+    issuer?: string;
+    issuerAt?: string;
+    expiresAt?: string;
+  }
+
   export interface CurrentUser {
     avatar?: string;
     name?: string;
@@ -12,11 +34,6 @@ declare namespace API {
     userid?: string;
     access?: 'user' | 'guest' | 'admin';
     unreadCount?: number;
-  }
-
-  export interface LoginStateType {
-    status?: 'ok' | 'error';
-    type?: string;
   }
 
   export interface NoticeIconData {
