@@ -4,9 +4,9 @@ import {Link} from 'umi';
 
 const NoFoundPage: React.FC<{}> = () => (
   <Result
-    status="404"
-    title="404"
-    subTitle="抱歉，没有您访问的页面！"
+    status="500"
+    title="500"
+    subTitle="抱歉，系统出现故障，请稍后重试，或联系系统管理员！"
     extra={
       <Link to="/">
         <Button type="primary">返回首页</Button>
