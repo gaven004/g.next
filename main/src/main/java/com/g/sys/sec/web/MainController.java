@@ -23,7 +23,8 @@ import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.g.commons.model.ApiResponse;
+import com.g.commons.exception.ErrorCode;
+import com.g.commons.model.AntdResponse;
 import com.g.commons.web.RequestHelper;
 import com.g.sys.sec.model.JwtAccessToken;
 import com.g.sys.sec.model.LoginUser;
@@ -49,24 +50,22 @@ public class MainController {
     }
 
     @RequestMapping(path = "/test", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ApiResponse<String>> test() {
-        ApiResponse<String> result = ApiResponse.success();
-        result.setBody("OK!");
+    public ResponseEntity<AntdResponse<String>> test() {
+        AntdResponse<String> result = AntdResponse.success("OK!");
         return new ResponseEntity(result, null, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/hello", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ApiResponse<String>> hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        ApiResponse<String> result = ApiResponse.success();
-        result.setBody("Hello " + name);
+    public ResponseEntity<AntdResponse<String>> hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+        AntdResponse<String> result = AntdResponse.success("Hello " + name);
         return new ResponseEntity(result, null, HttpStatus.OK);
     }
 
     @PostMapping(path = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ApiResponse<JwtAccessToken>> login(HttpServletRequest request, @Validated @RequestBody LoginUser user) {
+    public ResponseEntity<AntdResponse<JwtAccessToken>> login(HttpServletRequest request, @Validated @RequestBody LoginUser user) {
         final boolean debug = logger.isDebugEnabled();
 
-        ApiResponse<JwtAccessToken> response = null;
+        AntdResponse<JwtAccessToken> response = null;
         try {
             Authentication authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             if (debug) {
@@ -91,8 +90,7 @@ public class MainController {
             accessToken.setExpiresAt((Date) signResult.get(JwtService.EXPIRES_AT));
             accessToken.setToken((String) signResult.get(JwtService.TOKEN));
 
-            response = ApiResponse.success();
-            response.setBody(accessToken);
+            response = AntdResponse.success(accessToken);
         } catch (AuthenticationException failed) {
             SecurityContextHolder.clearContext();
 
@@ -100,7 +98,7 @@ public class MainController {
                 logger.debug("Authentication request for failed: {}", failed.getMessage());
             }
 
-            response = ApiResponse.error(failed.getMessage());
+            response = AntdResponse.error(ErrorCode.Generic, failed.getMessage());
         }
 
         HttpHeaders headers = new HttpHeaders();
@@ -112,7 +110,7 @@ public class MainController {
     }
 
     @PostMapping(path = "/refresh-token", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ApiResponse<JwtAccessToken> refreshToken(HttpServletRequest request) {
+    public AntdResponse<JwtAccessToken> refreshToken(HttpServletRequest request) {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
 
@@ -129,8 +127,6 @@ public class MainController {
         accessToken.setExpiresAt((Date) signResult.get(JwtService.EXPIRES_AT));
         accessToken.setToken((String) signResult.get(JwtService.TOKEN));
 
-        ApiResponse<JwtAccessToken> response = ApiResponse.success();
-        response.setBody(accessToken);
-        return response;
+        return AntdResponse.success(accessToken);
     }
 }
