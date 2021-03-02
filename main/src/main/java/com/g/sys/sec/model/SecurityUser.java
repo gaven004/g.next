@@ -75,9 +75,14 @@ public class SecurityUser implements UserDetails, CredentialsContainer {
             Assert.notNull(role, "Role list cannot contain any null elements");
             Assert.notNull(role.getAuthorities(), "Role list cannot contain any null authorities");
 
-            for (SysAction authority : role.getAuthorities()) {
-                Assert.notNull(role, "GrantedAuthority list cannot contain any null elements");
-                sortedAuthorities.add(new SimpleGrantedAuthority(authority.getId().toString()));
+            if (VALID.equals(role.getStatus())) {
+                for (SysAction authority : role.getAuthorities()) {
+                    Assert.notNull(role, "GrantedAuthority list cannot contain any null elements");
+
+                    if (VALID.equals(authority.getStatus())) {
+                        sortedAuthorities.add(new SimpleGrantedAuthority(authority.getId().toString()));
+                    }
+                }
             }
         }
 
