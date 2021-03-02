@@ -20,6 +20,7 @@ import com.g.commons.model.AbstractEntity;
 @Table(name = "sys_menu")
 @DynamicInsert
 @DynamicUpdate
+@Cacheable
 public class SysMenu extends AbstractEntity implements java.io.Serializable {
 
     private Long id;

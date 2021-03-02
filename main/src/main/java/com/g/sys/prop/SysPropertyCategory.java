@@ -14,6 +14,7 @@ import com.g.commons.model.AbstractEntity;
 @Table(name = "sys_property_categories")
 @DynamicInsert
 @DynamicUpdate
+@Cacheable
 public class SysPropertyCategory extends AbstractEntity {
     private String id;
     private String name;

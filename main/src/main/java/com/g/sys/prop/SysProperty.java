@@ -17,6 +17,7 @@ import com.g.commons.model.AbstractEntity;
 @IdClass(SysPropertyPK.class)
 @DynamicInsert
 @DynamicUpdate
+@Cacheable
 public class SysProperty extends AbstractEntity<SysPropertyPK> {
     private String category;
     private String name;

@@ -17,6 +17,7 @@ logging:
         type:
           descriptor:
             sql: TRACE
+        cache: TRACE
 
 spring:
   #  autoconfigure:
@@ -36,8 +37,14 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
         #physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
+      javax.persistence.sharedCache.mode: ENABLE_SELECTIVE
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: org.redisson.hibernate.RedissonRegionFactory
 
 # Actuator
 management:
@@ -65,4 +72,4 @@ sec:
   jwtService:
     secret: "CbQNsCSmYrJ1"
     issuer: "G.Next"
-    duration: 86400
+    duration: 86400 # 1 day

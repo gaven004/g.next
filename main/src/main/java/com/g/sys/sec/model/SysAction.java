@@ -23,6 +23,7 @@ import com.g.commons.model.AbstractEntity;
 @Table(name = "sys_action")
 @DynamicInsert
 @DynamicUpdate
+@Cacheable
 public class SysAction extends AbstractEntity implements java.io.Serializable {
 
     private Long id;

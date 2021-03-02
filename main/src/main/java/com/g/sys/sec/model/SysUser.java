@@ -13,6 +13,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 
 import com.g.commons.enums.Status;
 import com.g.commons.model.AbstractEntity;
@@ -24,6 +25,7 @@ import com.g.commons.model.AbstractEntity;
 @Table(name = "sys_users", uniqueConstraints = @UniqueConstraint(columnNames = "account"))
 @DynamicInsert
 @DynamicUpdate
+@Cacheable
 public class SysUser extends AbstractEntity implements java.io.Serializable {
 
     private Long id;
@@ -132,6 +134,7 @@ public class SysUser extends AbstractEntity implements java.io.Serializable {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     @BatchSize(size=20)
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     public Set<SysRole> getRoles() {
         return roles;
     }
