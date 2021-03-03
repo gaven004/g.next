@@ -5,9 +5,8 @@ import java.util.Date;
 import lombok.Data;
 
 @Data
-public class JwtAccessToken {
-    public static String Token_TYPE = "Bearer";
-
+public class UserInfo {
+    private String account;
     private String username;
     private String token;
     private String issuer;

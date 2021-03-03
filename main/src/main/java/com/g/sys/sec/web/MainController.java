@@ -26,9 +26,10 @@ import org.springframework.web.bind.annotation.*;
 import com.g.commons.exception.ErrorCode;
 import com.g.commons.model.AntdResponse;
 import com.g.commons.web.RequestHelper;
-import com.g.sys.sec.model.JwtAccessToken;
 import com.g.sys.sec.model.LoginUser;
 import com.g.sys.sec.model.PayloadKey;
+import com.g.sys.sec.model.SecurityUser;
+import com.g.sys.sec.model.UserInfo;
 import com.g.sys.sec.service.JwtService;
 
 @RestController
@@ -62,10 +63,10 @@ public class MainController {
     }
 
     @PostMapping(path = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AntdResponse<JwtAccessToken>> login(HttpServletRequest request, @Validated @RequestBody LoginUser user) {
+    public ResponseEntity<AntdResponse<UserInfo>> login(HttpServletRequest request, @Validated @RequestBody LoginUser user) {
         final boolean debug = logger.isDebugEnabled();
 
-        AntdResponse<JwtAccessToken> response = null;
+        AntdResponse<UserInfo> response = null;
         try {
             Authentication authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             if (debug) {
@@ -77,20 +78,8 @@ public class MainController {
                 logger.debug("Authentication success: {}", authResult);
             }
 
-            Map<String, Object> payloads = new HashMap<>();
-            payloads.put(PayloadKey.username, user.getUsername());
-            payloads.put(PayloadKey.ip, RequestHelper.getClientIpAddr(request));
-
-            final Map<String, Object> signResult = jwtService.sign(payloads);
-
-            JwtAccessToken accessToken = new JwtAccessToken();
-            accessToken.setUsername(user.getUsername());
-            accessToken.setIssuer((String) signResult.get(JwtService.ISSUER));
-            accessToken.setIssuerAt((Date) signResult.get(JwtService.ISSUED_AT));
-            accessToken.setExpiresAt((Date) signResult.get(JwtService.EXPIRES_AT));
-            accessToken.setToken((String) signResult.get(JwtService.TOKEN));
-
-            response = AntdResponse.success(accessToken);
+            SecurityUser authUser = (SecurityUser) authResult.getPrincipal();
+            response = AntdResponse.success(getUserInfo(request, authUser));
         } catch (AuthenticationException failed) {
             SecurityContextHolder.clearContext();
 
@@ -110,23 +99,27 @@ public class MainController {
     }
 
     @PostMapping(path = "/refresh-token", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public AntdResponse<JwtAccessToken> refreshToken(HttpServletRequest request) {
+    public AntdResponse<UserInfo> refreshToken(HttpServletRequest request) {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
+        SecurityUser authUser = (SecurityUser) authentication.getPrincipal();
+        return AntdResponse.success(getUserInfo(request, authUser));
+    }
 
+    private UserInfo getUserInfo(HttpServletRequest request, SecurityUser authUser) {
         Map<String, Object> payloads = new HashMap<>();
-        payloads.put(PayloadKey.username, authentication.getName());
+        payloads.put(PayloadKey.username, authUser.getUsername());
         payloads.put(PayloadKey.ip, RequestHelper.getClientIpAddr(request));
 
         final Map<String, Object> signResult = jwtService.sign(payloads);
 
-        JwtAccessToken accessToken = new JwtAccessToken();
-        accessToken.setUsername(authentication.getName());
+        UserInfo accessToken = new UserInfo();
+        accessToken.setAccount(authUser.getUsername());
+        accessToken.setUsername(authUser.getNickname());
         accessToken.setIssuer((String) signResult.get(JwtService.ISSUER));
         accessToken.setIssuerAt((Date) signResult.get(JwtService.ISSUED_AT));
         accessToken.setExpiresAt((Date) signResult.get(JwtService.EXPIRES_AT));
         accessToken.setToken((String) signResult.get(JwtService.TOKEN));
-
-        return AntdResponse.success(accessToken);
+        return accessToken;
     }
 }

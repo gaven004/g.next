@@ -41,28 +41,6 @@ public class SecurityUser implements UserDetails, CredentialsContainer {
         this.credentialsNonExpired = true;
     }
 
-    public SecurityUser(Long uid, String username, String nickname, String password, String email,
-                        boolean enabled, Collection<? extends GrantedAuthority> authorities) {
-        this(uid, username, nickname, password, email, authorities, true, true, true, enabled);
-    }
-
-    public SecurityUser(Long uid, String username, String nickname, String password, String email,
-                        Collection<? extends GrantedAuthority> authorities, boolean accountNonExpired, boolean accountNonLocked,
-                        boolean credentialsNonExpired, boolean enabled) {
-        this.id = uid;
-        this.username = username;
-        this.nickname = nickname;
-        this.password = password;
-        this.email = email;
-
-        this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
-
-        this.accountNonExpired = accountNonExpired;
-        this.accountNonLocked = accountNonLocked;
-        this.credentialsNonExpired = credentialsNonExpired;
-        this.enabled = enabled;
-    }
-
     private static SortedSet<GrantedAuthority> buildAuthorities(
             Set<SysRole> roles) {
         Assert.notNull(roles, "Cannot pass a null GrantedAuthority collection");
