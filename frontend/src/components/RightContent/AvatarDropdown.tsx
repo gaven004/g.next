@@ -16,11 +16,12 @@ export interface GlobalHeaderRightProps {
 /**
  * 退出登录，并且将当前的 url 保存
  */
-const loginOut = async () => {
+const logout = async () => {
   const {query, pathname} = history.location;
   // @ts-ignore
   const {redirect} = query;
 
+  localStorage.removeItem("AuthorizationToken");
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/login' && !redirect) {
     history.replace({
@@ -45,7 +46,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu}) => {
       const {key} = event;
       if (key === 'logout' && initialState) {
         setInitialState({...initialState, currentUser: undefined});
-        loginOut();
+        logout();
         return;
       }
       history.push(`/account/${key}`);
@@ -71,7 +72,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu}) => {
 
   const {currentUser} = initialState;
 
-  if (!currentUser || !currentUser.name) {
+  if (!currentUser || !currentUser.username) {
     return loading;
   }
 
@@ -101,7 +102,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu}) => {
     <HeaderDropdown overlay={menuHeaderDropdown}>
       <span className={`${styles.action} ${styles.account}`}>
         <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar"/>
-        <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+        <span className={`${styles.name} anticon`}>{currentUser.username}</span>
       </span>
     </HeaderDropdown>
   );

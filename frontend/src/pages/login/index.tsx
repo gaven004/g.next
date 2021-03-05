@@ -43,15 +43,6 @@ const Login: React.FC<{}> = () => {
   const [type, setType] = useState<string>('login');
   const {initialState, setInitialState} = useModel('@@initialState');
 
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-
-    if (userInfo) {
-      // @ts-ignore
-      setInitialState({...initialState, currentUser: userInfo});
-    }
-  };
-
   const handleSubmit = async (values: LoginParamsType) => {
     setSubmitting(true);
 
@@ -59,9 +50,13 @@ const Login: React.FC<{}> = () => {
       // 登录
       const response = await accountLogin(values);
 
-      if (response.success) {
+      if (response && response.success) {
         message.success('登录成功！');
-        await fetchUserInfo();
+        // @ts-ignore
+        setInitialState({...initialState, currentUser: response.data});
+        if (response.data.token) {
+          localStorage.setItem("AuthorizationToken", response.data.token);
+        }
         goto();
         return;
       }

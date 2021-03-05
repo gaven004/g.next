@@ -1,7 +1,7 @@
-import { Button, message, notification } from 'antd';
-import React from 'react';
 import { useIntl } from 'umi';
+import { Button, message, notification } from 'antd';
 import defaultSettings from '../config/defaultSettings';
+
 const { pwa } = defaultSettings;
 const isHttps = document.location.protocol === 'https:'; // if pwa is true
 
@@ -92,6 +92,7 @@ if (pwa) {
     if (sw) sw.unregister();
   }); // remove all caches
 
+  // @ts-ignore
   if (window.caches && window.caches.keys) {
     caches.keys().then((keys) => {
       keys.forEach((key) => {

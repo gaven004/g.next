@@ -1,15 +1,15 @@
 import {request} from 'umi';
 
-export async function query() {
-  return request<API.CurrentUser[]>('/api/users');
-}
+import {API} from "@/services/API";
 
 export async function queryCurrent() {
-  return request<API.CurrentUser>('/api/currentUser');
+  return request<API.Response>('/api/refresh-token', {
+    method: 'POST',
+  });
 }
 
 export async function queryMenu() {
-  return request('/api/sys/menu/$menu');
+  return request<API.Response>('/api/sys/menu/$menu');
 }
 
 export async function queryNotices(): Promise<any> {

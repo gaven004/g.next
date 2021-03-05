@@ -12,26 +12,15 @@ declare namespace API {
     [key: string]: any;
   }
 
-  export interface AccessToken {
+  export interface CurrentUser {
+    avatar?: string;
+    account?: string;
     username?: string;
     token?: string;
     status? :string;
     issuer?: string;
     issuerAt?: string;
     expiresAt?: string;
-  }
-
-  export interface CurrentUser {
-    avatar?: string;
-    name?: string;
-    title?: string;
-    group?: string;
-    signature?: string;
-    tags?: {
-      key: string;
-      label: string;
-    }[];
-    userid?: string;
     access?: 'user' | 'guest' | 'admin';
     unreadCount?: number;
   }

@@ -13,11 +13,12 @@ export default defineConfig({
     hmr: true,
   },
   layout: {
-    name: 'Ant Design Pro',
-    locale: true,
+    // https://umijs.org/zh-CN/plugins/plugin-layout
+    locale: false,
     siderWidth: 208,
     ...defaultSettings,
   },
+  // https://umijs.org/zh-CN/plugins/plugin-locale
   locale: {
   },
   dynamicImport: {
@@ -32,22 +33,13 @@ export default defineConfig({
   theme: {
     'primary-color': defaultSettings.primaryColor,
   },
+  // esbuild is father build tools
+  // https://umijs.org/plugins/plugin-esbuild
   esbuild: {},
   title: false,
   ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'dev'],
   manifest: {
     basePath: '/',
-  },
-  // https://github.com/zthxxx/react-dev-inspector
-  plugins: ['react-dev-inspector/plugins/umi/react-inspector'],
-  inspectorConfig: {
-    // loader options type and docs see below
-    exclude: [],
-    babelPlugins: [],
-    babelOptions: {},
-  },
-  resolve: {
-    includes: ['src/components'],
   },
 });

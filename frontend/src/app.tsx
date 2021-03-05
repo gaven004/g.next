@@ -1,7 +1,5 @@
-import React from 'react';
-
 import {history, RequestConfig, RunTimeLayoutConfig} from 'umi';
-import {ResponseError} from 'umi-request';
+import {RequestOptionsInit, ResponseError} from 'umi-request';
 
 import {notification} from 'antd';
 import {MenuDataItem, PageLoading, Settings as LayoutSettings} from '@ant-design/pro-layout';
@@ -10,10 +8,10 @@ import {HomeOutlined} from "@ant-design/icons";
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import {buildIcon} from "@/utils/icons";
+import {API} from "@/services/API";
+import {queryCurrent, queryMenu} from '@/services/user';
 
 import defaultSettings from '../config/defaultSettings';
-import {queryMenu} from './services/user';
-import {API} from "@/services/API";
 
 /**
  * 获取用户信息比较慢的时候会展示一个 loading
@@ -30,59 +28,14 @@ export async function getInitialState(): Promise<{
 }> {
   const fetchUserInfo = async () => {
     try {
-      // const currentUser = await queryCurrent();
-      const currentUser = {
-        name: 'Serati Ma',
-        avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
-        userid: '00000001',
-        email: 'antdesign@alipay.com',
-        signature: '海纳百川，有容乃大',
-        title: '交互专家',
-        group: '蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED',
-        tags: [
-          {
-            key: '0',
-            label: '很有想法的',
-          },
-          {
-            key: '1',
-            label: '专注设计',
-          },
-          {
-            key: '2',
-            label: '辣~',
-          },
-          {
-            key: '3',
-            label: '大长腿',
-          },
-          {
-            key: '4',
-            label: '川妹子',
-          },
-          {
-            key: '5',
-            label: '海纳百川',
-          },
-        ],
-        notifyCount: 12,
-        unreadCount: 11,
-        country: 'China',
-        access: 'admin',
-        geographic: {
-          province: {
-            label: '浙江省',
-            key: '330000',
-          },
-          city: {
-            label: '杭州市',
-            key: '330100',
-          },
-        },
-        address: '西湖区工专路 77 号',
-        phone: '0752-268888888',
-      };
-      return currentUser;
+      const response = await queryCurrent();
+      if (response?.success) {
+        const currentUser = response.data;
+        if (currentUser && currentUser.token) {
+          localStorage.setItem("AuthorizationToken", currentUser.token);
+        }
+        return currentUser;
+      }
     } catch (error) {
       history.push('/login');
     }
@@ -91,43 +44,42 @@ export async function getInitialState(): Promise<{
 
   const queryMenuData = async () => {
     try {
-      const fixed = [
+      const menu = [
         {
-          path: '/user',
           layout: false,
-          routes: [
-            {
-              path: '/user',
-              routes: [
-                {
-                  name: 'login',
-                  path: '/login',
-                  component: './login',
-                },
-              ],
-            },
-          ],
+          path: '/login',
+          component: './login',
         },
         {
           path: '/welcome',
           name: '欢迎',
           icon: <HomeOutlined/>,
-          component: './Welcome',
+          component: './sys/Menu',
         },
         {
           path: '/',
           redirect: '/welcome',
         },
         {
+          path: '/403',
+          component: './403',
+        },
+        {
+          path: '/404',
           component: './404',
         },
+        {
+          path: '/500',
+          component: './500',
+        },
       ];
-      const menu = await queryMenu();
 
-      if (menu?.success) {
-        return fixed.concat(
+      const response = await queryMenu();
+
+      if (response?.success) {
+        return menu.concat(
           // @ts-ignore
-          menu.data.map(item => ({
+          response.data.map(item => ({
             ...item,
             icon: buildIcon(item.icon)
           }))
@@ -144,10 +96,10 @@ export async function getInitialState(): Promise<{
   if (history.location.pathname !== '/login') {
     const currentUser = await fetchUserInfo();
     const menuData = await queryMenuData();
-    console.log(menuData);
     return {
       fetchUserInfo,
       currentUser,
+      // @ts-ignore
       menuData,
       settings: defaultSettings,
     };
@@ -221,7 +173,27 @@ const errorHandler = (error: ResponseError) => {
   throw error;
 };
 
+const authHeaderInterceptor = (url: string, options: RequestOptionsInit) => {
+  const token = localStorage.getItem("AuthorizationToken");
+
+  const headers = token ? {
+    ...options?.headers,
+    "Content-Type": "application/json;charset=UTF-8",
+    "Authorization": `Bearer ${token}`
+  } : {
+    ...options?.headers,
+    "Content-Type": "application/json;charset=UTF-8",
+  };
+
+  return {
+    url: `${url}`,
+    options: {...options, interceptors: true, headers},
+  };
+};
+
 export const request: RequestConfig = {
   timeout: 3000,
   errorHandler,
+  // 新增自动添加AccessToken的请求前拦截器
+  requestInterceptors: [authHeaderInterceptor],
 };

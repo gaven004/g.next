@@ -6,6 +6,7 @@ import classNames from 'classnames';
 import NoticeList, { NoticeIconTabProps } from './NoticeList';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import {API} from "@/services/API";
 
 const { TabPane } = Tabs;
 
