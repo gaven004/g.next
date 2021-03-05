@@ -60,7 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .addFilterBefore(getJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests().antMatchers("/login", "/test").permitAll().anyRequest().authenticated()
+                .authorizeRequests().antMatchers("/login", "/test").permitAll()
+                .anyRequest().access("@webSecurity.check(authentication,request)")
                 .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
