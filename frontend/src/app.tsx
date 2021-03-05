@@ -32,7 +32,9 @@ export async function getInitialState(): Promise<{
       if (response?.success) {
         const currentUser = response.data;
         if (currentUser && currentUser.token) {
-          localStorage.setItem("AuthorizationToken", currentUser.token);
+          // localStorage.setItem("AuthorizationToken", currentUser.token);
+          // @ts-ignore
+          globalThis.authorizationToken = currentUser.token;
         }
         return currentUser;
       }
@@ -174,7 +176,10 @@ const errorHandler = (error: ResponseError) => {
 };
 
 const authHeaderInterceptor = (url: string, options: RequestOptionsInit) => {
-  const token = localStorage.getItem("AuthorizationToken");
+  // const token = localStorage.getItem("AuthorizationToken");
+
+  // @ts-ignore
+  const token = globalThis.authorizationToken;
 
   const headers = token ? {
     ...options?.headers,

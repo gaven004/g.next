@@ -21,7 +21,10 @@ const logout = async () => {
   // @ts-ignore
   const {redirect} = query;
 
-  localStorage.removeItem("AuthorizationToken");
+  // localStorage.removeItem("AuthorizationToken");
+  // @ts-ignore
+  globalThis.authorizationToken = undefined;
+
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/login' && !redirect) {
     history.replace({

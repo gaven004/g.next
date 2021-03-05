@@ -54,8 +54,10 @@ const Login: React.FC<{}> = () => {
         message.success('登录成功！');
         // @ts-ignore
         setInitialState({...initialState, currentUser: response.data});
-        if (response.data.token) {
-          localStorage.setItem("AuthorizationToken", response.data.token);
+        if (response?.data?.token) {
+          // localStorage.setItem("AuthorizationToken", response.data.token);
+          // @ts-ignore
+          globalThis.authorizationToken = response.data.token;
         }
         goto();
         return;
