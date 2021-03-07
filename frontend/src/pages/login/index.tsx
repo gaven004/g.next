@@ -48,6 +48,7 @@ const Login: React.FC<{}> = () => {
 
     try {
       // 登录
+      localStorage.removeItem("AuthorizationToken");
       const response = await accountLogin(values);
 
       if (response && response.success) {
@@ -55,9 +56,7 @@ const Login: React.FC<{}> = () => {
         // @ts-ignore
         setInitialState({...initialState, currentUser: response.data});
         if (response?.data?.token) {
-          // localStorage.setItem("AuthorizationToken", response.data.token);
-          // @ts-ignore
-          globalThis.authorizationToken = response.data.token;
+          localStorage.setItem("AuthorizationToken", response.data.token);
         }
         goto();
         return;

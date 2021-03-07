@@ -32,13 +32,12 @@ export async function getInitialState(): Promise<{
       if (response?.success) {
         const currentUser = response.data;
         if (currentUser && currentUser.token) {
-          // localStorage.setItem("AuthorizationToken", currentUser.token);
-          // @ts-ignore
-          globalThis.authorizationToken = currentUser.token;
+          localStorage.setItem("AuthorizationToken", currentUser.token);
         }
         return currentUser;
       }
     } catch (error) {
+      localStorage.removeItem("AuthorizationToken");
       history.push('/login');
     }
     return undefined;
@@ -88,6 +87,7 @@ export async function getInitialState(): Promise<{
         );
       }
     } catch (error) {
+      localStorage.removeItem("AuthorizationToken");
       history.push('/login');
     }
 
@@ -123,6 +123,7 @@ export const layout: RunTimeLayoutConfig = ({initialState}) => {
       const {location} = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== '/login') {
+        localStorage.removeItem("AuthorizationToken");
         history.push('/login');
       }
     },
@@ -176,10 +177,7 @@ const errorHandler = (error: ResponseError) => {
 };
 
 const authHeaderInterceptor = (url: string, options: RequestOptionsInit) => {
-  // const token = localStorage.getItem("AuthorizationToken");
-
-  // @ts-ignore
-  const token = globalThis.authorizationToken;
+  const token = localStorage.getItem("AuthorizationToken");
 
   const headers = token ? {
     ...options?.headers,
