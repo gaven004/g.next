@@ -29,6 +29,8 @@ public class QSysAction extends EntityPathBase<SysAction> {
 
     public final StringPath description = createString("description");
 
+    public final BooleanPath permitAll = createBoolean("permitAll");
+
     public final EnumPath<com.g.commons.enums.Status> status = createEnum("status", com.g.commons.enums.Status.class);
 
     public QSysAction(String variable) {

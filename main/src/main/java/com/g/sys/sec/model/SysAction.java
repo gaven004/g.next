@@ -30,6 +30,7 @@ public class SysAction extends AbstractEntity implements java.io.Serializable {
     private String resource;
     private ActionMethod method;
     private String description;
+    private Boolean permitAll;
     private Status status;
 
     public SysAction() {
@@ -43,11 +44,12 @@ public class SysAction extends AbstractEntity implements java.io.Serializable {
         this.id = Long.valueOf(id);
     }
 
-    public SysAction(Long id, String resource, ActionMethod method, String description, Status status) {
+    public SysAction(Long id, String resource, ActionMethod method, String description, Boolean permitAll, Status status) {
         this.id = id;
         this.resource = resource;
         this.method = method;
         this.description = description;
+        this.permitAll = permitAll;
         this.status = status;
     }
 
@@ -98,6 +100,15 @@ public class SysAction extends AbstractEntity implements java.io.Serializable {
         this.description = description;
     }
 
+    @Column(name = "permit_all")
+    public Boolean getPermitAll() {
+        return permitAll;
+    }
+
+    public void setPermitAll(Boolean permitAll) {
+        this.permitAll = permitAll;
+    }
+
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     public Status getStatus() {
@@ -128,6 +139,7 @@ public class SysAction extends AbstractEntity implements java.io.Serializable {
                 .add("resource='" + resource + "'")
                 .add("method=" + method)
                 .add("description='" + description + "'")
+                .add("permitAll=" + permitAll)
                 .add("status=" + status)
                 .toString();
     }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.Assert;
 
+import com.g.sys.sec.model.ActionMethod;
 import com.g.sys.sec.model.SysAction;
 import com.g.sys.sec.service.SysActionService;
 
@@ -32,37 +33,54 @@ public class WebSecurity {
     }
 
     public boolean check(Authentication authentication, HttpServletRequest request) {
-        log.debug("Web Security Check, authentication: {}, request: {}", authentication, request);
+        String method = request.getMethod().toUpperCase();
+        String uri = request.getRequestURI();
+
+        log.debug("Web Security Check, authentication: {}, request: {} {}", authentication, method, uri);
+
+        ActionMethod actionMethod = null;
+        try {
+            actionMethod = ActionMethod.valueOf(method);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+
+        return check(authentication, uri, actionMethod);
+    }
+
+    public boolean check(Authentication authentication, String uri, ActionMethod actionMethod) {
+        if ("admin".equals(authentication.getName())) {
+            return true;
+        }
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         if (authorities == null) {
             return false;
         }
 
-        String method = request.getMethod().toUpperCase();
-        String uri = request.getRequestURI();
+        // 先做精确匹配
+        Iterator<SysAction> iterator = actionService.findByResource(uri).iterator();
+        if (check(authorities, uri, actionMethod, iterator)) return true;
 
-        Iterable<SysAction> actions = actionService.findByResourceAndMethod(uri, method);
+        // 再做通配符匹配
+        iterator = actionService.findByResourceWithWildcard().iterator();
+        if (check(authorities, uri, actionMethod, iterator)) return true;
 
-        if (actions == null) {
-            // 简单处理，系统没登记的资源，则默认可自由访问
-            return true;
-        }
+        return false;
+    }
 
-        Iterator<SysAction> iterator = actions.iterator();
-        if (!iterator.hasNext()) {
-            // 简单处理，系统没登记的资源，则默认可自由访问
-            return true;
-        }
-
-        // TODO：若系统中登记的资源含通配符，则返回的actions结果不会为空，
-        //  那没登记的资源，会在下面的处理中被拒绝，与原设想不符，
-        //  导致所有的资源都需要登记，需要改进判断的逻辑
-
+    public boolean check(Collection<? extends GrantedAuthority> authorities, String uri, ActionMethod actionMethod, Iterator<SysAction> iterator) {
         while (iterator.hasNext()) {
             SysAction action = iterator.next();
 
-            if (pathMatcher.match(action.getResource(), uri)) {
+            if (pathMatcher.match(action.getResource(), uri) &&
+                    (ActionMethod.ALL.equals(action.getMethod()) ||
+                            actionMethod == null ||
+                            actionMethod.equals(action.getMethod()))) {
+                if (action.getPermitAll()) {
+                    return true;
+                }
+
                 for (GrantedAuthority authority : authorities) {
                     if (authority.getAuthority().equals(action.getId().toString())) {
                         return true;
