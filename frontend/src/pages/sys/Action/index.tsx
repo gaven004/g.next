@@ -1,11 +1,12 @@
 import React from 'react';
-
 import {ProColumns} from "@ant-design/pro-table";
 import {ProFormSelect, ProFormSwitch, ProFormText} from "@ant-design/pro-form";
+import {CheckCircleTwoTone, CloseCircleTwoTone} from '@ant-design/icons';
 
 import GenericPage from "@/pages/commons/General";
 import type {TableListItem} from './data.d';
 import {getActionMethodOptions} from './service'
+import styles from './index.less';
 
 export default (): React.ReactNode => {
   const addActionUrl: string = "/api/sys/action";
@@ -42,6 +43,10 @@ export default (): React.ReactNode => {
     {
       title: '任意访问',
       dataIndex: 'permitAll',
+      render: (dom: React.ReactNode, entity: TableListItem) =>
+        (entity.permitAll) ? <CheckCircleTwoTone twoToneColor="#52c41a" className={styles.icons}/> :
+          <CloseCircleTwoTone twoToneColor="#eb2f96" className={styles.icons}/>,
+      align: 'center',
       width: '8%',
     },
     {
