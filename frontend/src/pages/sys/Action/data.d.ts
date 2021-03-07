@@ -3,6 +3,7 @@ export interface TableListItem {
   resource: string;
   method: string;
   description: string;
+  permitAll: boolean;
   status: string;
 }
 
@@ -22,6 +23,7 @@ export interface TableListParams {
   resource?: string;
   method?: string;
   description?: string;
+  permitAll?: boolean;
   status?: string;
   pageSize?: number;
   currentPage?: number;

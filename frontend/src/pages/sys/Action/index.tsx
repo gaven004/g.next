@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {ProColumns} from "@ant-design/pro-table";
-import {ProFormSelect, ProFormText} from "@ant-design/pro-form";
+import {ProFormSelect, ProFormSwitch, ProFormText} from "@ant-design/pro-form";
 
 import GenericPage from "@/pages/commons/General";
 import type {TableListItem} from './data.d';
@@ -17,13 +17,13 @@ export default (): React.ReactNode => {
     {
       title: 'ID',
       dataIndex: 'id',
-      width: '16%',
+      width: '12%',
     },
     {
       title: '资源',
       dataIndex: 'resource',
       sorter: true,
-      width: '28%',
+      width: '24%',
     },
     {
       title: '请求方法',
@@ -38,6 +38,11 @@ export default (): React.ReactNode => {
       dataIndex: 'description',
       sorter: true,
       width: '20%',
+    },
+    {
+      title: '任意访问',
+      dataIndex: 'permitAll',
+      width: '8%',
     },
     {
       title: '状态',
@@ -83,6 +88,12 @@ export default (): React.ReactNode => {
       <ProFormText
         name="description"
         label="描述"
+      />
+      <ProFormSwitch
+        name="permitAll"
+        label="任意访问"
+        checkedChildren="允许"
+        unCheckedChildren="不允许"
       />
       <ProFormSelect
         name="status"
