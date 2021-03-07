@@ -58,12 +58,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .addFilterBefore(getJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests().antMatchers("/login", "/test").permitAll()
-                .anyRequest().access("@webSecurity.check(authentication,request)")
-                .and().exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.addFilterBefore(getJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .csrf((csrf) -> csrf.disable())
+                .authorizeRequests((authorizeRequests) ->
+                        authorizeRequests.antMatchers("/login", "/test").permitAll()
+                                .anyRequest().access("isAuthenticated() and @webSecurity.check(authentication,request)"))
+                .exceptionHandling((exceptionHandling) ->
+                        exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .sessionManagement((sessionManagement) ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     }
 
     private Filter getJwtAuthenticationFilter() throws Exception {
