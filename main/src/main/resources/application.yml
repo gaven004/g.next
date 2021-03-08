@@ -8,6 +8,8 @@ server:
 logging:
   level:
     root: INFO
+    com:
+      g: DEBUG
     org:
       hibernate:
         SQL: DEBUG
@@ -45,6 +47,27 @@ spring:
           use_query_cache: true
           region:
             factory_class: org.redisson.hibernate.RedissonRegionFactory
+          redisson:
+            entity:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
+            collection:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
+            naturalid:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
+            query:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
+            timestamps:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
 
 # Actuator
 management:
@@ -59,17 +82,17 @@ management:
       exposure:
         include: "*"
 
-commons:
-  IDGenerator:
-    datacenterId: 0
-    workerId: 0
-  HexIDGenerator:
-    workerId: '00'
-
-sec:
-  entryPoint:
-    realmName: "G.Next Open Api"
-  jwtService:
-    secret: "CbQNsCSmYrJ1"
-    issuer: "G.Next"
-    duration: 86400 # 1 day
+g:
+  commons:
+    IDGenerator:
+      datacenterId: 0
+      workerId: 0
+    HexIDGenerator:
+      workerId: '00'
+  sec:
+    entryPoint:
+      realmName: "G.Next Open Api"
+    jwtService:
+      secret: "CbQNsCSmYrJ1"
+      issuer: "G.Next"
+      duration: 1800 # 30min

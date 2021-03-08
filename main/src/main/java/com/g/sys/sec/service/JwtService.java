@@ -33,9 +33,9 @@ public class JwtService {
     private final JWTVerifier verifier;
 
     @Autowired
-    public JwtService(@Value("${sec.jwtService.secret:abcde12345}") String secret,
-                      @Value("${sec.jwtService.issuer:G.Next}") String issuer,
-                      @Value("${sec.jwtService.duration}") Long duration) {
+    public JwtService(@Value("${g.sec.jwtService.secret:abcde12345}") String secret,
+                      @Value("${g.sec.jwtService.issuer:G.Next}") String issuer,
+                      @Value("${g.sec.jwtService.duration}") Long duration) {
         Assert.hasText(secret, "[Assertion failed] - the secret argument must have text; it must not be null, empty, or blank");
 
         this.secret = secret;

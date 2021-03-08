@@ -32,7 +32,10 @@ public class HibernateSnowflakeGenerator implements IdentifierGenerator, Configu
                  * HibernateSnowflakeGenerator本身不是Spring Bean，这样破坏了依赖注入的原则，
                  * 并且要求强制在初始化DataSource前，先创建ApplicationContextHolder以及IDGenerator两个组件
                  */
-                generator = ApplicationContextHolder.getBean(IDGenerator.class);
+//                generator = ApplicationContextHolder.getBean(IDGenerator.class);
+
+                // 为方便测试，开发时暂时使用，生产环境恢复上面代码
+                generator = new IDGenerator(0, 0);
 
                 if (generator == null) {
                     throw new RuntimeException("Component IDGenerator not found");

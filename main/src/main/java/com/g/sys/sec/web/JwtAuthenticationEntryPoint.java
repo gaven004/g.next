@@ -29,7 +29,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     // This is from Spring MVC.
     private HandlerExceptionResolver handlerExceptionResolver = new DefaultHandlerExceptionResolver();
 
-    public JwtAuthenticationEntryPoint(@Value("${sec.entryPoint.realmName:G.Next Open Api}") String realmName) {
+    public JwtAuthenticationEntryPoint(@Value("${g.sec.entryPoint.realmName:G.Next Open Api}") String realmName) {
         Assert.hasText(realmName, "[Assertion failed] - the realmName argument must have text; it must not be null, empty, or blank");
 
         this.realmName = realmName;

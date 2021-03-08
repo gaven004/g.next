@@ -7,7 +7,9 @@ server:
 
 logging:
   level:
-    root: TRACE
+    root: DEBUG
+    com:
+      g: DEBUG
     org:
       hibernate:
         SQL: DEBUG
@@ -17,10 +19,11 @@ logging:
         type:
           descriptor:
             sql: TRACE
+        cache: TRACE
 
 spring:
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  #  autoconfigure:
+  #    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   # 配置数据源信息
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
@@ -36,8 +39,35 @@ spring:
         implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyJpaCompliantImpl
         #physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
+      javax.persistence.sharedCache.mode: ENABLE_SELECTIVE
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: org.redisson.hibernate.RedissonRegionFactory
+          redisson:
+            entity:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
+            collection:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
+            naturalid:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
+            query:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
+            timestamps:
+              expiration:
+                time_to_live: 86400
+                max_idle_time: 3600
 
 # Actuator
 management:
@@ -52,9 +82,17 @@ management:
       exposure:
         include: "*"
 
-commons:
-  IDGenerator:
-    datacenterId: 0
-    workerId: 0
-  HexIDGenerator:
-    workerId: '00'
+g:
+  commons:
+    IDGenerator:
+      datacenterId: 0
+      workerId: 0
+    HexIDGenerator:
+      workerId: '00'
+  sec:
+    entryPoint:
+      realmName: "G.Next Open Api"
+    jwtService:
+      secret: "CbQNsCSmYrJ1"
+      issuer: "G.Next"
+      duration: 1800 # 30min
