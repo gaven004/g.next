@@ -17,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
@@ -100,9 +99,7 @@ public class MainController {
 
     @RequestMapping(path = "/refresh-token")
     public AntdResponse<UserInfo> refreshToken(HttpServletRequest request) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        SecurityUser authUser = (SecurityUser) authentication.getPrincipal();
+        SecurityUser authUser = WebSecurityHelper.getAuthUser();
         return AntdResponse.success(getUserInfo(request, authUser));
     }
 
