@@ -50,24 +50,24 @@ spring:
           redisson:
             entity:
               expiration:
-                time_to_live: 86400
-                max_idle_time: 3600
+                time_to_live: 86400000 # milliseconds
+                max_idle_time: 3600000 # milliseconds
             collection:
               expiration:
-                time_to_live: 86400
-                max_idle_time: 3600
+                time_to_live: 86400000
+                max_idle_time: 3600000
             naturalid:
               expiration:
-                time_to_live: 86400
-                max_idle_time: 3600
+                time_to_live: 86400000
+                max_idle_time: 3600000
             query:
               expiration:
-                time_to_live: 86400
-                max_idle_time: 3600
+                time_to_live: 86400000
+                max_idle_time: 3600000
             timestamps:
               expiration:
-                time_to_live: 86400
-                max_idle_time: 3600
+                time_to_live: 86400000
+                max_idle_time: 3600000
 
 # Actuator
 management:
