@@ -19,4 +19,6 @@ public final class ErrorCode {
     public static final String ExceedMaxSize = "CORE-00-0102";
 
     public static final String EntityNotFound = "CORE-00-0201";
+
+    public static final String Unauthenticated = "SEC-00-0001";
 }
