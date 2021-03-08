@@ -50,7 +50,7 @@ public class MainController {
         this.jwtService = jwtService;
     }
 
-    @RequestMapping(path = "/test", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(path = "/test")
     public ResponseEntity<AntdResponse<String>> test() {
         AntdResponse<String> result = AntdResponse.success("OK!");
         return new ResponseEntity(result, null, HttpStatus.OK);
@@ -98,7 +98,7 @@ public class MainController {
         return new ResponseEntity(response, headers, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/refresh-token", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(path = "/refresh-token")
     public AntdResponse<UserInfo> refreshToken(HttpServletRequest request) {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
