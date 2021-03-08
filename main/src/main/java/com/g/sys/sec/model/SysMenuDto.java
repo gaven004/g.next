@@ -2,6 +2,7 @@ package com.g.sys.sec.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.util.StringUtils;
 
@@ -12,7 +13,6 @@ public class SysMenuDto {
     private String component;
     private Menu menu;
 
-    private List<SysMenuDto> children;
     private List<SysMenuDto> routes;
 
     public SysMenuDto() {
@@ -78,32 +78,12 @@ public class SysMenuDto {
         this.menu = menu;
     }
 
-    public List<SysMenuDto> getChildren() {
-        return children;
-    }
-
-    public void setChildren(List<SysMenuDto> children) {
-        this.children = children;
-    }
-
     public List<SysMenuDto> getRoutes() {
         return routes;
     }
 
     public void setRoutes(List<SysMenuDto> routes) {
         this.routes = routes;
-    }
-
-    public void addChild(SysMenuDto child) {
-        if (children == null) {
-            children = new ArrayList<>();
-        }
-
-        children.add(child);
-    }
-
-    public void addChild(SysMenu child) {
-        addChild(new SysMenuDto(child));
     }
 
     public void addRoute(SysMenuDto child) {
@@ -116,6 +96,23 @@ public class SysMenuDto {
 
     public void addRoute(SysMenu child) {
         addRoute(new SysMenuDto(child));
+    }
+
+    public void removeRoute(SysMenuDto child) {
+        routes.remove(child);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SysMenuDto that = (SysMenuDto) o;
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 
     public class Menu {

@@ -10,6 +10,9 @@ package com.g.sys.sec.web;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +29,9 @@ import com.g.sys.sec.service.SysMenuService;
 @RequestMapping("sys/menu")
 public class SysMenuController
         extends GenericController<SysMenuService, SysMenuRepository, SysMenu, Long> {
+    @Autowired
+    WebSecurity webSecurity;
+
     @GetMapping("/$tree")
     AntdResponse<List<SysMenuDto4Select>> getTree() {
         SysMenuDto4Select root = new SysMenuDto4Select("root", 0L);
@@ -70,6 +76,8 @@ public class SysMenuController
 
     @GetMapping("/$menu")
     AntdResponse<List<SysMenuDto>> getMenu() {
+        Authentication authentication = WebSecurityHelper.getAuthentication();
+
         SysMenuDto root = new SysMenuDto("0");
 
         Long previousParent = 0L;
@@ -80,17 +88,34 @@ public class SysMenuController
             Iterator<SysMenu> iterator = iterable.iterator();
             while (iterator.hasNext()) {
                 SysMenu item = iterator.next();
+
+                // 权限检查
+                if (StringUtils.hasText(item.getUrl())) {
+                    if (!webSecurity.check(authentication, item.getUrl(), null)) {
+                        continue;
+                    }
+                }
+
                 if (previousParent != item.getParentId()) {
+                    // 寻找当前的item，应挂在哪一个菜单节点下
                     previousParent = item.getParentId();
                     current = find(root, previousParent);
                 }
-                current.addRoute(new SysMenuDto(item));
+
+                if (current != null) {
+                    current.addRoute(new SysMenuDto(item));
+                }
             }
         }
+
+        filter(root);
 
         return AntdResponse.success(root.getRoutes());
     }
 
+    /**
+     * 据已生成的菜单树，寻找给定id的位置
+     */
     private SysMenuDto find(SysMenuDto root, Long id) {
         if (root.getName().equals(id.toString())) {
             return root;
@@ -108,5 +133,38 @@ public class SysMenuController
         }
 
         return null;
+    }
+
+    /**
+     * 过滤菜单项，若菜单项自身不具有path（只用于菜单的组织展示，不可执行），或者不具有可执行的子菜单项
+     * 则认为是一个空的菜单项，删除
+     */
+    private void filter(SysMenuDto root) {
+        Iterator<SysMenuDto> iterator = root.getRoutes().iterator();
+        while (iterator.hasNext()) {
+            SysMenuDto next = iterator.next();
+            if (!StringUtils.hasText(next.getPath())) {
+                if (empty(next)) {
+                    iterator.remove();
+                }
+            }
+        }
+    }
+
+    /**
+     * 判断是否挂有子菜单，为空是返回true
+     */
+    private boolean empty(SysMenuDto menuDto) {
+        if (menuDto.getRoutes() == null || menuDto.getRoutes().isEmpty()) {
+            return true;
+        }
+
+        filter(menuDto);
+
+        if (menuDto.getRoutes() == null || menuDto.getRoutes().isEmpty()) {
+            return true;
+        }
+
+        return false;
     }
 }
