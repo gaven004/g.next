@@ -1,11 +1,11 @@
 package com.g.commons.exception;
 
-public class Unauthenticated extends GenericAppException {
-    public Unauthenticated() {
+public class UnauthenticatedException extends GenericAppException {
+    public UnauthenticatedException() {
         super(ErrorCode.Unauthenticated, ErrorMessage.Unauthenticated);
     }
 
-    public Unauthenticated(String message) {
+    public UnauthenticatedException(String message) {
         super(ErrorCode.Unauthenticated, message);
     }
 }
