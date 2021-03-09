@@ -7,7 +7,7 @@ import ProForm, {ProFormCheckbox, ProFormText} from '@ant-design/pro-form';
 
 import Footer from '@/components/Footer';
 import {API} from "@/services/API";
-import {accountLogin, LoginParamsType} from '@/services/login';
+import {accountLogin, LoginParamsType, resetPassword} from '@/services/login';
 import styles from './index.less';
 
 const AlertMessage: React.FC<{
@@ -43,9 +43,7 @@ const Login: React.FC<{}> = () => {
   const [type, setType] = useState<string>('login');
   const {initialState, setInitialState} = useModel('@@initialState');
 
-  const handleSubmit = async (values: LoginParamsType) => {
-    setSubmitting(true);
-
+  const doLogin = async (values: LoginParamsType) => {
     try {
       // 登录
       localStorage.removeItem("AuthorizationToken");
@@ -66,6 +64,29 @@ const Login: React.FC<{}> = () => {
       setUserLoginState({...response, success: false});
     } catch (error) {
       message.error('登录失败，请重试！');
+    }
+  };
+
+  const doResetPassword = async (values: LoginParamsType) => {
+    try {
+      const response = await resetPassword(values);
+
+      if (response && response.success) {
+        message.success('密码重置成功，请到电子邮箱查收新密码！');
+        return;
+      }
+    } catch (error) {
+      message.error('密码重置失败，请重试！');
+    }
+  };
+
+  const handleSubmit = async (values: LoginParamsType) => {
+    setSubmitting(true);
+
+    if (type === 'login') {
+      await doLogin(values);
+    } else if (type === 'reset') {
+      await doResetPassword(values);
     }
 
     setSubmitting(false);
