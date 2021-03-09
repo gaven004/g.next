@@ -76,4 +76,10 @@ class SysUsersServiceTest extends NextApplicationTests {
             });
         });
     }
+
+    @Test
+    public void testRestPassword() {
+        String email = "gaven_yeung@163.com";
+        service.resetPassword(email);
+    }
 }

@@ -5,10 +5,6 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
     <import resource="classpath*:mail-config.xml"/>
 
-    <bean id="freeMarkerConfigurationFactory" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
-        <property name="templateLoaderPath" value="classpath:/templates" />
-        <property name="preferFileSystemAccess" value="false" />
-    </bean>
     <bean id="usrMailSender" class="com.g.commons.utils.MailSender">
         <qualifier value="usrMailSender"/>
         <constructor-arg name="from" value="gsgdgcyxgs_pm@163.com"/>

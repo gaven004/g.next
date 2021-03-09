@@ -10,6 +10,7 @@ import java.util.StringJoiner;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.*;
@@ -81,7 +82,7 @@ public class SysUser extends AbstractEntity implements java.io.Serializable {
 
     @Column(name = "account", unique = true, nullable = false, length = 15)
     @NaturalId
-    @NotEmpty
+    @NotBlank
     public String getAccount() {
         return this.account;
     }
@@ -91,7 +92,7 @@ public class SysUser extends AbstractEntity implements java.io.Serializable {
     }
 
     @Column(name = "username", nullable = false, length = 50)
-    @NotEmpty
+    @NotBlank
     public String getUsername() {
         return this.username;
     }

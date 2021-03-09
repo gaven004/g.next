@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(getJwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf((csrf) -> csrf.disable())
                 .authorizeRequests((authorizeRequests) ->
-                        authorizeRequests.antMatchers("/login", "/test").permitAll()
+                        authorizeRequests.antMatchers("/login", "/sys/users/reset-password", "/test").permitAll()
                                 .anyRequest().access("isAuthenticated() and @webSecurity.check(authentication,request)"))
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint))

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -32,5 +33,12 @@ public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public FreeMarkerConfigurer freemarkerConfig() {
+        var freeMarkerConfigurer = new FreeMarkerConfigurer();
+        freeMarkerConfigurer.setTemplateLoaderPath("classpath:/");
+        return freeMarkerConfigurer;
     }
 }

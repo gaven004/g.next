@@ -8,15 +8,14 @@ package com.g.sys.sec.web;
  */
 
 import org.hibernate.Hibernate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import com.g.commons.model.AntdPageRequest;
 import com.g.commons.model.AntdResponse;
 import com.g.commons.web.GenericController;
+import com.g.sys.sec.model.Email;
 import com.g.sys.sec.model.SysUser;
 import com.g.sys.sec.persistence.SysUsersRepository;
 import com.g.sys.sec.service.SysUsersService;
@@ -39,5 +38,11 @@ public class SysUsersController
         AntdResponse<SysUser> result = super.get(id);
         Hibernate.initialize(result);
         return result;
+    }
+
+    @PutMapping("reset-password")
+    public AntdResponse<?> resetPassword(@Validated @RequestBody Email email) {
+        service.resetPassword(email.getEmail());
+        return AntdResponse.success();
     }
 }
