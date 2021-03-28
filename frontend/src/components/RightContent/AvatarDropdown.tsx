@@ -45,12 +45,17 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu}) => {
       domEvent: React.MouseEvent<HTMLElement>;
     }) => {
       const {key} = event;
-      if (key === 'logout' && initialState) {
-        setInitialState({...initialState, currentUser: undefined});
-        logout();
-        return;
+      switch (key) {
+        case 'logout':
+          if (initialState) {
+            setInitialState({...initialState, currentUser: undefined});
+            logout();
+          }
+          break;
+        case 'profile':
+          history.push(`/profile`);
+          break;
       }
-      history.push(`/account/${key}`);
     },
     [],
   );
@@ -80,7 +85,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({menu}) => {
   const menuHeaderDropdown = (
     <Menu className={styles.menu} selectedKeys={[]} onClick={onMenuClick}>
       {menu && (
-        <Menu.Item key="center">
+        <Menu.Item key="profile">
           <UserOutlined/>
           个人中心
         </Menu.Item>

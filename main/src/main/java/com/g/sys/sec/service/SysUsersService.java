@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import freemarker.template.Configuration;
 
 import com.g.commons.exception.EntityNotFoundException;
+import com.g.commons.exception.IllegalArgumentException;
 import com.g.commons.service.GenericService;
 import com.g.commons.utils.MailSender;
 import com.g.commons.utils.QuerydslBuilder;
@@ -109,6 +111,22 @@ public class SysUsersService
             entity.setPassword(passwordEncoder.encode(entity.getPassword()));
         }
         return super.update(entity);
+    }
+
+
+    @Transactional
+    public void changePassword(@NotNull Long id, @NotBlank String oldPwd, @NotBlank String newPwd) {
+        SysUser user = get(id);
+        if (user == null) {
+            throw new EntityNotFoundException("系统中没有对应的用户");
+        }
+
+        if (!passwordEncoder.matches(oldPwd, user.getPassword())) {
+            throw new IllegalArgumentException("原密码错误");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPwd));
+        super.update(user);
     }
 
     @Transactional
