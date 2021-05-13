@@ -15,7 +15,7 @@
     <name>Mngt Webapp</name>
 
     <properties>
-        <tomcat7Version>7.0.92</tomcat7Version>
+        <tomcat7Version>7.0.107</tomcat7Version>
         <g.next.version>0.0.1</g.next.version>
     </properties>
 
