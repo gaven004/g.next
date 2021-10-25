@@ -15,6 +15,14 @@ export default [
     redirect: '/welcome',
   },
   {
+    path: '/profile',
+    component: './sys/Profile',
+    hideInMenu: true,
+    "menu": {
+      "name": "个人中心"
+    },
+  },
+  {
     path: '/403',
     component: './403',
   },

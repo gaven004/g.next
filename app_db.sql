@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 80021
  Source Host           : localhost:3306
- Source Schema         : app_db
+ Source Schema         : next
 
  Target Server Type    : MySQL
  Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 31/01/2021 23:53:54
+ Date: 08/10/2021 17:07:53
 */
 
 SET NAMES utf8mb4;
@@ -26,6 +26,7 @@ CREATE TABLE `sys_action` (
   `resource` varchar(255) NOT NULL,
   `method` enum('ALL','GET','POST','PUT','DELETE','PATCH','OPTIONS','HEAD') NOT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `permit_all` tinyint(1) NOT NULL DEFAULT '0',
   `status` enum('VALID','INVALID') NOT NULL DEFAULT 'VALID',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统功能';
@@ -34,12 +35,12 @@ CREATE TABLE `sys_action` (
 -- Records of sys_action
 -- ----------------------------
 BEGIN;
-INSERT INTO `sys_action` VALUES (140167759693611008, '/sys/action', 'ALL', '系统功能管理', 'VALID');
-INSERT INTO `sys_action` VALUES (143127930975813632, '/sys/menu', 'ALL', '系统菜单管理', 'VALID');
-INSERT INTO `sys_action` VALUES (143139884427640832, '/sys/property/categories', 'ALL', '参数类型管理', 'VALID');
-INSERT INTO `sys_action` VALUES (143139969001586688, '/sys/properties', 'ALL', '系统参数管理', 'VALID');
-INSERT INTO `sys_action` VALUES (143140058881327104, '/sys/roles', 'ALL', '角色管理', 'VALID');
-INSERT INTO `sys_action` VALUES (143140137797156864, '/sys/users', 'ALL', '用户管理', 'VALID');
+INSERT INTO `sys_action` VALUES (140167759693611008, '/sys/action', 'ALL', '系统功能管理', 0, 'VALID');
+INSERT INTO `sys_action` VALUES (143127930975813632, '/sys/menu', 'ALL', '系统菜单管理', 0, 'VALID');
+INSERT INTO `sys_action` VALUES (143139884427640832, '/sys/property/categories', 'ALL', '参数类型管理', 0, 'VALID');
+INSERT INTO `sys_action` VALUES (143139969001586688, '/sys/properties', 'ALL', '系统参数管理', 0, 'VALID');
+INSERT INTO `sys_action` VALUES (143140058881327104, '/sys/roles', 'ALL', '角色管理', 0, 'VALID');
+INSERT INTO `sys_action` VALUES (143140137797156864, '/sys/users', 'ALL', '用户管理', 0, 'VALID');
 COMMIT;
 
 -- ----------------------------
@@ -59,6 +60,12 @@ CREATE TABLE `sys_log` (
   KEY `idx_ctime` (`ctime`),
   KEY `idx_clazz` (`clazz`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统日志表';
+
+-- ----------------------------
+-- Records of sys_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_menu
@@ -101,6 +108,12 @@ CREATE TABLE `sys_persistent_logins` (
   `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`series`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of sys_persistent_logins
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_properties
@@ -160,6 +173,12 @@ CREATE TABLE `sys_role_authorities` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
+-- Records of sys_role_authorities
+-- ----------------------------
+BEGIN;
+COMMIT;
+
+-- ----------------------------
 -- Table structure for sys_role_members
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_role_members`;
@@ -168,6 +187,13 @@ CREATE TABLE `sys_role_members` (
   `role_id` bigint NOT NULL,
   PRIMARY KEY (`user_id`,`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- ----------------------------
+-- Records of sys_role_members
+-- ----------------------------
+BEGIN;
+INSERT INTO `sys_role_members` VALUES (1, 140228410537410560);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for sys_roles
