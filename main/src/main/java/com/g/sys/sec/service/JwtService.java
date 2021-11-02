@@ -51,7 +51,7 @@ public class JwtService {
     }
 
     public Map<String, Object> sign(Map<String, Object> payloads) {
-        Assert.notNull(payloads);
+        Assert.notNull(payloads, "Payloads must not be null");
 
         Map<String, Object> claims = new HashMap<>(payloads);
 
@@ -85,13 +85,13 @@ public class JwtService {
     }
 
     public Map<String, Claim> verify(String token) {
-        Assert.hasText(token);
+        Assert.hasText(token, "Token must not empty");
         DecodedJWT jwt = verifier.verify(token);
         return jwt.getClaims();
     }
 
     public Map<String, Claim> decode(String token) {
-        Assert.hasText(token);
+        Assert.hasText(token, "Token must not empty");
         DecodedJWT jwt = JWT.decode(token);
         return jwt.getClaims();
     }

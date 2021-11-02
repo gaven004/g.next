@@ -10,8 +10,11 @@ package com.g.sys.sec.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g.commons.model.ApiResponse;
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +25,6 @@ import com.querydsl.core.types.Predicate;
 
 import com.g.commons.enums.Option;
 import com.g.commons.enums.Status;
-import com.g.commons.model.AntdPageRequest;
-import com.g.commons.model.AntdResponse;
 import com.g.commons.web.GenericController;
 import com.g.sys.sec.model.QSysRole;
 import com.g.sys.sec.model.SysRole;
@@ -35,7 +36,7 @@ import com.g.sys.sec.service.SysRolesService;
 public class SysRolesController
         extends GenericController<SysRolesService, SysRolesRepository, SysRole, Long> {
     @GetMapping("/$options")
-    AntdResponse<List<Option>> getOptions() {
+    ApiResponse<List<Option>> getOptions() {
         var qSysRoles = QSysRole.sysRoles;
         Predicate predicate = qSysRoles.status.eq(Status.VALID);
         Iterable<SysRole> categories = service.findAllEssential(predicate, Sort.by("name"));
@@ -45,23 +46,23 @@ public class SysRolesController
                 result.add(new Option(item.getId().toString(), item.getName()));
             });
 
-            return AntdResponse.success(result);
+            return ApiResponse.success(result);
         }
-        return AntdResponse.success();
+        return ApiResponse.success();
     }
 
     @Override
     @GetMapping
-    public AntdResponse<?> find(NativeWebRequest webRequest, AntdPageRequest pageRequest) throws Exception {
-        AntdResponse<?> result = super.find(webRequest, pageRequest);
+    public ApiResponse<?> find(NativeWebRequest webRequest, @PageableDefault Pageable pageable) throws Exception {
+        ApiResponse<?> result = super.find(webRequest, pageable);
         Hibernate.initialize(result);
         return result;
     }
 
     @Override
     @GetMapping("/{id}")
-    public AntdResponse<SysRole> get(@PathVariable Long id) {
-        AntdResponse<SysRole> result = super.get(id);
+    public ApiResponse<SysRole> get(@PathVariable Long id) {
+        ApiResponse<SysRole> result = super.get(id);
         Hibernate.initialize(result);
         return result;
     }

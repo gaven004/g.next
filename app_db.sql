@@ -29,7 +29,7 @@ CREATE TABLE `sys_action` (
   `permit_all` tinyint(1) NOT NULL DEFAULT '0',
   `status` enum('VALID','INVALID') NOT NULL DEFAULT 'VALID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统功能';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs COMMENT='系统功能';
 
 -- ----------------------------
 -- Records of sys_action
@@ -59,7 +59,7 @@ CREATE TABLE `sys_log` (
   KEY `idx_uid` (`uid`),
   KEY `idx_ctime` (`ctime`),
   KEY `idx_clazz` (`clazz`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs COMMENT='系统日志表';
 
 -- ----------------------------
 -- Records of sys_log
@@ -82,7 +82,7 @@ CREATE TABLE `sys_menu` (
   `order` int DEFAULT NULL,
   `status` enum('VALID','INVALID') NOT NULL DEFAULT 'VALID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs COMMENT='系统菜单表';
 
 -- ----------------------------
 -- Records of sys_menu
@@ -107,7 +107,7 @@ CREATE TABLE `sys_persistent_logins` (
   `token` varchar(64) DEFAULT NULL,
   `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`series`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs;
 
 -- ----------------------------
 -- Records of sys_persistent_logins
@@ -128,7 +128,7 @@ CREATE TABLE `sys_properties` (
   `status` enum('VALID','INVALID') DEFAULT 'VALID' COMMENT '状态',
   `note` varchar(255) DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`category`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统参数表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs COMMENT='系统参数表';
 
 -- ----------------------------
 -- Records of sys_properties
@@ -147,10 +147,10 @@ DROP TABLE IF EXISTS `sys_property_categories`;
 CREATE TABLE `sys_property_categories` (
   `id` varchar(20) NOT NULL COMMENT '属性类型',
   `name` varchar(20) NOT NULL COMMENT '属性类型名',
-  `note` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '备注',
-  `status` enum('VALID','INVALID') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'VALID' COMMENT '状态',
+  `note` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_zh_0900_as_cs DEFAULT NULL COMMENT '备注',
+  `status` enum('VALID','INVALID') CHARACTER SET utf8mb4 COLLATE utf8mb4_zh_0900_as_cs DEFAULT 'VALID' COMMENT '状态',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='系统属性类型表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs COMMENT='系统属性类型表';
 
 -- ----------------------------
 -- Records of sys_property_categories
@@ -170,7 +170,7 @@ CREATE TABLE `sys_role_authorities` (
   `authority` varchar(50) NOT NULL,
   PRIMARY KEY (`role_id`,`authority`) USING BTREE,
   KEY `idx_user` (`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs;
 
 -- ----------------------------
 -- Records of sys_role_authorities
@@ -186,7 +186,7 @@ CREATE TABLE `sys_role_members` (
   `user_id` bigint NOT NULL,
   `role_id` bigint NOT NULL,
   PRIMARY KEY (`user_id`,`role_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs;
 
 -- ----------------------------
 -- Records of sys_role_members
@@ -205,7 +205,7 @@ CREATE TABLE `sys_roles` (
   `status` enum('VALID','INVALID') NOT NULL DEFAULT 'VALID',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs;
 
 -- ----------------------------
 -- Records of sys_roles
@@ -223,7 +223,7 @@ CREATE TABLE `sys_user_authorities` (
   `authority` varchar(50) NOT NULL,
   PRIMARY KEY (`uid`,`authority`),
   KEY `idx_user` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs;
 
 -- ----------------------------
 -- Records of sys_user_authorities
@@ -242,10 +242,10 @@ CREATE TABLE `sys_users` (
   `username` varchar(50) NOT NULL COMMENT '用户名称',
   `password` varchar(60) DEFAULT NULL,
   `email` varchar(60) DEFAULT NULL,
-  `status` enum('VALID','INVALID') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'VALID',
+  `status` enum('VALID','INVALID') CHARACTER SET utf8mb4 COLLATE utf8mb4_zh_0900_as_cs NOT NULL DEFAULT 'VALID',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `idx_account` (`account`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_zh_0900_as_cs;
 
 -- ----------------------------
 -- Records of sys_users

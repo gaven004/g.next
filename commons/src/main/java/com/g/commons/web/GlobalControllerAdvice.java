@@ -15,7 +15,7 @@ import com.g.commons.exception.ErrorCode;
 import com.g.commons.exception.GenericAppException;
 import com.g.commons.model.ApiResponse;
 
-//@ControllerAdvice
+@ControllerAdvice
 public class GlobalControllerAdvice {
     private static final Logger log = LoggerFactory.getLogger(GlobalControllerAdvice.class);
 

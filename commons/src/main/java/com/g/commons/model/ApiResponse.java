@@ -47,8 +47,8 @@ public class ApiResponse<T> {
         return new ApiResponse<T>(ERROR, message);
     }
 
-    public static <T> ApiResponse<T> error(String message, T body) {
-        return new ApiResponse<T>(ERROR, message, body);
+    public static <T> ApiResponse<T> error(String result, String message) {
+        return new ApiResponse<T>(result, message);
     }
 
     public static <T> ApiResponse<T> create(boolean result) {

@@ -7,9 +7,11 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import com.g.commons.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -17,8 +19,6 @@ import com.querydsl.core.types.Predicate;
 
 import com.g.commons.enums.Option;
 import com.g.commons.exception.EntityNotFoundException;
-import com.g.commons.model.AntdPageRequest;
-import com.g.commons.model.AntdResponse;
 
 @RestController
 @RequestMapping("sys/property/categories")
@@ -33,29 +33,27 @@ public class SysPropertyCategoriesController {
     }
 
     @GetMapping
-    AntdResponse<?> find(NativeWebRequest webRequest,
-                         @QuerydslPredicate(root = SysPropertyCategory.class) Predicate predicate,
-                         AntdPageRequest pageRequest) {
+    ApiResponse<?> find(NativeWebRequest webRequest,
+                        @QuerydslPredicate(root = SysPropertyCategory.class) Predicate predicate,
+                        @PageableDefault Pageable pageable) {
         // 是否分页
         boolean isPage = isPage(webRequest);
         // 是否排序
         boolean isSort = isSort(webRequest);
 
-        Pageable pageable = getPageable(pageRequest);
-
         if (isPage) {
-            return AntdResponse.success(repository.findAll(predicate, pageable));
+            return ApiResponse.success(repository.findAll(predicate, pageable));
         }
 
         if (isSort) {
-            return AntdResponse.success(repository.findAll(predicate, pageable.getSort()));
+            return ApiResponse.success(repository.findAll(predicate, pageable.getSort()));
         }
 
-        return AntdResponse.success(repository.findAll(predicate));
+        return ApiResponse.success(repository.findAll(predicate));
     }
 
     @GetMapping("/$options")
-    AntdResponse<List<Option>> getOptions() {
+    ApiResponse<List<Option>> getOptions() {
         Iterable<SysPropertyCategory> categories = repository.findAll();
         if (categories != null && categories.iterator().hasNext()) {
             List<Option> result = new ArrayList();
@@ -63,39 +61,39 @@ public class SysPropertyCategoriesController {
                 result.add(new Option(item.getId(), item.getName()));
             });
 
-            return AntdResponse.success(result);
+            return ApiResponse.success(result);
         }
-        return AntdResponse.success();
+        return ApiResponse.success();
     }
 
     @GetMapping("/{category}")
-    AntdResponse<SysPropertyCategory> get(@PathVariable String category) {
+    ApiResponse<SysPropertyCategory> get(@PathVariable String category) {
         return repository.findById(category)
-                .map(entiry -> AntdResponse.success(entiry))
+                .map(entiry -> ApiResponse.success(entiry))
                 .orElseThrow(() -> new EntityNotFoundException());
     }
 
     @PostMapping
-    AntdResponse<SysPropertyCategory> save(@RequestBody @Valid SysPropertyCategory entity) {
-        return AntdResponse.success(service.save(0L, entity));
+    ApiResponse<SysPropertyCategory> save(@RequestBody @Valid SysPropertyCategory entity) {
+        return ApiResponse.success(service.save(0L, entity));
     }
 
     @PutMapping
-    AntdResponse<SysPropertyCategory> update(@RequestBody @Valid SysPropertyCategory entity) {
-        return AntdResponse.success(service.update(0L, entity));
+    ApiResponse<SysPropertyCategory> update(@RequestBody @Valid SysPropertyCategory entity) {
+        return ApiResponse.success(service.update(0L, entity));
     }
 
     @DeleteMapping("/$batch")
-    AntdResponse<?> delete(@RequestBody String[] pks) {
+    ApiResponse<?> delete(@RequestBody String[] pks) {
         for (String pk : pks) {
             service.delete(0L, pk);
         }
-        return AntdResponse.success();
+        return ApiResponse.success();
     }
 
     @DeleteMapping("/{category}")
-    AntdResponse<SysPropertyCategory> delete(@PathVariable String category) {
+    ApiResponse<SysPropertyCategory> delete(@PathVariable String category) {
         service.delete(0L, category);
-        return AntdResponse.success();
+        return ApiResponse.success();
     }
 }

@@ -29,9 +29,16 @@ spring:
   # 配置数据源信息
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/next?serverTimezone=UTC&characterEncoding=utf-8
+    url: jdbc:mysql://39.105.19.141:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
     username: root
-    password: MYSQL_ROOT_PASSWORD
+    password: hmFFXag3Ek
+  redis:
+    host: 39.105.19.141
+    port: 7001
+    password: 9vrGKspASS
+    database: 0
+    connect-timeout: 60000
+    timeout: 10000
   jpa:
     database: mysql
     hibernate:
@@ -48,28 +55,10 @@ spring:
           use_second_level_cache: true
           use_query_cache: true
           region:
-            factory_class: org.redisson.hibernate.RedissonRegionFactory
-          redisson:
-            entity:
-              expiration:
-                time_to_live: 86400000 # milliseconds
-                max_idle_time: 3600000 # milliseconds
-            collection:
-              expiration:
-                time_to_live: 86400000
-                max_idle_time: 3600000
-            naturalid:
-              expiration:
-                time_to_live: 86400000
-                max_idle_time: 3600000
-            query:
-              expiration:
-                time_to_live: 86400000
-                max_idle_time: 3600000
-            timestamps:
-              expiration:
-                time_to_live: 86400000
-                max_idle_time: 3600000
+            factory_class: jcache
+        javax:
+          cache:
+            provider: org.ehcache.jsr107.EhcacheCachingProvider
 
 # Actuator
 management:

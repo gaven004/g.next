@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.g.commons.model.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.g.commons.exception.ErrorCode;
-import com.g.commons.model.AntdResponse;
 import com.g.commons.web.RequestHelper;
 import com.g.sys.sec.model.LoginUser;
 import com.g.sys.sec.model.PayloadKey;
@@ -50,22 +50,22 @@ public class MainController {
     }
 
     @RequestMapping(path = "/test")
-    public ResponseEntity<AntdResponse<String>> test() {
-        AntdResponse<String> result = AntdResponse.success("OK!");
+    public ResponseEntity<ApiResponse<String>> test() {
+        ApiResponse<String> result = ApiResponse.success("OK!");
         return new ResponseEntity(result, null, HttpStatus.OK);
     }
 
     @RequestMapping(path = "/hello", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AntdResponse<String>> hello(@RequestParam(value = "name", defaultValue = "World") String name) {
-        AntdResponse<String> result = AntdResponse.success("Hello " + name);
+    public ResponseEntity<ApiResponse<String>> hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+        ApiResponse<String> result = ApiResponse.success("Hello " + name);
         return new ResponseEntity(result, null, HttpStatus.OK);
     }
 
     @PostMapping(path = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AntdResponse<UserInfo>> login(HttpServletRequest request, @Validated @RequestBody LoginUser user) {
+    public ResponseEntity<ApiResponse<UserInfo>> login(HttpServletRequest request, @Validated @RequestBody LoginUser user) {
         final boolean debug = logger.isDebugEnabled();
 
-        AntdResponse<UserInfo> response = null;
+        ApiResponse<UserInfo> response = null;
         try {
             Authentication authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
             if (debug) {
@@ -78,7 +78,7 @@ public class MainController {
             }
 
             SecurityUser authUser = (SecurityUser) authResult.getPrincipal();
-            response = AntdResponse.success(getUserInfo(request, authUser));
+            response = ApiResponse.success(getUserInfo(request, authUser));
         } catch (AuthenticationException failed) {
             SecurityContextHolder.clearContext();
 
@@ -86,7 +86,7 @@ public class MainController {
                 logger.debug("Authentication request for failed: {}", failed.getMessage());
             }
 
-            response = AntdResponse.error(ErrorCode.Generic, failed.getMessage());
+            response = ApiResponse.error(ErrorCode.Generic, failed.getMessage());
         }
 
         HttpHeaders headers = new HttpHeaders();
@@ -98,9 +98,9 @@ public class MainController {
     }
 
     @RequestMapping(path = "/refresh-token")
-    public AntdResponse<UserInfo> refreshToken(HttpServletRequest request) {
+    public ApiResponse<UserInfo> refreshToken(HttpServletRequest request) {
         SecurityUser authUser = WebSecurityHelper.getAuthUser();
-        return AntdResponse.success(getUserInfo(request, authUser));
+        return ApiResponse.success(getUserInfo(request, authUser));
     }
 
     private UserInfo getUserInfo(HttpServletRequest request, SecurityUser authUser) {

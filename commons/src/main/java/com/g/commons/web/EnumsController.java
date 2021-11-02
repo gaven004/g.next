@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.g.commons.model.ApiResponse;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.g.commons.exception.ErrorCode;
-import com.g.commons.model.AntdResponse;
 import com.g.commons.utils.EnumUtil;
 
 @RestController
@@ -56,10 +56,10 @@ public class EnumsController implements InitializingBean {
     }
 
     @GetMapping(value = "/{type}")
-    public AntdResponse<?> getOptions(@PathVariable String type) {
+    public ApiResponse<?> getOptions(@PathVariable String type) {
         return Optional.ofNullable((type.indexOf('.') >= 0) ? type : NAME_MAP.get(type))
                 .map(fullname -> CLASS_MAP.get(fullname))
-                .map(clazz -> AntdResponse.success(EnumUtil.getDescOptions(clazz)))
-                .orElse(AntdResponse.error(ErrorCode.EntityNotFound, "没有指定的枚举类"));
+                .map(clazz -> ApiResponse.success(EnumUtil.getDescOptions(clazz)))
+                .orElse(ApiResponse.error(ErrorCode.EntityNotFound, "没有指定的枚举类"));
     }
 }

@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.util.NumberUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import com.querydsl.core.types.Predicate;
 
-import com.g.commons.model.AntdPageRequest;
-import com.g.commons.model.AntdResponse;
+import com.g.commons.model.ApiResponse;
 import com.g.commons.service.GenericService;
 import com.g.commons.utils.GenericsUtils;
 
@@ -38,60 +38,53 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
     }
 
     @GetMapping
-    public AntdResponse<?> find(NativeWebRequest webRequest, AntdPageRequest pageRequest) throws Exception {
-        // 是否分页
-        boolean isPage = isPage(webRequest);
-        // 是否排序
-        boolean isSort = isSort(webRequest);
-
-        Pageable pageable = getPageable(pageRequest);
-
+    public ApiResponse<?> find(NativeWebRequest webRequest, @PageableDefault Pageable pageable) throws Exception {
         Predicate predicate = argumentResolver.resolveArgument(webRequest, domainClass);
 
-        if (isPage) {
-            return AntdResponse.success(service.findAll(predicate, pageable));
+        if (isPage(webRequest)) {
+            return ApiResponse.success(service.findAll(predicate, pageable));
         }
 
-        if (isSort) {
-            return AntdResponse.success(service.findAll(predicate, pageable.getSort()));
+        if (isSort(webRequest)) {
+            return ApiResponse.success(service.findAll(predicate, pageable.getSort()));
         }
 
-        return AntdResponse.success(service.findAll(predicate));
+        return ApiResponse.success(service.findAll(predicate));
     }
 
     @GetMapping("/{id}")
-    public AntdResponse<T> get(@PathVariable ID id) {
-        return AntdResponse.success(service.get(id));
+    public ApiResponse<T> get(@PathVariable ID id) {
+        return ApiResponse.success(service.get(id));
     }
 
     @PostMapping
-    public AntdResponse<T> save(@RequestBody @Valid T entity) {
-        return AntdResponse.success(service.save(entity));
+    public ApiResponse<T> save(@RequestBody @Valid T entity) {
+        return ApiResponse.success(service.save(entity));
     }
 
     @PutMapping
-    public AntdResponse<T> update(@RequestBody @Valid T entity) {
-        return AntdResponse.success(service.update(entity));
+    public ApiResponse<T> update(@RequestBody @Valid T entity) {
+        return ApiResponse.success(service.update(entity));
     }
 
     @DeleteMapping("/$batch")
-    public AntdResponse<?> delete(@RequestBody @Valid ID[] ids) {
+    public ApiResponse<?> delete(@RequestBody @Valid ID[] ids) {
         for (ID id : ids) {
             service.delete(convert(id));
         }
-        return AntdResponse.success();
+        return ApiResponse.success();
     }
 
     @DeleteMapping("/{id}")
-    public AntdResponse<T> delete(@PathVariable ID id) {
+    public ApiResponse<T> delete(@PathVariable ID id) {
         service.delete(convert(id));
-        return AntdResponse.success();
+        return ApiResponse.success();
     }
 
     /**
      * 由于泛型在运行时，是没有精确的类型信息，如上面delete方法，传入的实际是一个Serializable数组，
      * 并不是期待的精确主键类型
-     *
+     * <p>
      * 常见的主键类型为String、Number，这里尝试对常见的主键类型做一个转换，主要是针对String转换成Number
      */
     private ID convert(Object id) {
@@ -132,15 +125,12 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
         return (ID) id;
     }
 
-    public static Pageable getPageable(AntdPageRequest pageRequest) {
-        return pageRequest != null ? pageRequest.toPageable() : null;
-    }
-
     public static boolean isSort(NativeWebRequest webRequest) {
-        return webRequest.getParameter("sorter") != null;
+        return webRequest.getParameter("sort") != null;
     }
 
     public static boolean isPage(NativeWebRequest webRequest) {
-        return webRequest.getParameter("pageSize") != null;
+        return webRequest.getParameter("page") != null ||
+                webRequest.getParameter("size") != null;
     }
 }

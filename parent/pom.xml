@@ -6,14 +6,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.2</version>
+        <version>2.5.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.g</groupId>
     <artifactId>next</artifactId>
     <version>0.0.2</version>
     <name>next</name>
-    <description>G.Next</description>
+    <description>G.Next Classic</description>
 
     <modules>
         <module>../main</module>
@@ -64,6 +64,14 @@
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -89,13 +97,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-rest</artifactId>
-        </dependency>
-
-        <!-- redisson-hibernate -->
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-hibernate-53</artifactId>
-            <version>3.14.1</version>
         </dependency>
 
         <!-- mail -->

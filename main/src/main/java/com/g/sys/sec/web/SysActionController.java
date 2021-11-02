@@ -10,6 +10,7 @@ package com.g.sys.sec.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.g.commons.model.ApiResponse;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +20,6 @@ import com.querydsl.core.types.Predicate;
 
 import com.g.commons.enums.Option;
 import com.g.commons.enums.Status;
-import com.g.commons.model.AntdResponse;
 import com.g.commons.web.GenericController;
 import com.g.sys.sec.model.QSysAction;
 import com.g.sys.sec.model.SysAction;
@@ -31,7 +31,7 @@ import com.g.sys.sec.service.SysActionService;
 public class SysActionController
         extends GenericController<SysActionService, SysActionRepository, SysAction, Long> {
     @GetMapping("/$options")
-    AntdResponse<List<Option>> getOptions() {
+    ApiResponse<List<Option>> getOptions() {
         var qSysAction = QSysAction.sysAction;
         Predicate predicate = qSysAction.status.eq(Status.VALID);
         Iterable<SysAction> actions = service.findAll(predicate, Sort.by("resource"));
@@ -41,8 +41,8 @@ public class SysActionController
                 result.add(new Option(item.getId().toString(), item.getDescription()));
             });
 
-            return AntdResponse.success(result);
+            return ApiResponse.success(result);
         }
-        return AntdResponse.success();
+        return ApiResponse.success();
     }
 }

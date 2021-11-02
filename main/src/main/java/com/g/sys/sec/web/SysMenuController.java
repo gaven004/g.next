@@ -10,6 +10,7 @@ package com.g.sys.sec.web;
 import java.util.Iterator;
 import java.util.List;
 
+import com.g.commons.model.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.util.StringUtils;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.g.commons.model.AntdResponse;
 import com.g.commons.web.GenericController;
 import com.g.sys.sec.model.SysMenu;
 import com.g.sys.sec.model.SysMenuDto;
@@ -33,7 +33,7 @@ public class SysMenuController
     WebSecurity webSecurity;
 
     @GetMapping("/$tree")
-    AntdResponse<List<SysMenuDto4Select>> getTree() {
+    ApiResponse<List<SysMenuDto4Select>> getTree() {
         SysMenuDto4Select root = new SysMenuDto4Select("root", 0L);
 
         Long previousParent = 0L;
@@ -52,7 +52,7 @@ public class SysMenuController
             }
         }
 
-        return AntdResponse.success(root.getChildren());
+        return ApiResponse.success(root.getChildren());
     }
 
     private SysMenuDto4Select find(SysMenuDto4Select root, Long id) {
@@ -75,7 +75,7 @@ public class SysMenuController
     }
 
     @GetMapping("/$menu")
-    AntdResponse<List<SysMenuDto>> getMenu() {
+    ApiResponse<List<SysMenuDto>> getMenu() {
         Authentication authentication = WebSecurityHelper.getAuthentication();
 
         SysMenuDto root = new SysMenuDto("0");
@@ -110,7 +110,7 @@ public class SysMenuController
 
         filter(root);
 
-        return AntdResponse.success(root.getRoutes());
+        return ApiResponse.success(root.getRoutes());
     }
 
     /**
