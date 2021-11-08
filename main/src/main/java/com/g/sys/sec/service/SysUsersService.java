@@ -47,8 +47,8 @@ public class SysUsersService
         extends GenericService<SysUsersRepository, SysUser, Long> {
     private static final Logger log = LoggerFactory.getLogger(SysUsersService.class);
 
-    private static final String REGISTER_MAIL_TEMPLATE = "com/g/sys/sec/template/reg.html";
-    private static final String RESET_PASSWORD_MAIL_TEMPLATE = "com/g/sys/sec/template/reset-pwd.html";
+    private static final String REGISTER_MAIL_TEMPLATE = "sys/sec/reg.html";
+    private static final String RESET_PASSWORD_MAIL_TEMPLATE = "sys/sec/reset-pwd.html";
 
     private static final String REGISTER_MAIL_SUBJECT = "新用户注册";
     private static final String RESET_PASSWORD_MAIL_SUBJECT = "密码重置";

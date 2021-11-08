@@ -35,10 +35,10 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public FreeMarkerConfigurer freemarkerConfig() {
-        var freeMarkerConfigurer = new FreeMarkerConfigurer();
-        freeMarkerConfigurer.setTemplateLoaderPath("classpath:/");
-        return freeMarkerConfigurer;
-    }
+//    @Bean
+//    public FreeMarkerConfigurer freemarkerConfig() {
+//        var freeMarkerConfigurer = new FreeMarkerConfigurer();
+//        freeMarkerConfigurer.setTemplateLoaderPath("classpath:/");
+//        return freeMarkerConfigurer;
+//    }
 }

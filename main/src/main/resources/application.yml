@@ -22,16 +22,10 @@ logging:
         cache: TRACE
 
 spring:
-  #  autoconfigure:
-  #    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+#  autoconfigure:
+#    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   jmx:
     enabled: true
-  # 配置数据源信息
-  datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://39.105.19.141:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
-    username: root
-    password: hmFFXag3Ek
   redis:
     host: 39.105.19.141
     port: 7001
@@ -39,6 +33,12 @@ spring:
     database: 0
     connect-timeout: 60000
     timeout: 10000
+  # 配置数据源信息
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://39.105.19.141:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    username: root
+    password: hmFFXag3Ek
   jpa:
     database: mysql
     hibernate:
@@ -59,25 +59,37 @@ spring:
         javax:
           cache:
             provider: org.ehcache.jsr107.EhcacheCachingProvider
+  freemarker:
+    template-loader-path: "classpath:/templates/"
+    charset: "UTF-8"
+    suffix: ".html"
+    cache: false
+    content-type: "text/html"
+    allow-request-override: false
+    check-template-location: true
+    expose-request-attributes: true
+    expose-session-attributes: true
+    expose-spring-macro-helpers: true
+
 
 # Actuator
-management:
-  endpoints:
-    enabled-by-default: true
-    jmx:
-      exposure:
-        include: "*"
-    web:
-      exposure:
-        include: "*"
-  endpoint:
-    httptrace:
-      enabled: true
-    info:
-      enabled: true
-  trace:
-    http:
-      include: true
+#management:
+#  endpoints:
+#    enabled-by-default: true
+#    jmx:
+#      exposure:
+#        include: "*"
+#    web:
+#      exposure:
+#        include: "*"
+#  endpoint:
+#    httptrace:
+#      enabled: true
+#    info:
+#      enabled: true
+#  trace:
+#    http:
+#      include: true
 
 g:
   commons:
