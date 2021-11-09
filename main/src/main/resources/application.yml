@@ -62,7 +62,7 @@ spring:
   freemarker:
     template-loader-path: "classpath:/templates/"
     charset: "UTF-8"
-    suffix: ".html"
+    suffix: ".ftlh"
     cache: false
     content-type: "text/html"
     allow-request-override: false

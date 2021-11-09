@@ -73,22 +73,24 @@
                             </div>
 
                             <#if trace?has_content>
-                            <div class="alert fade show bgc-white brc-secondary-l2 rounded" role="alert">
-                                <div class="position-tl h-102 border-l-4 brc-danger m-n1px rounded-left"></div><!-- the big red line on left -->
+                                <div class="alert fade show bgc-white brc-secondary-l2 rounded" role="alert">
+                                    <div class="position-tl h-102 border-l-4 brc-danger m-n1px rounded-left"></div>
+                                    <!-- the big red line on left -->
 
-                                <h5 class="alert-heading text-danger-m1 font-bolder">
-                                    <i class="fas fa-exclamation-triangle mr-1 mb-1"></i>
-                                    Error
-                                </h5>
+                                    <h5 class="alert-heading text-danger-m1 font-bolder">
+                                        <i class="fas fa-exclamation-triangle mr-1 mb-1"></i>
+                                        Error
+                                    </h5>
 
-                                ${trace!}
-                            </div>
+                                    ${trace!}
+                                </div>
                             </#if>
 
                             <hr class="border-double border-t-3 brc-secondary-l2 my-4">
 
                             <div class="text-center mt-4">
-                                <a href="javascript:history.back()" class="btn btn-bgc-white btn-outline-default px-35 btn-text-slide-x">
+                                <a href="javascript:history.back()"
+                                   class="btn btn-bgc-white btn-outline-default px-35 btn-text-slide-x">
                                     <i class="btn-text-2 fa fa-arrow-left text-110 align-text-bottom mr-2"></i>
                                     返回
                                 </a>
