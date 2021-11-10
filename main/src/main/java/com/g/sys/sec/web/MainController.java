@@ -11,29 +11,9 @@ public class MainController {
     public String login(Model model) {
         return "login";
     }
-//
-//    @RequestMapping(value = "/blank", method = RequestMethod.GET)
-//    public String blank() {
-//        return "blank";
-//    }
-//
-//    @RequestMapping(value = "/403", method = RequestMethod.GET)
-//    public String _403() {
-//        return "403";
-//    }
-//
-//    @RequestMapping(value = "/404", method = RequestMethod.GET)
-//    public String _404() {
-//        return "404";
-//    }
-//
-//    @RequestMapping(value = "/500", method = RequestMethod.GET)
-//    public String _500() {
-//        return "500";
-//    }
-//
-//    @RequestMapping(value = "/error", method = RequestMethod.GET)
-//    public String error() {
-//        return "error";
-//    }
+
+    @RequestMapping(value = "/blank", method = RequestMethod.GET)
+    public String blank() {
+        return "blank";
+    }
 }
