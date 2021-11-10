@@ -82,8 +82,8 @@
                                         </h2>
 
                                         <div class="mt-5 mx-4 text-dark-tp3">
-                                            <span class="text-120">
-                                               Join our community to make friends,<br/> meet experts &amp; receive exclusive offers!
+                                            <span class="text-secondary-m1">
+                                               新一代业务管理系统，由心创造，不断进步！
                                             </span>
                                             <hr class="mb-1 brc-black-tp10"/>
                                         </div>
@@ -129,7 +129,7 @@
                                             <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                                                 <div class="d-flex align-items-center input-floating-label text-blue brc-blue-m2">
                                                     <input placeholder="账号" type="text"
-                                                           class="form-control form-control-lg pr-4 shadow-none"
+                                                           class="form-control pr-4 shadow-none"
                                                            id="id-login-username"/>
                                                     <i class="fa fa-user text-grey-m2 ml-n4"></i>
                                                     <label class="floating-label text-grey-l1 ml-n3"
@@ -143,7 +143,7 @@
                                             <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-2 mt-md-1">
                                                 <div class="d-flex align-items-center input-floating-label text-blue brc-blue-m2">
                                                     <input placeholder="密码" type="password"
-                                                           class="form-control form-control-lg pr-4 shadow-none"
+                                                           class="form-control pr-4 shadow-none"
                                                            id="id-login-password"/>
                                                     <i class="fa fa-key text-grey-m2 ml-n4"></i>
                                                     <label class="floating-label text-grey-l1 ml-n3"
@@ -163,7 +163,7 @@
 
 
                                             <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-                                                <label class="d-inline-block mt-3 mb-0 text-dark-l1">
+                                                <label class="d-inline-block mt-3 mb-0 text-dark-l1 text-95">
                                                     <input type="checkbox" class="mr-1" id="id-remember-me"/>
                                                     保持登录状态
                                                 </label>
@@ -197,12 +197,12 @@
 
                                         <form autocomplete="off" class="form-row mt-4">
                                             <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-                                                <label class="text-secondary-d3 mb-3">
+                                                <label class="text-secondary-d3 mb-3 text-95">
                                                     请输入您绑定的邮箱，我们将发送新的密码到您的邮箱：
                                                 </label>
                                                 <div class="d-flex align-items-center">
                                                     <input type="email"
-                                                           class="form-control form-control-lg pr-4 shadow-none"
+                                                           class="form-control pr-4 shadow-none"
                                                            id="id-recover-email" placeholder="Email"/>
                                                     <i class="fa fa-envelope text-grey-m2 ml-n4"></i>
                                                 </div>
