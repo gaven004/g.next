@@ -58,13 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         public void configure(WebSecurity web) throws Exception {
-            web.ignoring().antMatchers("/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**");
+            web.ignoring().antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**");
         }
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests(authorize -> authorize
-                            .antMatchers("/login", "/reset-password").permitAll()
+                            .antMatchers("/form-login", "/reset-password").permitAll()
                             .anyRequest().authenticated()
                     )
                     .formLogin(form -> form

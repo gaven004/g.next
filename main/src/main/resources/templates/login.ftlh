@@ -82,7 +82,7 @@
                                         </h2>
 
                                         <div class="mt-5 mx-4 text-dark-tp3">
-                                            <span class="text-secondary-m1">
+                                            <span class="text-secondary-m1 text-110">
                                                新一代业务管理系统，由心创造，不断进步！
                                             </span>
                                             <hr class="mb-1 brc-black-tp10"/>
@@ -118,17 +118,39 @@
                                                     G. <span class="text-80 text-dark-tp3">Next Application</span>
                                                 </span>
                                             </h1>
-                                            欢 迎
+                                            <h4 class="text-dark-tp4 brc-secondary-l2 pt-2 pb-1 text-120">
+                                                欢 迎
+                                            </h4>
                                         </div>
 
+                                        <#if RequestParameters.error??>
+                                        <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-4 alert alert-danger">
+                                            <i class="fa fa-exclamation-triangle mr-3 align-middle text-danger-m1"></i>
+                                            <span class="align-middle">${(Session["SPRING_SECURITY_LAST_EXCEPTION"].message)!"登录失败，请检查账号和密码"}</span>
+                                        </div>
+                                        </#if>
 
-                                        <form autocomplete="off" class="form-row mt-4">
+                                        <#if RequestParameters.logout??>
+                                        <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-4 alert alert-info">
+                                            <i class="fa fa-info mr-3 align-middle"></i>
+                                            <span class="align-middle">您已退出系统，继续使用请重新登录</span>
+                                        </div>
+                                        </#if>
+
+                                        <#if RequestParameters.invalidSession??>
+                                        <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-4 alert alert-warning">
+                                            <i class="fa fa-exclamation mr-3 align-middle text-orange"></i>
+                                            <span class="align-middle">您的登录已失效，请重新登录</span>
+                                        </div>
+                                        </#if>
+
+                                        <form autocomplete="off" class="form-row mt-45" name="f" action="form-login" method="POST">
 
                                             <@security.csrfInput />
 
                                             <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                                                 <div class="d-flex align-items-center input-floating-label text-blue brc-blue-m2">
-                                                    <input placeholder="账号" type="text"
+                                                    <input placeholder="账号" type="text" name="username" required
                                                            class="form-control pr-4 shadow-none"
                                                            id="id-login-username"/>
                                                     <i class="fa fa-user text-grey-m2 ml-n4"></i>
@@ -139,10 +161,9 @@
                                                 </div>
                                             </div>
 
-
                                             <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-2 mt-md-1">
                                                 <div class="d-flex align-items-center input-floating-label text-blue brc-blue-m2">
-                                                    <input placeholder="密码" type="password"
+                                                    <input placeholder="密码" type="password" name="password" required
                                                            class="form-control pr-4 shadow-none"
                                                            id="id-login-password"/>
                                                     <i class="fa fa-key text-grey-m2 ml-n4"></i>
@@ -153,7 +174,6 @@
                                                 </div>
                                             </div>
 
-
                                             <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 text-right text-md-right mt-n2 mb-2">
                                                 <a href="#" class="text-primary-m1 text-95"
                                                    data-toggle="tab" data-target="#id-tab-forgot">
@@ -161,14 +181,13 @@
                                                 </a>
                                             </div>
 
-
                                             <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                                                 <label class="d-inline-block mt-3 mb-0 text-dark-l1 text-95">
                                                     <input type="checkbox" class="mr-1" id="id-remember-me"/>
                                                     保持登录状态
                                                 </label>
 
-                                                <button type="button"
+                                                <button name="submit" type="submit"
                                                         class="btn btn-primary btn-block px-4 btn-bold mt-2 mb-4">
                                                     登 录
                                                 </button>
@@ -186,7 +205,6 @@
                                             </a>
                                         </div>
 
-
                                         <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-5 px-0">
                                             <h4 class="pt-4 pt-md-0 text-dark-tp4 border-b-1 brc-grey-l2 pb-1 text-130">
                                                 <i class="fa fa-key text-brown-m1 mr-1"></i>
@@ -194,10 +212,9 @@
                                             </h4>
                                         </div>
 
-
-                                        <form autocomplete="off" class="form-row mt-4">
+                                        <form autocomplete="off" class="form-row mt-45">
                                             <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-                                                <label class="text-secondary-d3 mb-3 text-95">
+                                                <label class="text-secondary-d3 mb-3">
                                                     请输入您绑定的邮箱，我们将发送新的密码到您的邮箱：
                                                 </label>
                                                 <div class="d-flex align-items-center">
@@ -215,7 +232,6 @@
                                                 </button>
                                             </div>
                                         </form>
-
 
                                         <div class="form-row w-100">
                                             <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 d-flex flex-column align-items-center justify-content-center">
@@ -256,11 +272,11 @@
 <script src="./vendors/ace/ace.min.js"></script>
 
 <script>
-    jQuery(function($) {
+    jQuery(function ($) {
         // because "Login Here" and "Signup now" links are not inside a "UL" or ".nav", they preserve "active" class
         // and we should remove that, to be able to move between tab panes
         $('a[data-toggle="tab"]')
-            .on('click', function() {
+            .on('click', function () {
                 $('a[data-toggle="tab"]').removeClass('active')
             })
     })

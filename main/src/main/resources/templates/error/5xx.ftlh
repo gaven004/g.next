@@ -48,7 +48,7 @@
             <!-- Page Content -->
             <div class="page-content container container-plus">
                 <div class="row justify-content-center pos-rel">
-                    <div class="pos-rel col-12 col-sm-7 mt-1 mt-sm-3">
+                    <div class="pos-rel col-12 col-md-9 mt-1 mt-md-3">
                         <div class="py-3 px-1 py-lg-4 px-lg-5">
                             <div class="text-center fa-4x">
                                 <span class="text-100 text-dark-m3 d-sm-none"><!-- smaller text to fit in small devices -->
@@ -64,25 +64,21 @@
                             </div>
 
                             <div class="text-center">
-                                <span class="text-150 text-primary-d2">
-                                    O!
+                                <span class="text-120 text-danger-m1 p-15">
+                                    <i class="fas fa-exclamation-triangle mr-1 mb-1"></i>
+                                    系统异常：
                                 </span>
                                 <span class="text-120 text-primary-d2 p-15">
-                                    系统出错了，${message!}...
+                                    ${message!}...
                                 </span>
                             </div>
 
                             <#if trace?has_content>
-                                <div class="alert fade show bgc-white brc-secondary-l2 rounded" role="alert">
+                                <div class="alert fade show bgc-white brc-secondary-l2 rounded mt-4" role="alert">
                                     <div class="position-tl h-102 border-l-4 brc-danger m-n1px rounded-left"></div>
                                     <!-- the big red line on left -->
 
-                                    <h5 class="alert-heading text-danger-m1 font-bolder">
-                                        <i class="fas fa-exclamation-triangle mr-1 mb-1"></i>
-                                        Error
-                                    </h5>
-
-                                    ${trace!}
+                                    <pre class="overflow-auto" style="height: 50vh">${trace!}</pre>
                                 </div>
                             </#if>
 
