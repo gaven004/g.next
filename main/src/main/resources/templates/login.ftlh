@@ -126,7 +126,7 @@
                                         <#if RequestParameters.error??>
                                         <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-4 alert alert-danger">
                                             <i class="fa fa-exclamation-triangle mr-3 align-middle text-danger-m1"></i>
-                                            <span class="align-middle">${(Session["SPRING_SECURITY_LAST_EXCEPTION"].message)!"登录失败，请检查账号和密码"}</span>
+                                            <span class="align-middle">登录失败，请检查账号和密码</span>
                                         </div>
                                         </#if>
 

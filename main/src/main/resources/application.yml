@@ -27,18 +27,23 @@ spring:
   jmx:
     enabled: true
   redis:
-    host: 39.105.19.141
-    port: 7001
-    password: 9vrGKspASS
+    host: localhost
+    port: 6379
+#    host: 39.105.19.141
+#    port: 7001
+#    password: 9vrGKspASS
     database: 0
     connect-timeout: 60000
     timeout: 10000
   # 配置数据源信息
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://39.105.19.141:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+#    url: jdbc:mysql://39.105.19.141:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
+#    username: root
+#    password: hmFFXag3Ek
+    url: jdbc:mysql://localhost:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
     username: root
-    password: hmFFXag3Ek
+    password: MYSQL_ROOT_PASSWORD
   jpa:
     database: mysql
     hibernate:
