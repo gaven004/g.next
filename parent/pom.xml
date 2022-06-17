@@ -38,7 +38,7 @@
         <freemarker.version>2.3.23</freemarker.version>
         <javax.activation.version>1.1.1</javax.activation.version>
         <javax.mail.version>1.5.2</javax.mail.version>
-        <fastjson.version>1.2.55</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <zjsonpatch.version>0.4.6</zjsonpatch.version>
         <commons-lang.version>3.7</commons-lang.version>
         <commons-text.version>1.1</commons-text.version>
