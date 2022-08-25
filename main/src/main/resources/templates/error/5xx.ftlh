@@ -1,10 +1,11 @@
 <!doctype html>
+<#import "/spring.ftl" as spring />
 <html lang="zh">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-    <base href="./"/>
+    <base href="<@spring.url '/'/>"/>
 
     <title>Starter - G.Next Admin</title>
 

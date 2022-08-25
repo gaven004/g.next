@@ -34,22 +34,22 @@
         <div class="navbar-inner">
 
             <div class="navbar-intro justify-content-xl-between">
-                <button type="button" class="btn btn-burger burger-arrowed static collapsed ml-2 d-flex d-xl-none"
+                <button type="button" class="btn btn-burger burger-arrowed static collapsed ml-2 d-flex flex-shrink-0 d-xl-none"
                         data-toggle-mobile="sidebar" data-target="#sidebar" aria-controls="sidebar"
                         aria-expanded="false" aria-label="Toggle sidebar">
                     <span class="bars"></span>
                 </button><!-- mobile sidebar toggler button -->
 
-                <a class="navbar-brand text-white" href="#">
+                <div class="navbar-brand text-white">
                     <i class="fa fa-leaf"></i>
                     <span class="d-none d-xl-inline-flex ml-2">
                         <span>G.Next</span>
                         <span>App</span>
                     </span>
                     <span class="text-lg d-inline-flex d-xl-none">
-                        <span class="ml-2">Blank - 空白页</span>
+                        <span class="ml-2">Blank - 空白页 Long Text</span>
                     </span>
-                </a><!-- /.navbar-brand -->
+                </div><!-- /.navbar-brand -->
 
                 <button type="button" class="btn btn-burger mr-2 d-none d-xl-flex" data-toggle="sidebar"
                         data-target="#sidebar" aria-controls="sidebar" aria-expanded="true" aria-label="Toggle sidebar">
@@ -78,7 +78,7 @@
                 <div class="navbar-nav">
                     <ul class="nav">
 
-                        <li class="nav-item dropdown dropdown-mega bgc-pink-d1">
+                        <li class="nav-item dropdown dropdown-mega bgc-pink-d3">
                             <a class="nav-link dropdown-toggle pl-lg-3 pr-lg-4" href="#" role="button">
                                 <i class="fa fa-bell text-110 icon-animated-bell mr-lg-2"></i>
 
@@ -92,7 +92,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item dd-backdrop dropdown dropdown-mega bgc-success-d1">
+                        <li class="nav-item dd-backdrop dropdown dropdown-mega bgc-success-d3">
                             <a class="nav-link dropdown-toggle pl-lg-3 pr-lg-4" href="#" role="button">
                                 <i class="fa fa-flask text-110 icon-animated-vertical mr-lg-1"></i>
 
@@ -112,7 +112,7 @@
                                      src="/img/user.svg" alt="">
                                 <span class="d-inline-block d-lg-none d-xl-inline-block">
                                     <span class="text-90" id="id-user-welcome">您好，</span>
-                                    <span class="nav-user-name">管理员</span>
+                                    <span class="nav-user-name"><@security.authentication property="principal.nickname" /></span>
                                 </span>
                                 <i class="caret fa fa-angle-down d-none d-xl-block"></i>
                                 <i class="caret fa fa-angle-left d-block d-lg-none"></i>
@@ -121,7 +121,7 @@
                             <div class="dropdown-menu dropdown-caret dropdown-menu-right dropdown-animated brc-primary-m3 py-1">
                                 <div class="d-none d-lg-block d-xl-none">
                                     <div class="dropdown-header">
-                                        Hello, World
+                                        您好，<@security.authentication property="principal.nickname" />
                                     </div>
                                     <div class="dropdown-divider"></div>
                                 </div>
@@ -146,7 +146,7 @@
                                     登出
                                 </a>
                                 <form id="fLogout" name="fLogout" action="logout" method="POST" class="d-none">
-                                    [@sec.csrfInput /]
+                                    <@security.csrfInput />
                                 </form>
                             </div>
                         </li><!-- /.nav-item:last -->
@@ -161,9 +161,7 @@
     <div class="main-container bgc-white">
         <div id="sidebar" class="sidebar sidebar-fixed expandable sidebar-light">
             <div class="sidebar-inner">
-
                 <div class="ace-scroll flex-grow-1" data-ace-scroll="{}">
-
                     <div class="sidebar-section my-2">
                         <!-- the shortcut buttons -->
                         <div class="sidebar-section-item fadeable-left">
@@ -209,15 +207,64 @@
                             </a>
                             <b class="sub-arrow"></b>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="" class="nav-link dropdown-toggle collapsed">
+                                <i class="nav-icon fa fa-cogs"></i>
+                                <span class="nav-text fadeable">
+                                    <span>设置</span>
+                                </span>
+                                <b class="caret fa fa-angle-left rt-n90"></b>
+                            </a>
+
+                            <div class="hideable submenu collapse">
+                                <ul class="submenu-inner">
+                                    <li class="nav-item">
+                                        <a href="view/sys/prop/category" class="nav-link">
+                                            <span class="nav-text">
+                                                <span>系统参数分类</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="view/sys/prop/property" class="nav-link">
+                                            <span class="nav-text">
+                                                <span>系统参数</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <span class="nav-text">
+                                                <span>系统功能</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <span class="nav-text">
+                                                <span>系统菜单</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="" class="nav-link">
+                                            <span class="nav-text">
+                                                <span>用户</span>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <b class="sub-arrow"></b>
+                        </li>
                     </ul>
-
                 </div><!-- /.sidebar scroll -->
-
             </div>
         </div>
 
         <div role="main" class="main-content">
-            <div class="page-content container container-plus"></div>
+            <div class="page-content"></div>
 
             <footer class="footer d-none d-sm-block">
                 <div class="footer-inner bgc-white-tp1">

@@ -22,6 +22,8 @@ logging:
         cache: TRACE
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
 #  autoconfigure:
 #    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   jmx:
@@ -64,6 +66,7 @@ spring:
         javax:
           cache:
             provider: org.ehcache.jsr107.EhcacheCachingProvider
+        enable_lazy_load_no_trans: true
   freemarker:
     template-loader-path: "classpath:/templates/"
     charset: "UTF-8"
@@ -75,7 +78,11 @@ spring:
     expose-request-attributes: true
     expose-session-attributes: true
     expose-spring-macro-helpers: true
-
+  data:
+    rest:
+      base-path: /api
+      return-body-on-update: true
+      return-body-on-create: true
 
 # Actuator
 #management:

@@ -1,5 +1,7 @@
 package com.g.sys.sec.web;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,5 +15,11 @@ public class MainController {
     @RequestMapping(value = "/blank")
     public String blank() {
         return "blank";
+    }
+
+    @RequestMapping(value = "/view/**")
+    public String view(HttpServletRequest request) {
+        final String uri = request.getRequestURI();
+        return uri.substring(6);
     }
 }
