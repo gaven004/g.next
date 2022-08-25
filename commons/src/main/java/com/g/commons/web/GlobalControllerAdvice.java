@@ -1,8 +1,13 @@
 package com.g.commons.web;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,17 +20,9 @@ import com.g.commons.exception.ErrorCode;
 import com.g.commons.exception.GenericAppException;
 import com.g.commons.model.ApiResponse;
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "com.g")
 public class GlobalControllerAdvice {
     private static final Logger log = LoggerFactory.getLogger(GlobalControllerAdvice.class);
-
-    @ExceptionHandler(GenericAppException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    public ApiResponse<?> generalSystemErrorHandler(GenericAppException exception) {
-        log.warn(exception.getDetail(), exception);
-        return ApiResponse.error(exception.getMessage());
-    }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -42,10 +39,30 @@ public class GlobalControllerAdvice {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ResponseBody
-    public ApiResponse<?> exceptionHandler(Exception exception) {
-        log.error("操作失败", exception);
-        return ApiResponse.error("操作失败，" + exception.getMessage());
+    public ResponseEntity<ApiResponse<?>> exceptionHandler(Exception ex) {
+        if (ex instanceof GenericAppException) {
+            log.warn(((GenericAppException) ex).getDetail(), ex);
+        } else {
+            log.error("操作失败", ex);
+        }
+
+        Optional<ResponseStatus> status = Optional.ofNullable(AnnotatedElementUtils.findMergedAnnotation(ex.getClass(), ResponseStatus.class));
+        return response(status.map(s -> s.value()).orElse(null), null, ApiResponse.error(ex.getMessage()));
+    }
+
+    private static <T> ResponseEntity<T> response(HttpStatus status, HttpHeaders headers) {
+        return response(status, headers, null);
+    }
+
+    private static <T> ResponseEntity<T> response(HttpStatus status, HttpHeaders headers, T body) {
+        if (status == null) {
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        }
+
+        if (headers == null) {
+            headers = new HttpHeaders();
+        }
+
+        return new ResponseEntity<T>(body, headers, status);
     }
 }
