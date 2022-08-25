@@ -1,0 +1,105 @@
+### main
+GET http://localhost:8080/api
+
+### Get sysPropertyCategories
+GET http://localhost:8080/api/sysPropertyCategories?status=VALID&page=0&size=2&sort=name,asc
+Accept: application/json
+
+### Get sysPropertyCategories compact
+GET http://localhost:8080/api/sysPropertyCategories?status=VALID&page=0&size=2&sort=name,asc
+Accept: application/x-spring-data-compact+json
+
+### Get custom sysPropertyCategories
+GET http://localhost:8080/api/rest/sysPropertyCategories?status=VALID&page=0&size=10&sort=name,asc
+Accept: application/json
+
+### Custom create
+POST http://localhost:8080/api/rest/sysPropertyCategories
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "TEST2",
+  "name": "测试2",
+  "status": "VALID"
+}
+
+### Get sysPropertyCategory - UNIT
+http://localhost:8080/api/sysPropertyCategories/UNIT
+Accept: application/json
+
+### Get sysPropertyCategory - UNIT
+http://localhost:8080/api/sysPropertyCategories/UUU
+Accept-Language: zh-CN
+Accept: application/json
+
+### Custom Get sysPropertyCategory - UNIT
+http://localhost:8080/api/rest/sysPropertyCategories/UNIT
+Accept: application/json
+
+### Update sysPropertyCategories
+PATCH http://localhost:8080/api/rest/sysPropertyCategories/TEST2
+Content-Type: application/json
+
+{
+  "status" : "VALID"
+}
+
+### Update sysPropertyCategories
+PUT http://localhost:8080/api/rest/sysPropertyCategories/TEST2
+Content-Type: application/json
+
+{
+  "id": "TEST2",
+  "name": "测试2",
+  "status": "INVALID"
+}
+
+### Delete sysPropertyCategories
+DELETE http://localhost:8080/api/rest/sysPropertyCategories/TEST2
+
+### Get User
+GET http://localhost:8080/api/sysUsers/1
+Content-Type: application/json
+
+### Get User
+GET http://localhost:8080/api/sysUsers
+Content-Type: application/json
+
+### Get Users custom
+GET http://localhost:8080/api/rest/sysUsers
+Accept-Language: zh-CN
+Content-Type: application/json
+
+### Get User custom
+GET http://localhost:8080/api/rest/sysUsers/1
+Accept-Language: zh-CN
+Content-Type: application/json
+
+### SysUsersRepository search
+GET http://localhost:8080/api/sysUsers/search
+Content-Type: application/json
+
+### SysUsersRepository search
+GET http://localhost:8080/api/sysUsers/search
+Content-Type: application/json
+
+### SysUsersRepository findByAccount
+GET http://localhost:8080/api/sysUsers/search/findByAccount?account=admin
+Content-Type: application/json
+
+### SysUsersRepository findByAccount custom
+GET http://localhost:8080/api/rest/sysUsers/search/findByAccount?account=admin
+Content-Type: application/json
+
+### SysAction get
+GET http://localhost:8080/api/sysActions
+Content-Type: application/json
+
+### SysAction search
+GET http://localhost:8080/api/sysActions/search
+Content-Type: application/json
+
+### SysAction search
+GET http://localhost:8080/api/sysActions/search/findByResource?resource=/sys/users
+Content-Type: application/json
