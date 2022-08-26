@@ -1,8 +1,7 @@
-<!doctype html>
+<!DOCTYPE html>
 <#import "/spring.ftl" as spring />
-<#assign security = JspTaglibs["http://www.springframework.org/security/tags"]>
+<#assign sec = JspTaglibs["http://www.springframework.org/security/tags"]>
 <html lang="zh">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
@@ -11,7 +10,7 @@
     <title>Login - G.Next Admin</title>
 
     <!-- include common vendor stylesheets & fontawesome -->
-    <link rel="stylesheet" type="text/css" href="./vendors/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./vendors/bootstrap/css/bootstrap.min.css">
 
     <link rel="stylesheet" type="text/css" href="./vendors/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" type="text/css" href="./vendors/fontawesome/css/regular.min.css">
@@ -22,265 +21,197 @@
     <link rel="stylesheet" type="text/css" href="./vendors/opensans/css">
 
     <!-- ace.css -->
-    <link rel="stylesheet" type="text/css" href="./vendors/ace/ace.min.css">
+    <link rel="stylesheet" type="text/css" href="./vendors/ace/css/ace.min.css">
 
     <!-- favicon -->
     <link rel="icon" type="image/png" href="./img/favicon.png"/>
-
-    <!-- "Login" page styles, specific to this page for demo only -->
-    <style>
-        .body-container {
-            background-image: linear-gradient(#6baace, #264783);
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-        }
-
-        .carousel-item > div {
-            height: 100%;
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        /* these rules are used to make sure in mobile devices, tab panes are not all the same height (for example 'forgot' pane is not as tall as 'signup' pane) */
-
-        @media (max-width: 1199.98px) {
-            .tab-sliding .tab-pane:not(.active) {
-                max-height: 0 !important;
-            }
-
-            .tab-sliding .tab-pane.active {
-                min-height: 80vh;
-                max-height: none !important;
-            }
-        }
-    </style>
 </head>
 
-<body>
-<div class="body-container">
-
-    <div class="main-container container bgc-transparent">
-
-        <div class="main-content minh-100 justify-content-center">
-            <div class="p-2 p-md-4">
-                <div class="row" id="row-1">
-                    <div class="col-12 col-xl-10 offset-xl-1 bgc-white shadow radius-1 overflow-hidden">
-
-                        <div class="row" id="row-2">
-
-                            <div id="id-col-intro" class="col-lg-5 d-none d-lg-flex border-r-1 brc-default-l3 px-0">
-                                <div class="carousel-item active minw-100 h-100">
-                                    <div style="background-image: url(/img/login-bg-1.svg);"
-                                         class="px-3 bgc-blue-l4 d-flex flex-column align-items-center justify-content-center">
-                                        <div class="mt-5 mb-2">
-                                            <i class="fa fa-leaf text-success-m2 fa-3x"></i>
+<body class="login-layout">
+<div class="main-container">
+    <div class="main-content">
+        <div class="row">
+            <div class="col-sm-10 col-sm-offset-1" style="height: 80vh; display: flex; justify-content: center; align-items: center;">
+                <div class="login-container">
+                    <div class="space-18"></div>
+                    <div class="center">
+                        <h1>
+                            <i class="ace-icon fa fa-leaf green"></i>
+                            <span class="red"> G. </span>
+                            <span class="white" id="id-text2">Next</span>
+                        </h1>
+                        <div class="space-6"></div>
+                        <h4 class="blue" id="id-company-text">&copy; G. Company</h4>
+                        <div class="space-6"></div>
+                    </div>
+                    <div class="space-18"></div>
+                    <div class="position-relative">
+                        <div id="login-box"
+                             class="login-box widget-box no-border <#if springMacroRequestContext.requestUri?index_of('/reset-pwd.view') < 0>visible</#if>">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header blue lighter bigger">
+                                        <i class="ace-icon fa fa-coffee green"></i>
+                                        请输入您的登录信息
+                                    </h4>
+                                    <div class="space-6"></div>
+                                    <#if RequestParameters.error??>
+                                        <div class="alert alert-danger">
+                                            <i class="ace-icon fa fa-exclamation-triangle"></i>
+                                            &nbsp;${Session["SPRING_SECURITY_LAST_EXCEPTION"].message}
+                                            <br/>
                                         </div>
-
-                                        <h2 class="text-primary-d1">
-                                            G. <span class="text-80 text-dark-l1">Next Application</span>
-                                        </h2>
-
-                                        <div class="mt-5 mx-4 text-dark-tp3">
-                                            <span class="text-secondary-m1 text-110">
-                                               新一代业务管理系统，由心创造，不断进步！
-                                            </span>
-                                            <hr class="mb-1 brc-black-tp10"/>
+                                    </#if>
+                                    <#if RequestParameters.logout??>
+                                        <div class="alert alert-warning">
+                                            <i class="ace-icon fa fa-check"></i>
+                                            &nbsp;您已退出系统，继续使用请重新登录
+                                            <br/>
                                         </div>
-
-                                        <div class="w-50 h-75"></div>
-
-                                        <div class="mt-auto mb-4 text-dark-tp2">
-                                            G Company &copy; 2021
+                                    </#if>
+                                    <#if RequestParameters.invalidSession??>
+                                        <div class="alert alert-warning">
+                                            <i class="ace-icon fa fa-check"></i>
+                                            &nbsp;您的登录已失效，请重新登录
+                                            <br/>
                                         </div>
+                                    </#if>
+                                    <form name="f" action="form-login" method="POST">
+                                        <fieldset>
+                                            <label class="block clearfix">
+                                                <span class="block input-icon input-icon-right">
+                                                    <input type="text" name="username" class="form-control"
+                                                           placeholder="账号" value="" required/>
+                                                    <i class="ace-icon fa fa-user"></i>
+                                                </span>
+                                            </label>
+                                            <label class="block clearfix">
+                                                <span class="block input-icon input-icon-right">
+                                                    <input type="password" name="password" class="form-control"
+                                                           placeholder="密码" value="" required/>
+                                                    <i class="ace-icon fa fa-lock"></i>
+                                                </span>
+                                            </label>
+                                            <div class="space"></div>
+                                            <div class="clearfix">
+                                                <label class="inline">
+                                                    <input type="checkbox" name="remember-me" class="ace"/>
+                                                    <span class="lbl"> 保持登录状态</span>
+                                                </label>
+                                                <button name="submit" type="submit"
+                                                        class="width-35 pull-right btn btn-sm btn-primary">
+                                                    <i class="ace-icon fa fa-key"></i>
+                                                    <span class="bigger-110">登 录</span>
+                                                </button>
+                                            </div>
+                                            <@sec.csrfInput />
+                                            <div class="space-4"></div>
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.widget-main -->
+
+                                <div class="toolbar clearfix">
+                                    <div>
+                                        <a href="#" data-target="#forgot-box" class="forgot-password-link">
+                                            <i class="ace-icon fa fa-arrow-left"></i>
+                                            忘记密码？
+                                        </a>
                                     </div>
                                 </div>
-                            </div>
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.login-box -->
 
-                            <div id="id-col-main" class="col-12 col-lg-7 py-lg-5 bgc-white px-0">
-                                <div class="tab-content tab-sliding border-0 p-0" data-swipe="right">
-                                    <div class="tab-pane active show mh-100 px-3 px-lg-0 pb-3" id="id-tab-login">
-                                        <!-- show this in desktop -->
-                                        <div class="d-none d-lg-block col-md-6 offset-md-3 mt-lg-4 px-0">
-                                            <h4 class="text-dark-tp4 border-b-1 brc-secondary-l2 pb-1 text-130">
-                                                <i class="fa fa-coffee text-orange-m1 mr-1"></i>
-                                                欢 迎
-                                            </h4>
+                        <div id="forgot-box" class="forgot-box widget-box no-border <#if springMacroRequestContext.requestUri?index_of('/reset-pwd.view') gte 0>visible</#if>">
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <h4 class="header red lighter bigger">
+                                        <i class="ace-icon fa fa-key"></i>
+                                        密码找回
+                                    </h4>
+                                    <div class="space-6"></div>
+                                    <p>
+                                        请输入您绑定的邮箱
+                                    </p>
+                                    <#if Request["ERROR_MESSAGE"]??>
+                                        <div class="alert alert-danger">
+                                            <i class="ace-icon fa fa-exclamation-triangle"></i>
+                                            &nbsp;${Request["ERROR_MESSAGE"]}
+                                            <br/>
                                         </div>
-
-                                        <!-- show this in mobile device -->
-                                        <div class="d-lg-none text-secondary-m1 my-4 text-center">
-                                            <div>
-                                                <i class="fa fa-leaf text-success-m2 text-200 mb-4"></i>
-                                            </div>
-                                            <h1 class="text-170">
-                                                <span class="text-blue-d1">
-                                                    G. <span class="text-80 text-dark-tp3">Next Application</span>
+                                    <#elseif Request["SUCCESS_MESSAGE"]??>
+                                        <div class="alert alert-warning">
+                                            <i class="ace-icon fa fa-check"></i>
+                                            &nbsp;${Request["SUCCESS_MESSAGE"]}
+                                            <br/>
+                                        </div>
+                                    </#if>
+                                    <form id="frmResetPwd" name="frmResetPwd" action="admin/user/reset-pwd.view"
+                                          onSubmit="return false;" method="POST">
+                                        <fieldset>
+                                            <label class="block clearfix">
+                                                <span class="block input-icon input-icon-right">
+                                                    <input name="email" type="email" class="form-control"
+                                                           placeholder="Email" required/>
+                                                    <i class="ace-icon fa fa-envelope"></i>
                                                 </span>
-                                            </h1>
-                                            <h4 class="text-dark-tp4 brc-secondary-l2 pt-2 pb-1 text-120">
-                                                欢 迎
-                                            </h4>
-                                        </div>
-
-                                        <#if RequestParameters.error??>
-                                        <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-4 alert alert-danger">
-                                            <i class="fa fa-exclamation-triangle mr-3 align-middle text-danger-m1"></i>
-                                            <span class="align-middle">登录失败，请检查账号和密码</span>
-                                        </div>
-                                        </#if>
-
-                                        <#if RequestParameters.logout??>
-                                        <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-4 alert alert-info">
-                                            <i class="fa fa-info mr-3 align-middle"></i>
-                                            <span class="align-middle">您已退出系统，继续使用请重新登录</span>
-                                        </div>
-                                        </#if>
-
-                                        <#if RequestParameters.invalidSession??>
-                                        <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-4 alert alert-warning">
-                                            <i class="fa fa-exclamation mr-3 align-middle text-orange"></i>
-                                            <span class="align-middle">您的登录已失效，请重新登录</span>
-                                        </div>
-                                        </#if>
-
-                                        <form autocomplete="off" class="form-row mt-45" name="f" action="form-login" method="POST">
-
-                                            <@security.csrfInput />
-
-                                            <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-                                                <div class="d-flex align-items-center input-floating-label text-blue brc-blue-m2">
-                                                    <input placeholder="账号" type="text" name="username" required
-                                                           class="form-control pr-4 shadow-none"
-                                                           id="id-login-username"/>
-                                                    <i class="fa fa-user text-grey-m2 ml-n4"></i>
-                                                    <label class="floating-label text-grey-l1 ml-n3"
-                                                           for="id-login-username">
-                                                        账号
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-2 mt-md-1">
-                                                <div class="d-flex align-items-center input-floating-label text-blue brc-blue-m2">
-                                                    <input placeholder="密码" type="password" name="password" required
-                                                           class="form-control pr-4 shadow-none"
-                                                           id="id-login-password"/>
-                                                    <i class="fa fa-key text-grey-m2 ml-n4"></i>
-                                                    <label class="floating-label text-grey-l1 ml-n3"
-                                                           for="id-login-password">
-                                                        密码
-                                                    </label>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 text-right text-md-right mt-n2 mb-2">
-                                                <a href="#" class="text-primary-m1 text-95"
-                                                   data-toggle="tab" data-target="#id-tab-forgot">
-                                                    忘记密码?
-                                                </a>
-                                            </div>
-
-                                            <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-                                                <label class="d-inline-block mt-3 mb-0 text-dark-l1 text-95">
-                                                    <input type="checkbox" class="mr-1" id="id-remember-me"/>
-                                                    保持登录状态
-                                                </label>
-
-                                                <button name="submit" type="submit"
-                                                        class="btn btn-primary btn-block px-4 btn-bold mt-2 mb-4">
-                                                    登 录
+                                            </label>
+                                            <div class="clearfix">
+                                                <button id="btnResetPwd" type="button"
+                                                        class="width-35 pull-right btn btn-sm btn-danger">
+                                                    <i class="ace-icon fa fa-lightbulb-o"></i>
+                                                    <span class="bigger-110">发送邮件!</span>
                                                 </button>
                                             </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="tab-pane mh-100 px-3 px-lg-0 pb-3" id="id-tab-forgot"
-                                         data-swipe-prev="#id-tab-login">
-                                        <div class="position-tl ml-3 mt-2">
-                                            <a href="#"
-                                               class="btn btn-light-default btn-h-light-default btn-a-light-default btn-bgc-tp"
-                                               data-toggle="tab" data-target="#id-tab-login">
-                                                <i class="fa fa-arrow-left"></i>
-                                            </a>
-                                        </div>
-
-                                        <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-5 px-0">
-                                            <h4 class="pt-4 pt-md-0 text-dark-tp4 border-b-1 brc-grey-l2 pb-1 text-130">
-                                                <i class="fa fa-key text-brown-m1 mr-1"></i>
-                                                重置密码
-                                            </h4>
-                                        </div>
-
-                                        <form autocomplete="off" class="form-row mt-45">
-                                            <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
-                                                <label class="text-secondary-d3 mb-3">
-                                                    请输入您绑定的邮箱，我们将发送新的密码到您的邮箱：
-                                                </label>
-                                                <div class="d-flex align-items-center">
-                                                    <input type="email"
-                                                           class="form-control pr-4 shadow-none"
-                                                           id="id-recover-email" placeholder="Email"/>
-                                                    <i class="fa fa-envelope text-grey-m2 ml-n4"></i>
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mt-1">
-                                                <button type="button"
-                                                        class="btn btn-orange btn-block px-4 btn-bold mt-2 mb-4">
-                                                    发 送
-                                                </button>
-                                            </div>
-                                        </form>
-
-                                        <div class="form-row w-100">
-                                            <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 d-flex flex-column align-items-center justify-content-center">
-
-                                                <hr class="brc-default-l2 mt-0 mb-2 w-100"/>
-
-                                                <div class="p-0 px-md-2 text-dark-tp4 my-3">
-                                                    <a class="text-blue-d1 text-600 btn-text-slide-x" data-toggle="tab"
-                                                       data-target="#id-tab-login" href="#">
-                                                        <i class="btn-text-2 fa fa-arrow-left text-110 align-text-bottom mr-2"></i>
-                                                        返回登录
-                                                    </a>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div><!-- .tab-content -->
-                            </div>
-                        </div><!-- /.row -->
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-
-                <div class="d-lg-none my-3 text-white-tp1 text-center">
-                    <i class="fa fa-leaf text-success-l3 mr-1 text-110"></i> G Company &copy; 2021
+                                            <@sec.csrfInput />
+                                        </fieldset>
+                                    </form>
+                                </div><!-- /.widget-main -->
+                                <div class="toolbar center">
+                                    <a href="#" data-target="#login-box" class="back-to-login-link">
+                                        返回登录
+                                        <i class="ace-icon fa fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div><!-- /.widget-body -->
+                        </div><!-- /.forgot-box -->
+                    </div><!-- /.position-relative -->
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.main-content -->
+</div><!-- /.main-container -->
 
-<!-- include common vendor scripts used in demo pages -->
+<!-- include common vendor scripts -->
 <script src="./vendors/jquery/jquery.min.js"></script>
-<script src="./vendors/popper/popper.min.js"></script>
-<script src="./vendors/bootstrap/bootstrap.min.js"></script>
+<script src="./vendors/bootstrap/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    if ('ontouchstart' in document.documentElement) document.write("<script src='./vendors/jquery/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+</script>
 
 <!-- include ace.js -->
-<script src="./vendors/ace/ace.min.js"></script>
+<script src="./vendors/ace/js/ace.min.js"></script>
 
-<script>
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
     jQuery(function ($) {
-        // because "Login Here" and "Signup now" links are not inside a "UL" or ".nav", they preserve "active" class
-        // and we should remove that, to be able to move between tab panes
-        $('a[data-toggle="tab"]')
-            .on('click', function () {
-                $('a[data-toggle="tab"]').removeClass('active')
-            })
-    })
+        $(document).on('click', '.toolbar a[data-target]', function (e) {
+            e.preventDefault();
+            let target = $(this).data('target');
+            $('.widget-box.visible').removeClass('visible');//hide others
+            $(target).addClass('visible');//show target
+        });
+
+        $('button#btnResetPwd').bind('click', function () {
+            let param = $("form#frmResetPwd").serialize();
+            comm.ajax2msg("rest/admin/user/reset-pwd", param);
+        });
+    });
+
+    function resetPwd() {
+        let param = $("form#frmResetPwd").serialize();
+        comm.ajax2msg("rest/admin/user/reset-pwd", param);
+    }
 </script>
 </body>
-
 </html>
