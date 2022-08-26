@@ -11,11 +11,7 @@
 
     <!-- include common vendor stylesheets & fontawesome -->
     <link rel="stylesheet" type="text/css" href="./vendors/bootstrap/css/bootstrap.min.css">
-
-    <link rel="stylesheet" type="text/css" href="./vendors/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" type="text/css" href="./vendors/fontawesome/css/regular.min.css">
-    <link rel="stylesheet" type="text/css" href="./vendors/fontawesome/css/brands.min.css">
-    <link rel="stylesheet" type="text/css" href="./vendors/fontawesome/css/solid.min.css">
+    <link rel="stylesheet" type="text/css" href="./vendors/fontawesome/css/font-awesome.min.css">
 
     <!-- include fonts -->
     <link rel="stylesheet" type="text/css" href="./vendors/opensans/css">
