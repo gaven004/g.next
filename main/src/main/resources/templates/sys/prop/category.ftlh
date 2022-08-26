@@ -293,6 +293,7 @@
 <script src="./vendors/jquery/jquery.min.js"></script>
 <script src="./vendors/popper/popper.min.js"></script>
 <script src="./vendors/bootstrap/bootstrap.min.js"></script>
+<script src="./vendors/jqgrid/js/grid.locale-cn.js"></script>
 <script src="./vendors/jqgrid/js/jquery.jqgrid.src.min.js"></script>
 
 <!-- include ace.js -->
@@ -514,7 +515,7 @@
                     }
                 },
                 {
-                    name: 'note',
+                    name: '说明',
                     index: 'note',
                     width: 150,
                     sortable: false,
