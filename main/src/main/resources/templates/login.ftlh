@@ -5,6 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
     <base href="<@spring.url '/'/>"/>
 
     <title>Login - G.Next Admin</title>
@@ -27,13 +28,14 @@
 <div class="main-container">
     <div class="main-content">
         <div class="row">
-            <div class="col-sm-10 col-sm-offset-1" style="height: 80vh; display: flex; justify-content: center; align-items: center;">
+            <div class="col-sm-10 col-sm-offset-1"
+                 style="height: 80vh; display: flex; justify-content: center; align-items: center;">
                 <div class="login-container">
                     <div class="space-18"></div>
                     <div class="center">
                         <h1>
                             <i class="ace-icon fa fa-leaf green"></i>
-                            <span class="red"> G. </span>
+                            <span class="red" style="padding-left: 1rem"> G. </span>
                             <span class="white" id="id-text2">Next</span>
                         </h1>
                         <div class="space-6"></div>
@@ -105,7 +107,6 @@
                                         </fieldset>
                                     </form>
                                 </div><!-- /.widget-main -->
-
                                 <div class="toolbar clearfix">
                                     <div>
                                         <a href="#" data-target="#forgot-box" class="forgot-password-link">
@@ -117,7 +118,8 @@
                             </div><!-- /.widget-body -->
                         </div><!-- /.login-box -->
 
-                        <div id="forgot-box" class="forgot-box widget-box no-border <#if springMacroRequestContext.requestUri?index_of('/reset-pwd.view') gte 0>visible</#if>">
+                        <div id="forgot-box"
+                             class="forgot-box widget-box no-border <#if springMacroRequestContext.requestUri?index_of('/reset-pwd.view') gte 0>visible</#if>">
                             <div class="widget-body">
                                 <div class="widget-main">
                                     <h4 class="header red lighter bigger">
