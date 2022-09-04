@@ -21,6 +21,7 @@ import org.springframework.data.rest.core.event.*;
 import org.springframework.data.rest.core.mapping.RepositoryResourceMappings;
 import org.springframework.data.rest.core.mapping.ResourceType;
 import org.springframework.data.rest.webmvc.*;
+import org.springframework.data.rest.webmvc.spi.BackendIdConverter;
 import org.springframework.data.rest.webmvc.support.BackendId;
 import org.springframework.data.rest.webmvc.support.DefaultedPageable;
 import org.springframework.data.rest.webmvc.support.ETag;
@@ -29,12 +30,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.plugin.core.PluginRegistry;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.g.commons.model.PagedModelLite;
 
@@ -55,6 +55,7 @@ public class CustomRestController implements ApplicationEventPublisherAware {
     private final Repositories repositories;
     private final HttpHeadersPreparer headersPreparer;
     private final ResourceStatus resourceStatus;
+    private final PluginRegistry<BackendIdConverter, Class<?>> idConverters;
 
     private ApplicationEventPublisher publisher;
 
@@ -69,7 +70,8 @@ public class CustomRestController implements ApplicationEventPublisherAware {
     public CustomRestController(RepositoryRestConfiguration configuration,
                                 RepositoryResourceMappings mappings,
                                 Repositories repositories,
-                                HttpHeadersPreparer headersPreparer) {
+                                HttpHeadersPreparer headersPreparer,
+                                PluginRegistry<BackendIdConverter, Class<?>> idConverters) {
 
         Assert.notNull(configuration, "RepositoryRestConfiguration must not be null!");
         Assert.notNull(mappings, "RepositoryResourceMappings must not be null!");
@@ -81,6 +83,7 @@ public class CustomRestController implements ApplicationEventPublisherAware {
         this.repositories = repositories;
         this.headersPreparer = headersPreparer;
         this.resourceStatus = ResourceStatus.of(headersPreparer);
+        this.idConverters = idConverters;
     }
 
     /*
@@ -148,6 +151,50 @@ public class CustomRestController implements ApplicationEventPublisherAware {
 
         return createAndReturn(payload.getContent(), resourceInformation.getInvoker(), assembler,
                 true);
+    }
+
+    /**
+     * <code>DELETE /{repository}?ids=recordId,recordId</code> - Deletes the entity backing the item resource.
+     *
+     * @param resourceInformation
+     * @param ids
+     * @param eTag
+     * @return
+     * @throws ResourceNotFoundException
+     * @throws HttpRequestMethodNotSupportedException
+     * @throws ETagDoesntMatchException
+     */
+    @RequestMapping(value = RESOURCE_CUSTOM_REST_MAPPING, method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteCollectionResource(RootResourceInformation resourceInformation,
+                                                      @RequestParam String ids,
+                                                      ETag eTag)
+            throws ResourceNotFoundException, HttpRequestMethodNotSupportedException {
+
+        resourceInformation.verifySupportedMethod(HttpMethod.DELETE, ResourceType.ITEM);
+
+        if (!StringUtils.hasText(ids)) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        RepositoryInvoker invoker = resourceInformation.getInvoker();
+        BackendIdConverter pluginFor = idConverters.getPluginFor(resourceInformation.getDomainType())
+                .orElse(BackendIdConverter.DefaultIdConverter.INSTANCE);
+
+        for (String idSource : ids.split(",")) {
+            Serializable id = pluginFor.fromRequestId(idSource, resourceInformation.getDomainType());
+            Optional<Object> domainObj = invoker.invokeFindById(id);
+
+            domainObj.map(it -> {
+                PersistentEntity<?, ?> entity = resourceInformation.getPersistentEntity();
+                eTag.verify(entity, it);
+                publisher.publishEvent(new BeforeDeleteEvent(it));
+                invoker.invokeDeleteById(entity.getIdentifierAccessor(it).getIdentifier());
+                publisher.publishEvent(new AfterDeleteEvent(it));
+                return it;
+            }).orElseThrow(() -> new ResourceNotFoundException());
+        }
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
