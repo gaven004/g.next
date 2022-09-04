@@ -23,11 +23,10 @@ import com.g.sys.sec.web.JwtAuthenticationEntryPoint;
 import com.g.sys.sec.web.JwtAuthenticationFilter;
 import com.g.sys.sec.web.JwtAuthenticationProvider;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
+@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, jsr250Enabled = true)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig {
+
 //    @Configuration
 //    @Order(1)
 //    public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
@@ -58,7 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         public void configure(WebSecurity web) throws Exception {
-            web.ignoring().antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**", "/api/**", "/rest/**");
+            web.ignoring().antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**", "/api/**");
         }
 
         @Override
