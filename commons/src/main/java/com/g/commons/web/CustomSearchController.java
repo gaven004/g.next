@@ -1,5 +1,7 @@
 package com.g.commons.web;
 
+import static com.g.commons.web.CustomRestController.oneIndexedParameters;
+
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -110,7 +112,7 @@ public class CustomSearchController {
         return source.map(it -> {
 
             if (it instanceof PageImpl<?>) {
-                return ResponseEntity.ok(new PagedModelLite<>((PageImpl) it));
+                return ResponseEntity.ok(new PagedModelLite<>((PageImpl) it, oneIndexedParameters));
             } else if (it instanceof Iterable) {
                 return ResponseEntity.ok(it);
             } else if (ClassUtils.isPrimitiveOrWrapper(it.getClass())) {

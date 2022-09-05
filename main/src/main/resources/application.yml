@@ -79,6 +79,9 @@ spring:
     expose-session-attributes: true
     expose-spring-macro-helpers: true
   data:
+    web:
+      pageable:
+        one-indexed-parameters: true
     rest:
       base-path: /api
       return-body-on-update: true

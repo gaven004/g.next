@@ -28,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PagedModelLite<T> extends PageImpl<T> implements Page<T> {
     public static PagedModelLite<?> NO_PAGE = new PagedModelLite<>();
 
+    private boolean oneIndexedParameters = false;
+
     @JsonProperty(value = "page")
     private final PageMetadata metadata;
 
@@ -36,16 +38,16 @@ public class PagedModelLite<T> extends PageImpl<T> implements Page<T> {
     }
 
     public PagedModelLite(List<T> content) {
-        this(content, Pageable.unpaged(), null == content ? 0 : content.size());
+        this(content, Pageable.unpaged(), null == content ? 0 : content.size(), false);
     }
 
-    public PagedModelLite(List<T> content, Pageable pageable, long total) {
+    public PagedModelLite(List<T> content, Pageable pageable, long total, boolean oneIndexedParameters) {
         super(content, pageable, total);
-        this.metadata = new PageMetadata(getSize(), getNumber(), getTotalElements(), getTotalPages());
+        this.metadata = new PageMetadata(getSize(), oneIndexedParameters ? getNumber() + 1 : getNumber(), getTotalElements(), getTotalPages());
     }
 
-    public PagedModelLite(PageImpl<T> page) {
-        this(page.getContent(), page.getPageable(), page.getTotalElements());
+    public PagedModelLite(PageImpl<T> page, boolean oneIndexedParameters) {
+        this(page.getContent(), page.getPageable(), page.getTotalElements(), oneIndexedParameters);
     }
 
     /**

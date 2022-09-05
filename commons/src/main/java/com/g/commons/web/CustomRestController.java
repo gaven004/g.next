@@ -26,6 +26,7 @@ import org.springframework.data.rest.webmvc.support.BackendId;
 import org.springframework.data.rest.webmvc.support.DefaultedPageable;
 import org.springframework.data.rest.webmvc.support.ETag;
 import org.springframework.data.rest.webmvc.support.ETagDoesntMatchException;
+import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -47,6 +48,8 @@ import com.g.commons.model.PagedModelLite;
 public class CustomRestController implements ApplicationEventPublisherAware {
     public static final String CUSTOM_REST_ROOT_MAPPING = "/rest";
     public static final String RESOURCE_CUSTOM_REST_MAPPING = CUSTOM_REST_ROOT_MAPPING + "/{repository}";
+
+    public static final boolean oneIndexedParameters = true;
 
     private static final String ACCEPT_HEADER = "Accept";
 
@@ -71,7 +74,8 @@ public class CustomRestController implements ApplicationEventPublisherAware {
                                 RepositoryResourceMappings mappings,
                                 Repositories repositories,
                                 HttpHeadersPreparer headersPreparer,
-                                PluginRegistry<BackendIdConverter, Class<?>> idConverters) {
+                                PluginRegistry<BackendIdConverter, Class<?>> idConverters,
+                                PageableHandlerMethodArgumentResolver pageableResolver) {
 
         Assert.notNull(configuration, "RepositoryRestConfiguration must not be null!");
         Assert.notNull(mappings, "RepositoryResourceMappings must not be null!");
@@ -125,7 +129,7 @@ public class CustomRestController implements ApplicationEventPublisherAware {
                 : invoker.invokeFindAll(sort);
 
         return results instanceof PageImpl<?>
-                ? new PagedModelLite<>((PageImpl) results)
+                ? new PagedModelLite<>((PageImpl) results, oneIndexedParameters)
                 : results;
     }
 
