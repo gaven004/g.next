@@ -1,0 +1,95 @@
+@CHARSET "UTF-8";
+
+/* 条件查询form各个控件统一大小 */
+form.fix-input-size input,
+form.fix-input-size select {
+    width: 188px;
+    height: 34px;
+}
+
+select {
+    height: 34px;
+}
+
+input[readonly].show {
+    color: #393939;
+    background: #FFFFFF !important;
+    cursor: default;
+}
+
+textarea[readonly].show {
+    color: #393939;
+    background: #FFFFFF !important;
+    cursor: default;
+}
+
+.radio-inline {
+    position: relative;
+    display: inline;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* jqgrid调整 */
+.ui-jqdialog-content select.FormElement {
+    height: 34px;
+}
+
+.ui-jqdialog-content .CaptionTD {
+    padding-right: 12px;
+    width: 30%
+}
+
+.ui-jqdialog-content .DataTD input,
+.ui-jqdialog-content .DataTD select,
+.ui-jqdialog-content .DataTD textarea
+{
+    width: 90%
+}
+
+.ui-jqgrid .ui-jqgrid-labels {
+    border-bottom: none;
+    /*background: #F0F0F0 none repeat-x;*/
+    filter: none;
+    padding: 0 !important;
+    border-left: 1px solid #E1E1E1 !important;
+}
+
+.ui-jqgrid .ui-jqgrid-labels th {
+    border-left: 1px solid #E1E1E1 !important;
+    border-right: 0px none !important;
+    text-align: center !important;
+}
+
+.ui-jqgrid .ui-jqgrid-labels th[aria-selected=true] {
+    /*background: #EFF3F8 none repeat-x;*/
+}
+
+/*合并表头加下边框*/
+.ui-jqgrid .ui-jqgrid-labels th.ui-th-column-header {
+    border-bottom: 1px solid #E1E1E1 !important;
+}
+
+.ui-jqgrid .ui-jqgrid-htable .ui-th-div {
+    margin-top: 3px;
+}
+
+.ui-jqgrid-table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #FAFAFA;
+    opacity: 1;
+}
+
+.ui-jqgrid .ui-jqgrid-hdiv,
+.ui-jqgrid-sortable {
+    color: #666;
+}
+
+
+.ui-jqgrid .ui-jqgrid-pager {
+    padding-top: 14px !important;
+}
+
+.table-bordered.solid-1 th,
+.table-bordered.solid-1 td {
+    border: 1px solid #000 !important;
+}

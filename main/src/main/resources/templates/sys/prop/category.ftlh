@@ -1,7 +1,7 @@
 <#import "/common/base.ftlh" as base>
 <@base.page>
     <div class="row">
-        <div class="col-xs-4">
+        <div class="col-md-4">
             <button id="jqg_add" class="btn btn-success btn-sm" data-url="rest/admin/user/save" data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
@@ -9,12 +9,11 @@
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
         </div>
-        <div class="col-xs-8 align-right">
-            <div class="input-group">
-                <form id="form" class="form-inline">
-                    <input name="username" type="text" class="input-elm" placeholder="用户名">
-                    <input name="account" type="text" class="input-elm" placeholder="账号">
-                    <input name="email" type="text" class="input-elm" placeholder="Email">
+        <div class="col-md-8">
+            <div class="input-group" style="margin-left:auto;">
+                <form id="form" class="form-inline align-right">
+                    <input name="username" type="text" class="input-elm" placeholder="编码">
+                    <input name="account" type="text" class="input-elm" placeholder="名称">
                     <button class="btn btn-sm btn-info" type="button" id="btnSearch">
                         <i class="ace-icon glyphicon glyphicon-search"></i> 查找
                     </button>
@@ -25,5 +24,59 @@
             </div>
         </div>
     </div>
+    <div class="space-6"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="widget-grid">
+                <table id="grid-table"></table>
+                <div id="grid-pager"></div>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        jQuery(function ($) {
+            $("#grid-table").grid({
+                url: "api/rest/sysPropertyCategories",
+                editUrl: "api/rest/sysPropertyCategories",
+                delUrl: "api/rest/sysPropertyCategories",
+                token: _csrf,
+                colModel: [{
+                    label: '编码',
+                    name: 'id',
+                    width: 60,
+                    editable: true
+                }, {
+                    label: '名称',
+                    name: 'name',
+                    width: 150,
+                    editable: true,
+                    editoptions: {
+                        size: "20",
+                        maxlength: "30"
+                    }
+                }, {
+                    label: '状态',
+                    name: 'status',
+                    width: 50,
+                    editable: true,
+                    edittype: "select",
+                    editoptions: {
+                        value: "FE:FedEx;IN:InTime;TN:TNT;AR:ARAMEX"
+                    }
+                }, {
+                    label: '说明',
+                    name: 'note',
+                    width: 150,
+                    sortable: false,
+                    editable: true,
+                    edittype: "textarea",
+                    editoptions: {
+                        rows: "2",
+                        cols: "10"
+                    }
+                }]
+            });
+        });
+    </script>
 </@base.page>

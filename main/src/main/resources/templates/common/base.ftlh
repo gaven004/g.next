@@ -14,10 +14,12 @@
     <!-- include fonts -->
     <link rel="stylesheet" type="text/css" href="vendors/opensans/css">
     <#if useJQGrid>
-    <link rel="stylesheet" type="text/css" href="vendors/jqgrid/css/ui.jqgrid.min.css">
+    <!-- include jqgrid -->
+    <link rel="stylesheet" type="text/css" href="vendors/jqgrid/css/ui.jqgrid.css">
     </#if>
     <!-- ace.css -->
     <link rel="stylesheet" type="text/css" href="vendors/ace/css/ace.min.css">
+    <link rel="stylesheet" type="text/css" href="css/next.css">
     <!-- favicon -->
     <link rel="icon" type="image/png" href="img/favicon.png"/>
 </head>
@@ -33,6 +35,7 @@
 </script>
 
 <!-- include ace.js -->
+<script src="vendors/ace/js/ace-elements.min.js"></script>
 <script src="vendors/ace/js/ace.min.js"></script>
 
 <div id="navbar" class="navbar navbar-default">
@@ -116,13 +119,6 @@
     <div class="main-content">
         <div class="main-content-inner">
             <div class="breadcrumbs" id="breadcrumbs">
-                <script type="text/javascript">
-                    try {
-                        ace.settings.check('breadcrumbs', 'fixed')
-                    } catch (e) {
-                    }
-                </script>
-
                 <ul class="breadcrumb" id="breadcrumb">
                     <li>
                         <i class="ace-icon fa fa-home home-icon"></i>
@@ -131,19 +127,11 @@
                 </ul><!-- /.breadcrumb -->
             </div>
             <!-- 内容页 -->
-            <div class="page-content">
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                        <#nested>
-                    </div>
-                </div>
+            <div class="page-content" style="padding-top:12px;padding-bottom:12px">
+            <#nested>
             </div>
         </div>
     </div>
-
-    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-    </a>
 
     <div class="footer">
         <div class="footer-inner">
@@ -155,13 +143,24 @@
             </div>
         </div>
     </div>
+
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+    </a>
 </div><!-- /.main-container -->
 
 <#if useJQGrid>
-<script src="vendors/jqgrid/js/jquery.jqgrid.src.min.js"></script>
+<script src="vendors/jqgrid/js/jquery.jqgrid.js"></script>
 <script src="vendors/jqgrid/js/grid.locale-cn.js"></script>
+<script src="js/common/jquery.jqgrid.custom.js"></script>
 </#if>
 <script src="js/common/menu_status.js"></script>
+
+<!-- inline scripts related to this page -->
+<script type="text/javascript">
+    const _csrf = "${_csrf.token}";
+</script>
+
 </body>
 </html>
 </#macro>
