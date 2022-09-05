@@ -26,13 +26,12 @@
 <body class="no-skin">
 
 <!-- include common vendor scripts -->
-<script src="vendors/jquery/jquery.min.js"></script>
-<script src="vendors/jquery/jquery.cookie.min.js"></script>
-<script src="vendors/bootstrap/js/bootstrap.min.js"></script>
-
+<script src="vendors/jquery/js/jquery.min.js"></script>
+<script src="vendors/jquery/js/jquery.cookie.min.js"></script>
 <script type="text/javascript">
-    if ('ontouchstart' in document.documentElement) document.write("<script src='vendors/jquery/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    if ('ontouchstart' in document.documentElement) document.write("<script src='vendors/jquery/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
+<script src="vendors/bootstrap/js/bootstrap.min.js"></script>
 
 <!-- include ace.js -->
 <script src="vendors/ace/js/ace-elements.min.js"></script>
@@ -154,6 +153,7 @@
 <script src="vendors/jqgrid/js/grid.locale-cn.js"></script>
 <script src="js/common/jquery.jqgrid.custom.js"></script>
 </#if>
+<script src="js/common/common.js"></script>
 <script src="js/common/menu_status.js"></script>
 
 <!-- inline scripts related to this page -->

@@ -23,7 +23,7 @@ $.fn.grid = function (o) {
         });
     }
 
-    function style_edit_form(form) {
+    function styleEditForm(form) {
         //update buttons classes
         let buttons = form.next().find('.EditButton .fm-button');
         buttons.addClass('btn btn-sm').find('[class*="-icon"]').hide();//ui-icon, s-icon
@@ -36,11 +36,31 @@ $.fn.grid = function (o) {
         buttons.eq(1).append('<i class="ace-icon fa fa-chevron-right"></i>');
     }
 
-    function style_delete_form(form) {
+    function styleDeleteForm(form) {
         let buttons = form.next().find('.EditButton .fm-button');
         buttons.addClass('btn btn-sm').find('[class*="-icon"]').hide();//ui-icon, s-icon
         buttons.eq(0).addClass('btn-danger').prepend('<i class="ace-icon fa fa-trash-o"></i>');
         buttons.eq(1).addClass('btn-default').prepend('<i class="ace-icon fa fa-times"></i>')
+    }
+
+    function resultMsg(response, postdata, oper) {
+        const result = eval('(' + response.responseText + ')');
+        if (!result || !result.code) {
+            return [false, '服务器异常'];
+        }
+        if (result.code === 1) {
+            // layer.msg(!result.msg ? '成功！' : result.msg, {
+            //     icon: 1
+            // });
+            return [true, "", ""];
+        } else {
+            return [false, !result.msg ? '服务器异常' : result.msg];
+        }
+    }
+
+    function errorMsg(response) {
+        const result = eval('(' + response.responseText + ')');
+        return [false, !result.msg ? '服务器异常' : result.msg];
     }
 
     function jqgDelOptions(url, token) {
@@ -54,10 +74,14 @@ $.fn.grid = function (o) {
             closeAfterEdit: true,
             beforeShowForm: function (e) {
                 let form = $(e[0]);
-                style_delete_form(form);
+                if(form.data('styled')) return false;
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar')
+                    .wrapInner('<div class="widget-header" />');
+                styleDeleteForm(form);
+                form.data('styled', true);
             },
-            // afterSubmit: resultMsg,
-            // errorTextFormat: errorMsg
+            afterSubmit: resultMsg,
+            errorTextFormat: errorMsg
         };
     }
 
@@ -75,10 +99,99 @@ $.fn.grid = function (o) {
             closeAfterEdit: true,
             beforeShowForm: function (e) {
                 let form = $(e[0]);
-                style_edit_form(form);
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar')
+                    .wrapInner('<div class="widget-header" />');
+                styleEditForm(form);
             },
-            // afterSubmit: resultMsg,
-            // errorTextFormat: errorMsg
+            afterSubmit: resultMsg,
+            errorTextFormat: errorMsg
+        };
+    }
+
+    function jqgAddFunc(grid_id, beforeProcessing, afterProcessing) {
+        return function () {
+            const grid = $("#" + grid_id);
+
+            if (beforeProcessing) {
+                beforeProcessing();
+            }
+
+            const url = $(this).attr("data-url");
+            const token = $(this).attr("data-token");
+            const id = $(this).attr("data-id");
+            const editData = id ? {"_csrf": token, "id": id} : {"_csrf": token};
+
+            let formHeight = grid.getGridParam("formEditHeight");
+            let formDataHeight = grid.getGridParam("formDataHeight");
+            let formWidth = grid.getGridParam("formEditWidth");
+            let top = grid.getGridParam("top");
+            let left = grid.getGridParam("left");
+
+            grid.editGridRow("new", {
+                url: url,
+                editData: editData,
+                top: !top ? $(window).height() / 5 + $(document).scrollTop() : top,
+                left: !left ? $(window).width() / 3 : left,
+                width: !formWidth ? $(window).width() / 3 : formWidth,
+                height: !formHeight ? 'auto' : formHeight,
+                dataheight: !formDataHeight ? 'auto' : formDataHeight,
+                resize: true,
+                recreateForm: true,
+                closeAfterAdd: true,
+                beforeShowForm: function (e) {
+                    let form = $(e[0]);
+                    form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar')
+                        .wrapInner('<div class="widget-header" />');
+                    styleEditForm(form);
+                },
+                afterSubmit: resultMsg,
+                errorTextFormat: errorMsg
+            });
+
+            if (afterProcessing) {
+                afterProcessing();
+            }
+        }
+    }
+
+    function jqgDelFunc(grid_id, data_url, data_token, options) {
+        return function () {
+            let i;
+            const grid = $("#" + grid_id);
+
+            if (!grid.getGridParam("selrow")) {
+                // layer.msg("请选择需要删除的行", {icon: 0});
+                return;
+            }
+
+            const url = data_url ? data_url : $(this).attr("data-url");
+            const token = data_token ? data_token : $(this).attr("data-token");
+            const selectedIds = grid.getGridParam("selarrrow");
+            const idList = new Array();
+            for (i = 0; i < selectedIds.length; i++) {
+                if (selectedIds[i] !== '') {
+                    idList.push(selectedIds[i]);
+                }
+            }
+
+            let params = {
+                keys: true,
+                url: url,
+                delData: {
+                    "_csrf": token,
+                    "idList": idList
+                },
+                top: $(window).height() / 3 + $(document).scrollTop(),
+                left: $(window).width() / 2.5,
+                afterSubmit: resultMsg,
+                errorTextFormat: errorMsg
+            };
+
+            params = $.extend(true, params, options || {});
+            for (i = 0; i < selectedIds.length; i++) {
+                const rowKey = selectedIds[i];
+                grid.delGridRow(rowKey, params);
+            }
         };
     }
 
@@ -91,7 +204,6 @@ $.fn.grid = function (o) {
         align: 'center',
         fixed: true,
         sortable: false,
-        resize: false,
         formatter: 'actions',
         formatoptions: {
             keys: true,
@@ -115,7 +227,8 @@ $.fn.grid = function (o) {
         height: "100%",
         rowNum: 10,
         rowList: [10, 20, 50, 100],
-        pager: '#grid-pager',           // 默认导航栏id
+        pager: '#grid-pager', // 默认导航栏id
+        viewrecords: true,
         altRows: true,
         disableView: true,
         multiselect: !!o.delUrl,
@@ -124,7 +237,7 @@ $.fn.grid = function (o) {
         jsonReader: {page: "page.number", total: "page.totalPages", records: "page.totalElements", root: "content"},
         serializeGridData: function (postData) {
             // 把id为form的表单数据附加到postData
-            // return $.extend($("#" + (o.form ? o.form : "form")).serializeObject(), postData);
+            return $.extend($("#" + (o.form ? o.form : "form")).serializeObject(), postData);
         },
         loadError: function (xhr, status, error) {   // 弹出错误信息
             // showErrMsg(xhr && xhr.responseJSON && xhr.responseJSON.msg ? xhr.responseJSON.msg : null);
@@ -158,6 +271,13 @@ $.fn.grid = function (o) {
 
     //trigger window resize to make the grid get the correct size
     $(window).triggerHandler('resize.jqGrid');
+
+    $("#jqgSearch").click(function () {
+        grid.trigger('reloadGrid');
+    });
+
+    $("#jqgAdd").click(jqgAddFunc("grid-table"));
+    $("#jqgDel").click(jqgDelFunc("grid-table"));
 
     setTimeout(function () {
         updatePagerIcons(grid);

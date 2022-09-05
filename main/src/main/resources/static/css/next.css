@@ -84,9 +84,32 @@ textarea[readonly].show {
     color: #666;
 }
 
-
 .ui-jqgrid .ui-jqgrid-pager {
     padding-top: 14px !important;
+}
+
+/* 导入jquery-ui的几个样式，以支持jqgrid的弹框调整大小 */
+.ui-resizable-se {
+    cursor: se-resize;
+    width: 12px;
+    height: 12px;
+    right: 1px;
+    bottom: 1px;
+}
+
+.ui-resizable-handle {
+    position: absolute;
+    font-size: .1px;
+    display: block;
+    -ms-touch-action: none;
+    touch-action: none;
+}
+
+.ui-icon {
+    display: block;
+    text-indent: -99999px;
+    overflow: hidden;
+    background-repeat: no-repeat;
 }
 
 .table-bordered.solid-1 th,

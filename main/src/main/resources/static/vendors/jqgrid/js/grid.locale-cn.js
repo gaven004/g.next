@@ -1,13 +1,13 @@
 /**
  * jqGrid Chinese Translation
- * 咖啡兔 yanhonglei@gmail.com 
- * http://www.kafeitu.me 
- * 
+ * 咖啡兔 yanhonglei@gmail.com
+ * http://www.kafeitu.me
+ *
  * 花岗岩 marbleqi@163.com
- * 
+ *
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
- * http://www.gnu.org/licenses/gpl.html 
+ * http://www.gnu.org/licenses/gpl.html
 **/
 /*global jQuery, define */
 (function( factory ) {
@@ -30,10 +30,10 @@ if(!$.jgrid.hasOwnProperty("regional")) {
 }
 $.jgrid.regional["cn"] = {
     defaults : {
-        recordtext: "第{0}到第{1}条\u3000共 {2} 条", // 共字前是全角空格
+        recordtext: "第{0} - {1}条\u3000共 {2} 条", // 共字前是全角空格
         emptyrecords: "没有记录！",
         loadtext: "读取中...",
-	savetext: "保存中...",
+        savetext: "保存中...",
         pgtext : "第{0}页\u3000共{1}页",
 		pgfirst : "第一页",
 		pglast : "最后一页",
