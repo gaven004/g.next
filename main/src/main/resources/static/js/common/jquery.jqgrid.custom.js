@@ -200,9 +200,10 @@ $.fn.grid = function (o) {
         label: ' ',
         name: 'myac',
         index: '',
-        width: !!o.editUrl && !!o.delUrl ? 70 : 60,
+        width: !!o.editUrl && !!o.delUrl ? 60 : 40,
         align: 'center',
         fixed: true,
+        resize: false,
         sortable: false,
         formatter: 'actions',
         formatoptions: {
@@ -233,6 +234,7 @@ $.fn.grid = function (o) {
         disableView: true,
         multiselect: !!o.delUrl,
         multiboxonly: !!o.delUrl,
+        multiselectWidth: 30,
         prmNames: {page: "page", rows: "size"},
         jsonReader: {page: "page.number", total: "page.totalPages", records: "page.totalElements", root: "content"},
         serializeGridData: function (postData) {

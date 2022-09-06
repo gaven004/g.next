@@ -31,11 +31,28 @@ textarea[readonly].show {
 }
 
 /* jqgrid调整 */
+
+/* dialog */
+.ui-jqdialog.ui-jqgrid-jquery-ui {
+    padding: 0;
+}
+
+.ui-jqdialog .ui-jqdialog-titlebar-ltr .ui-jqdialog-titlebar-close {
+    width: 1.4em;
+    height: 1.4em;
+    right: .3em;
+    margin: -.7em 0 0 0;
+    position: absolute;
+    cursor: pointer;
+}
+
 .ui-jqdialog-content select.FormElement {
     height: 34px;
 }
 
 .ui-jqdialog-content .CaptionTD {
+    font-size: 13px;
+    font-weight: 400;
     padding-right: 12px;
     width: 30%
 }
@@ -47,6 +64,7 @@ textarea[readonly].show {
     width: 90%
 }
 
+/*  */
 .ui-jqgrid .ui-jqgrid-labels {
     border-bottom: none;
     /*background: #F0F0F0 none repeat-x;*/
@@ -59,6 +77,18 @@ textarea[readonly].show {
     border-left: 1px solid #E1E1E1 !important;
     border-right: 0px none !important;
     text-align: center !important;
+}
+
+.ui-jqgrid .s-ico {
+    position: absolute;
+    width: auto;
+    height: auto;
+    margin: 0;
+    right: .125rem;
+}
+
+.ui-jqgrid .ui-jqgrid-htable .ui-jqgrid-labels > th.jqgh_cbox {
+    padding-top: 10px;
 }
 
 .ui-jqgrid .ui-jqgrid-labels th[aria-selected=true] {
@@ -82,10 +112,6 @@ textarea[readonly].show {
 .ui-jqgrid .ui-jqgrid-hdiv,
 .ui-jqgrid-sortable {
     color: #666;
-}
-
-.ui-jqgrid .ui-jqgrid-pager {
-    padding-top: 14px !important;
 }
 
 /* 导入jquery-ui的几个样式，以支持jqgrid的弹框调整大小 */

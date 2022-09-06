@@ -149,7 +149,7 @@
 </div><!-- /.main-container -->
 
 <#if useJQGrid>
-<script src="vendors/jqgrid/js/jquery.jqgrid.js"></script>
+<script src="vendors/jqgrid/js/jquery.jqgrid.src.js"></script>
 <script src="vendors/jqgrid/js/grid.locale-cn.js"></script>
 <script src="js/common/jquery.jqgrid.custom.js"></script>
 </#if>
