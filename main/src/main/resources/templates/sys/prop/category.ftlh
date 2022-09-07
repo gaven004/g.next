@@ -26,7 +26,7 @@
     </div>
     <div class="space-6"></div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="widget-grid">
                 <table id="grid-table"></table>
                 <div id="grid-pager"></div>

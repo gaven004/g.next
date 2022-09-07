@@ -20063,7 +20063,7 @@
 				top = parseFloat(h.w.css("top") || 0);
 				h.w.before('<span id="jqmP' + h.w[0]._jqm + '"></span>')
 					.insertAfter(h.o);
-				h.w.css({ top: parentOffset.top + top, left: parentOffset.left + left });
+				h.w.css({ top: top ? top : parentOffset.top, left: left ? left : parentOffset.left });
 			}
 			if (options.onShow) {
 				options.onShow(h);

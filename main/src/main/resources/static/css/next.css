@@ -64,7 +64,19 @@ textarea[readonly].show {
     width: 90%
 }
 
-/*  */
+.ui-jqdialog .fm-button {
+    padding: .25em .6em;
+}
+
+.ui-jqdialog-content td.navButton {
+    padding: 5px 10px;
+}
+
+.ui-jqdialog-content td.navButton-ltr > .fm-button.ui-state-disabled {
+    opacity: .6;
+}
+
+/* 表头 */
 .ui-jqgrid .ui-jqgrid-labels {
     border-bottom: none;
     /*background: #F0F0F0 none repeat-x;*/
@@ -91,11 +103,12 @@ textarea[readonly].show {
     padding-top: 10px;
 }
 
-.ui-jqgrid .ui-jqgrid-labels th[aria-selected=true] {
-    /*background: #EFF3F8 none repeat-x;*/
+.ui-jqgrid .ui-jqgrid-htable th div {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
-/*合并表头加下边框*/
+/* 合并表头加下边框 */
 .ui-jqgrid .ui-jqgrid-labels th.ui-th-column-header {
     border-bottom: 1px solid #E1E1E1 !important;
 }
