@@ -29,7 +29,7 @@
     <div class="main-content">
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1"
-                 style="height: 80vh; display: flex; justify-content: center; align-items: center;">
+                 style="height: 80vh; min-height: 540px; display: flex; justify-content: center; align-items: center;">
                 <div class="login-container">
                     <div class="space-18"></div>
                     <div class="center">
@@ -180,12 +180,8 @@
 </div><!-- /.main-container -->
 
 <!-- include common vendor scripts -->
-<script src="vendors/jquery/js/jquery.min.js"></script>
+<script src="vendors/jquery/js/jquery-3.6.1.min.js"></script>
 <script src="vendors/bootstrap/js/bootstrap.min.js"></script>
-
-<script type="text/javascript">
-    if ('ontouchstart' in document.documentElement) document.write("<script src='vendors/jquery/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
-</script>
 
 <!-- include ace.js -->
 <script src="vendors/ace/js/ace.min.js"></script>

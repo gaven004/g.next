@@ -26,12 +26,9 @@
 <body class="no-skin">
 
 <!-- include common vendor scripts -->
-<script src="vendors/jquery/js/jquery.min.js"></script>
+<script src="vendors/jquery/js/jquery-3.6.1.min.js"></script>
 <script src="vendors/jquery/js/jquery.cookie.min.js"></script>
-<script type="text/javascript">
-    if ('ontouchstart' in document.documentElement) document.write("<script src='vendors/jquery/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
-</script>
-<script src="vendors/bootstrap/js/bootstrap.min.js"></script>
+<script src="vendors/bootstrap/js/bootstrap.js"></script>
 <script src="vendors/bootbox/bootbox.js"></script>
 
 <!-- include ace.js -->

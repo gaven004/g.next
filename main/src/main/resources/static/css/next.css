@@ -1,5 +1,17 @@
 @CHARSET "UTF-8";
 
+/* Fix: 调整Bootstrap与Ace展示菜单把手的屏幕大小统一为991以下 */
+@media (max-width: 991px) {
+    .navbar-toggle {
+        display: block;
+    }
+}
+@media (min-width: 992px) {
+    .navbar-toggle {
+        display: none;
+    }
+}
+
 /* 条件查询form各个控件统一大小 */
 form.fix-input-size input,
 form.fix-input-size select {
