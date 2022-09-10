@@ -11,17 +11,17 @@
     <title>Login - G.Next Admin</title>
 
     <!-- include common vendor stylesheets & fontawesome -->
-    <link rel="stylesheet" type="text/css" href="./vendors/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./vendors/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="vendors/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="vendors/fontawesome/css/font-awesome.min.css">
 
     <!-- include fonts -->
-    <link rel="stylesheet" type="text/css" href="./vendors/opensans/css">
+    <link rel="stylesheet" type="text/css" href="vendors/opensans/css">
 
     <!-- ace.css -->
-    <link rel="stylesheet" type="text/css" href="./vendors/ace/css/ace.min.css">
+    <link rel="stylesheet" type="text/css" href="vendors/ace/css/ace.min.css">
 
     <!-- favicon -->
-    <link rel="icon" type="image/png" href="./img/favicon.png"/>
+    <link rel="icon" type="image/png" href="img/favicon.png"/>
 </head>
 
 <body class="login-layout">
@@ -180,15 +180,15 @@
 </div><!-- /.main-container -->
 
 <!-- include common vendor scripts -->
-<script src="./vendors/jquery/jquery.min.js"></script>
-<script src="./vendors/bootstrap/js/bootstrap.min.js"></script>
+<script src="vendors/jquery/js/jquery.min.js"></script>
+<script src="vendors/bootstrap/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-    if ('ontouchstart' in document.documentElement) document.write("<script src='./vendors/jquery/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    if ('ontouchstart' in document.documentElement) document.write("<script src='vendors/jquery/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
 
 <!-- include ace.js -->
-<script src="./vendors/ace/js/ace.min.js"></script>
+<script src="vendors/ace/js/ace.min.js"></script>
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">

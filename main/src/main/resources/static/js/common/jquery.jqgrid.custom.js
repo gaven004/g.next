@@ -43,17 +43,26 @@
         }
 
         function resultMsg(response, postdata, oper) {
-            const result = eval('(' + response.responseText + ')');
-            if (!result || !result.code) {
-                return [false, '服务器异常'];
-            }
-            if (result.code === 1) {
+            // const result = eval('(' + response.responseText + ')');
+            // if (!result || !result.code) {
+            //     return [false, '服务器异常'];
+            // }
+            // if (result.code === 1) {
+            //     // layer.msg(!result.msg ? '成功！' : result.msg, {
+            //     //     icon: 1
+            //     // });
+            //     return [true, "", ""];
+            // } else {
+            //     return [false, !result.msg ? '服务器异常' : result.msg];
+            // }
+
+            if (response && response.status && response.status < 400) {
                 // layer.msg(!result.msg ? '成功！' : result.msg, {
                 //     icon: 1
                 // });
                 return [true, "", ""];
             } else {
-                return [false, !result.msg ? '服务器异常' : result.msg];
+                return [false, '服务器异常'];
             }
         }
 
@@ -66,9 +75,6 @@
             return {
                 url: url,
                 delData: {"_csrf": token},
-                top: $(window).height() > 768 ? $(window).height() / 3 + $(document).scrollTop() : 0,
-                left: $(window).width() > 768 ? $(window).width() / 3 : 0,
-                width: $(window).width() > 768 ? $(window).width() / 3 : 360,
                 recreateForm: true,
                 closeAfterEdit: true,
                 beforeShowForm: function (e) {
@@ -129,6 +135,11 @@
                 grid.editGridRow("new", {
                     url: url,
                     editData: editData,
+                    ajaxEditOptions: {
+                        dataType: 'json',
+                        contentType: "application/json;charset=utf-8",
+                        processData: false
+                    },
                     top: !top ? ($(window).height() > 768 ? $(window).height() / 5 + $(document).scrollTop() : 0) : top,
                     left: !left ? ($(window).width() > 1200 ? $(window).width() / 3 : 0) : left,
                     width: !formWidth ? ($(window).width() > 1200 ? $(window).width() / 3 : 360) : formWidth,
@@ -137,6 +148,7 @@
                     resize: true,
                     recreateForm: true,
                     closeAfterAdd: true,
+
                     beforeShowForm: function (e) {
                         let form = $(e[0]);
                         form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar')
@@ -159,29 +171,35 @@
                 const grid = $("#" + grid_id);
 
                 if (!grid.getGridParam("selrow")) {
-                    // layer.msg("请选择需要删除的行", {icon: 0});
+                    let dialog = bootbox.dialog({
+                        message: '<div class="text-center"><i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i> 请选择需要删除的行 </div>',
+                        size: 'sm',
+                        closeButton: false,
+                    });
+                    setTimeout(() => {
+                        dialog.modal('hide');
+                    }, "3000");
                     return;
                 }
 
                 const url = data_url ? data_url : $(this).attr("data-url");
                 const token = data_token ? data_token : $(this).attr("data-token");
                 const selectedIds = grid.getGridParam("selarrrow");
-                const idList = new Array();
+                const ids = new Array();
                 for (i = 0; i < selectedIds.length; i++) {
                     if (selectedIds[i] !== '') {
-                        idList.push(selectedIds[i]);
+                        ids.push(selectedIds[i]);
                     }
                 }
 
                 let params = {
                     keys: true,
                     url: url,
+                    mtype: 'DELETE',
                     delData: {
                         "_csrf": token,
-                        "idList": idList
+                        "ids": ids.toString()
                     },
-                    top: $(window).height() / 3 + $(document).scrollTop(),
-                    left: $(window).width() / 2.5,
                     beforeShowForm: function (e) {
                         let form = $(e[0]);
                         if (form.data('styled')) return false;
@@ -259,8 +277,19 @@
             prmNames: {page: "page", rows: "size"},
             jsonReader: {page: "page.number", total: "page.totalPages", records: "page.totalElements", root: "content"},
             serializeGridData: function (postData) {
+                // 兼容QueryDSL的Sorting
+                if (postData && postData.sidx && postData.sidx.trim().length > 0) {
+                    if (postData && postData.sord && postData.sord === 'desc') {
+                        postData.sort = postData.sidx + ",desc";
+                    } else {
+                        postData.sort = postData.sidx + ",asc";
+                    }
+                }
                 // 把id为form的表单数据附加到postData
                 return $.extend($("#" + (o.form ? o.form : "form")).serializeObject(), postData);
+            },
+            serializeEditData: function (postData) {
+                return JSON.stringify(postData);
             },
             loadError: function (xhr, status, error) {   // 弹出错误信息
                 // showErrMsg(xhr && xhr.responseJSON && xhr.responseJSON.msg ? xhr.responseJSON.msg : null);

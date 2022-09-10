@@ -2,10 +2,10 @@
 <@base.page>
     <div class="row">
         <div class="col-md-4">
-            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="rest/admin/user/save" data-token="${_csrf.token}">
+            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="api/rest/sysPropertyCategories" data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
-            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="rest/admin/user/del_m" data-token="${_csrf.token}">
+            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="api/rest/sysPropertyCategories" data-token="${_csrf.token}">
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
         </div>
@@ -63,7 +63,7 @@
                     editable: true,
                     edittype: "select",
                     editoptions: {
-                        value: "FE:FedEx;IN:InTime;TN:TNT;AR:ARAMEX"
+                        value: "VALID:启用;INVALID:停用"
                     }
                 }, {
                     label: '说明',
