@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="vendors/fontawesome/css/font-awesome.min.css">
 
     <!-- include fonts -->
-    <link rel="stylesheet" type="text/css" href="vendors/opensans/css">
+    <link rel="stylesheet" type="text/css" href="vendors/opensans/opensans.css">
 
     <!-- ace.css -->
     <link rel="stylesheet" type="text/css" href="vendors/ace/css/ace.min.css">

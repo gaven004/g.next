@@ -1,27 +1,14 @@
 package com.g.config;
 
-import javax.servlet.Filter;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.util.Assert;
-
-import com.g.sys.sec.web.JwtAuthenticationEntryPoint;
-import com.g.sys.sec.web.JwtAuthenticationFilter;
-import com.g.sys.sec.web.JwtAuthenticationProvider;
 
 @Configuration
 @EnableWebSecurity
@@ -56,14 +43,10 @@ public class WebSecurityConfig {
         }
 
         @Override
-        public void configure(WebSecurity web) throws Exception {
-            web.ignoring().antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**", "/api/**");
-        }
-
-        @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests(authorize -> authorize
-                            .antMatchers("/form-login", "/reset-password").permitAll()
+                            .antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**",
+                                    "/api/**", "/form-login", "/reset-password").permitAll()
                             .anyRequest().authenticated()
                     )
                     .formLogin(form -> form

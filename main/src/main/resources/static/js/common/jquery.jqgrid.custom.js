@@ -74,6 +74,7 @@
         function jqgDelOptions(url, token) {
             return {
                 url: url,
+                mtype: 'DELETE',
                 delData: {"_csrf": token},
                 recreateForm: true,
                 closeAfterEdit: true,
@@ -93,7 +94,13 @@
         function jqgEditOptions(url, token, formHeight, formWidth, formDataHeight, top, left) {
             return {
                 url: url,
+                mtype: 'PATCH',
                 editData: {"_csrf": token},
+                ajaxEditOptions: {
+                    dataType: 'json',
+                    contentType: "application/json;charset=utf-8",
+                    processData: false
+                },
                 top: !top ? ($(window).height() > 768 ? $(window).height() / 5 + $(document).scrollTop() : 0) : top,
                 left: !left ? ($(window).width() > 1200 ? $(window).width() / 3 : 0) : left,
                 width: !formWidth ? ($(window).width() > 1200 ? $(window).width() / 3 : 360) : formWidth,
@@ -148,7 +155,6 @@
                     resize: true,
                     recreateForm: true,
                     closeAfterAdd: true,
-
                     beforeShowForm: function (e) {
                         let form = $(e[0]);
                         form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar')
@@ -174,11 +180,12 @@
                     let dialog = bootbox.dialog({
                         message: '<div class="text-center"><i class="ace-icon fa fa-exclamation-triangle red bigger-130"></i> 请选择需要删除的行 </div>',
                         size: 'sm',
+                        backdrop: true,
                         closeButton: false,
                     });
-                    setTimeout(() => {
-                        dialog.modal('hide');
-                    }, "3000");
+                    // setTimeout(() => {
+                    //     dialog.modal('hide');
+                    // }, "3000");
                     return;
                 }
 

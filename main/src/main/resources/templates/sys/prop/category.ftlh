@@ -46,12 +46,18 @@
                     label: '编码',
                     name: 'id',
                     width: 60,
-                    editable: true
+                    editable: true,
+                    editrules : {
+                        required : true,
+                    },
                 }, {
                     label: '名称',
                     name: 'name',
                     width: 150,
                     editable: true,
+                    editrules : {
+                        required : true,
+                    },
                     editoptions: {
                         size: "20",
                         maxlength: "30"
@@ -61,6 +67,9 @@
                     name: 'status',
                     width: 50,
                     editable: true,
+                    editrules : {
+                        required : true,
+                    },
                     edittype: "select",
                     editoptions: {
                         value: "VALID:启用;INVALID:停用"
