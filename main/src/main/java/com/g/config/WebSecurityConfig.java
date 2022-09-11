@@ -1,71 +1,41 @@
 package com.g.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
-
-//    @Configuration
-//    @Order(1)
-//    public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
-//        protected void configure(HttpSecurity http) throws Exception {
-//            http
-//                    .antMatcher("/api/**")
-//                    .authorizeRequests(authorize -> authorize
-//                            .anyRequest().hasRole("ADMIN")
-//                    )
-//                    .httpBasic(withDefaults());
-//        }
-//    }
-
-    @Configuration
-    @Order(2)
-    public static class FormLoginWebSecurityConfigurerAdapter extends WebSecurityConfigurerAdapter {
-        private final UserDetailsService userDetailsService;
-
-        @Autowired
-        public FormLoginWebSecurityConfigurerAdapter(@Qualifier("gUserDetailsService") UserDetailsService userDetailsService) {
-            this.userDetailsService = userDetailsService;
-        }
-
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(userDetailsService);
-        }
-
-        @Override
-        protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests(authorize -> authorize
-                            .antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**",
-                                    "/api/**", "/form-login", "/reset-password").permitAll()
-                            .anyRequest().authenticated()
-                    )
-                    .formLogin(form -> form
-                            .loginPage("/form-login")
-                            .failureForwardUrl("/form-login?error")
-                            .defaultSuccessUrl("/blank")
-                            .permitAll()
-                    )
-                    .logout(form -> form
-                            .logoutUrl("/logout")
-                            .logoutSuccessUrl("/form-login?logout")
-                            .invalidateHttpSession(true)
-                            .deleteCookies("JSESSIONID")
-                    )
-                    .sessionManagement(form -> form
-                            .invalidSessionUrl("/form-login?invalidSession"));
-        }
+    @Bean
+    @Order(10)
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+        http.antMatcher("/api/**")
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+        return http.build();
     }
 
+    @Bean
+    public SecurityFilterChain formLoginFilterChain(HttpSecurity http,
+                                                    @Qualifier("gUserDetailsService") UserDetailsService userDetailsService) throws Exception {
+        http.userDetailsService(userDetailsService)
+                .authorizeHttpRequests(authorize ->
+                        authorize.antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**")
+                                .permitAll())
+                .formLogin(form -> form.loginPage("/form-login")
+                        .failureForwardUrl("/form-login?error")
+                        .defaultSuccessUrl("/blank")
+                        .permitAll())
+                .logout(form -> form.logoutUrl("/logout")
+                        .logoutSuccessUrl("/form-login?logout")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID"))
+                .sessionManagement(form -> form.invalidSessionUrl("/form-login?invalidSession"));
+        return http.build();
+    }
 
 //    private final UserDetailsService userDetailsService;
 //

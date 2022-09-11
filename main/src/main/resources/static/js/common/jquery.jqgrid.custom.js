@@ -105,7 +105,8 @@
                 ajaxEditOptions: {
                     dataType: 'json',
                     contentType: "application/json;charset=utf-8",
-                    processData: false
+                    processData: false,
+                    headers: {"X-CSRF-TOKEN" : _csrf},
                 },
                 top: !top ? ($(window).height() > 768 ? $(window).height() / 5 + $(document).scrollTop() : 0) : top,
                 left: !left ? ($(window).width() > 1200 ? $(window).width() / 3 : 0) : left,
@@ -151,6 +152,7 @@
                     ajaxEditOptions: {
                         dataType: 'json',
                         contentType: "application/json;charset=utf-8",
+                        headers: {"X-CSRF-TOKEN" : _csrf},
                         processData: false
                     },
                     top: !top ? ($(window).height() > 768 ? $(window).height() / 5 + $(document).scrollTop() : 0) : top,
