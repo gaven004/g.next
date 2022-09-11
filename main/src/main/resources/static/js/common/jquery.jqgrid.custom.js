@@ -73,7 +73,10 @@
 
         function jqgDelOptions(url, token) {
             return {
-                url: url,
+                baseurl: url,
+                url: function (id, postdata, o) {
+                    return id ? o.baseurl + '/' + id : o.baseurl;
+                },
                 mtype: 'DELETE',
                 delData: {"_csrf": token},
                 recreateForm: true,
@@ -93,7 +96,10 @@
 
         function jqgEditOptions(url, token, formHeight, formWidth, formDataHeight, top, left) {
             return {
-                url: url,
+                baseurl: url,
+                url: function (id, oper, postdata, o) {
+                    return id ? o.baseurl + '/' + id : o.baseurl;
+                },
                 mtype: 'PATCH',
                 editData: {"_csrf": token},
                 ajaxEditOptions: {
@@ -183,9 +189,9 @@
                         backdrop: true,
                         closeButton: false,
                     });
-                    // setTimeout(() => {
-                    //     dialog.modal('hide');
-                    // }, "3000");
+                    setTimeout(() => {
+                        dialog.modal('hide');
+                    }, 3000);
                     return;
                 }
 
