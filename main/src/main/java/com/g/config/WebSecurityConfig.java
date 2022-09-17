@@ -14,7 +14,8 @@ public class WebSecurityConfig {
     @Order(10)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http.antMatcher("/api/**")
-                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
+                .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 

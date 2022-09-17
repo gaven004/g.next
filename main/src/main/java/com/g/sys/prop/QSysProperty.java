@@ -24,6 +24,8 @@ public class QSysProperty extends EntityPathBase<SysProperty> {
 
     public final com.g.commons.model.QAbstractEntity _super = new com.g.commons.model.QAbstractEntity(this);
 
+    public final NumberPath<Long> id = createNumber("id", Long.class);
+
     public final StringPath category = createString("category");
 
     public final StringPath name = createString("name");

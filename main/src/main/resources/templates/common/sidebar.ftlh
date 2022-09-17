@@ -79,7 +79,7 @@
         <@menuItem url="">系统功能</@menuItem>
         <@menuItem url="">系统菜单</@menuItem>
         <@menuItem url="view/sys/prop/category">参数类型</@menuItem>
-        <@menuItem url="">系统参数</@menuItem>
+        <@menuItem url="view/sys/prop/property">系统参数</@menuItem>
         <@menuItem url="">角色管理</@menuItem>
         <@menuItem url="">用户管理</@menuItem>
     </@menuTop>

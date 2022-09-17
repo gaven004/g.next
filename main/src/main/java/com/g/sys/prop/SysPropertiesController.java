@@ -1,9 +1,9 @@
 package com.g.sys.prop;
 
-import com.g.commons.enums.Option;
-import com.g.commons.exception.EntityNotFoundException;
-import com.g.commons.model.ApiResponse;
-import com.querydsl.core.types.Predicate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -11,9 +11,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
+import com.g.commons.enums.Option;
+import com.g.commons.exception.EntityNotFoundException;
+import com.g.commons.model.ApiResponse;
+import com.querydsl.core.types.Predicate;
 
 @RestController
 @RequestMapping("sys/properties")
@@ -48,9 +49,9 @@ public class SysPropertiesController {
         return ApiResponse.success();
     }
 
-    @GetMapping("/{category}/{name}")
-    ApiResponse<SysProperty> get(@PathVariable String category, @PathVariable String name) {
-        return service.get(category, name)
+    @GetMapping("/{id}")
+    ApiResponse<SysProperty> get(@PathVariable Long id) {
+        return service.get(id)
                 .map(entity -> ApiResponse.success(entity))
                 .orElseThrow(() -> new EntityNotFoundException());
     }
@@ -66,16 +67,16 @@ public class SysPropertiesController {
     }
 
     @DeleteMapping("/$batch")
-    ApiResponse<?> delete(@RequestBody @Valid SysPropertyPK[] pks) {
-        for (SysPropertyPK pk : pks) {
-            service.delete(0L, pk);
+    ApiResponse<?> delete(@RequestBody @Valid Long[] ids) {
+        for (Long id : ids) {
+            service.delete(0L, id);
         }
         return ApiResponse.success();
     }
 
-    @DeleteMapping("/{category}/{name}")
-    ApiResponse<?> delete(@PathVariable String category, @PathVariable String name) {
-        service.delete(0L, new SysPropertyPK(category, name));
+    @DeleteMapping("/{id}")
+    ApiResponse<?> delete(@PathVariable Long id) {
+        service.delete(0L, id);
         return ApiResponse.success();
     }
 }

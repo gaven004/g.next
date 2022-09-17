@@ -1,3 +1,21 @@
+function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop) {
+    let html = '<select id="' + cm.name + '" name="' + cm.name + '" size="1" class="FormElement ui-widget-content ui-corner-all">';
+    html += '<option value="">请选择...</option>';
+    if (text) {
+        try {
+            let data = JSON.parse(text);
+            if (data && data.content) {
+                data.content.forEach(
+                    item => html += '<option value="' + item[value_prop] + '">' + item[label_prop] + '</option>'
+                );
+            }
+        } catch (e) {
+        }
+    }
+    html += '</select>';
+    return html;
+}
+
 (function ($) {
     $.fn.grid = function (o) {
         //replace icons with FontAwesome icons like above
@@ -106,7 +124,7 @@
                     dataType: 'json',
                     contentType: "application/json;charset=utf-8",
                     processData: false,
-                    headers: {"X-CSRF-TOKEN" : _csrf},
+                    headers: {"X-CSRF-TOKEN": _csrf},
                 },
                 top: !top ? ($(window).height() > 768 ? $(window).height() / 5 + $(document).scrollTop() : 0) : top,
                 left: !left ? ($(window).width() > 1200 ? $(window).width() / 3 : 0) : left,
@@ -152,7 +170,7 @@
                     ajaxEditOptions: {
                         dataType: 'json',
                         contentType: "application/json;charset=utf-8",
-                        headers: {"X-CSRF-TOKEN" : _csrf},
+                        headers: {"X-CSRF-TOKEN": _csrf},
                         processData: false
                     },
                     top: !top ? ($(window).height() > 768 ? $(window).height() / 5 + $(document).scrollTop() : 0) : top,

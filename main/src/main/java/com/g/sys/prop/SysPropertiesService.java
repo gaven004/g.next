@@ -2,7 +2,6 @@ package com.g.sys.prop;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.querydsl.core.types.Predicate;
-
 import com.g.commons.enums.Status;
 import com.g.commons.exception.EntityNotFoundException;
 import com.g.commons.utils.NullAwareBeanUtilsBean;
 import com.g.sys.log.SysLogService;
+import com.querydsl.core.types.Predicate;
 
 @Service
 public class SysPropertiesService {
@@ -38,7 +36,7 @@ public class SysPropertiesService {
 
     @Transactional
     public SysProperty update(final Long operator, final SysProperty entity) {
-        final Optional<SysProperty> optional = get(entity.getCategory(), entity.getName());
+        final Optional<SysProperty> optional = get(entity.getId());
         return optional
                 .map(source -> {
                     try {
@@ -56,13 +54,13 @@ public class SysPropertiesService {
     }
 
     @Transactional
-    public void delete(Long operator, SysPropertyPK pk) {
+    public void delete(Long operator, Long pk) {
         repository.deleteById(pk);
-        logService.logDelete(operator, new SysProperty(pk.getCategory(), pk.getName()));
+        logService.logDelete(operator, new SysProperty(pk));
     }
 
-    public Optional<SysProperty> get(String category, String name) {
-        return repository.findById(new SysPropertyPK(category, name));
+    public Optional<SysProperty> get(Long pk) {
+        return repository.findById(pk);
     }
 
     public Page<SysProperty> findAll(Predicate predicate, Pageable pageable) {

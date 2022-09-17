@@ -11,7 +11,7 @@ Accept: application/x-spring-data-compact+json
 
 ### Get custom sysPropertyCategories
 GET http://localhost:8080/api/rest/sysPropertyCategories?status=VALID&page=0&size=10&sort=name,asc
-Accept: application/json
+#Accept: application/json
 
 ### Custom Multi Delete sysPropertyCategory - UNIT
 DELETE http://localhost:8080/api/rest/sysPropertyCategories?ids=UNIT,TEST2

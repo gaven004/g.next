@@ -6,19 +6,19 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
+import org.springframework.util.StringUtils;
 
 import com.g.commons.enums.Status;
 import com.g.commons.model.AbstractEntity;
 
 @Entity
 @Table(name = "sys_properties")
-@IdClass(SysPropertyPK.class)
 @DynamicInsert
 @DynamicUpdate
 @Cacheable
-public class SysProperty extends AbstractEntity<SysPropertyPK> {
+public class SysProperty extends AbstractEntity implements java.io.Serializable {
+    private Long id;
     private String category;
     private String name;
     private String value;
@@ -30,12 +30,46 @@ public class SysProperty extends AbstractEntity<SysPropertyPK> {
     public SysProperty() {
     }
 
-    public SysProperty(String category, String name) {
+    public SysProperty(Long id) {
+        this.id = id;
+    }
+
+    public SysProperty(String id) {
+        this.id = Long.valueOf(id);
+        ;
+    }
+
+    public SysProperty(Long id, String category, String name, String value, String properties, Integer sortOrder, Status status, String note) {
+        this.id = id;
         this.category = category;
         this.name = name;
+        this.value = value;
+        if (StringUtils.hasText(properties)) {
+            this.properties = properties;
+        }
+        this.sortOrder = sortOrder;
+        this.status = status;
+        this.note = note;
     }
 
     @Id
+    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(
+            generator = "snowflake_generator"
+    )
+    @GenericGenerator(
+            name = "snowflake_generator",
+            strategy = "com.g.commons.utils.HibernateSnowflakeGenerator"
+    )
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Basic
     @Column(name = "category")
     @NotEmpty
     public String getCategory() {
@@ -46,7 +80,7 @@ public class SysProperty extends AbstractEntity<SysPropertyPK> {
         this.category = category;
     }
 
-    @Id
+    @Basic
     @Column(name = "name")
     @NotEmpty
     public String getName() {
@@ -75,7 +109,9 @@ public class SysProperty extends AbstractEntity<SysPropertyPK> {
     }
 
     public void setProperties(String properties) {
-        this.properties = properties;
+        if (StringUtils.hasText(properties)) {
+            this.properties = properties;
+        }
     }
 
     @Basic
@@ -127,7 +163,8 @@ public class SysProperty extends AbstractEntity<SysPropertyPK> {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SysProperty{");
-        sb.append("category='").append(category).append('\'');
+        sb.append("id=").append(id);
+        sb.append(", category='").append(category).append('\'');
         sb.append(", name='").append(name).append('\'');
         sb.append(", value='").append(value).append('\'');
         sb.append(", properties='").append(properties).append('\'');
@@ -136,17 +173,5 @@ public class SysProperty extends AbstractEntity<SysPropertyPK> {
         sb.append(", note='").append(note).append('\'');
         sb.append('}');
         return sb.toString();
-    }
-
-    /**
-     * Returns the id of the entity.
-     *
-     * @return the id. Can be {@literal null}.
-     */
-    @Override
-    @Transient
-    @JsonIgnore
-    public SysPropertyPK getId() {
-        return new SysPropertyPK(category, name);
     }
 }

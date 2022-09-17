@@ -4,5 +4,5 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface SysPropertiesRepository extends
-        PagingAndSortingRepository<SysProperty, SysPropertyPK>, QuerydslPredicateExecutor<SysProperty> {
+        PagingAndSortingRepository<SysProperty, Long>, QuerydslPredicateExecutor<SysProperty> {
 }

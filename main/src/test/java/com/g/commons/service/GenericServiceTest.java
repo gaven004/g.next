@@ -4,31 +4,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.g.NextApplicationTests;
+import com.g.sys.prop.SysPropertiesService;
 import com.g.sys.prop.SysProperty;
-import com.g.sys.prop.SysPropertyPK;
 
 class GenericServiceTest extends NextApplicationTests {
     @Autowired
-    SysPropertiesTestService service;
+    SysPropertiesService service;
 
     @Test
     void all() {
-        SysProperty entity = new SysProperty();
-        entity.setCategory("Test2");
-        entity.setName("Hello");
-        entity.setValue("World");
-        entity = service.save(entity);
-        System.out.println("entity = " + entity);
-
-        entity.setValue("Gaven");
-        entity = service.update(entity);
-        System.out.println("entity = " + entity);
-
-        SysPropertyPK pk = new SysPropertyPK("Test2", "Hello");
-        entity = service.get(pk);
-        System.out.println("entity = " + entity);
-
-        service.delete(pk);
     }
 
     @Test
@@ -41,8 +25,6 @@ class GenericServiceTest extends NextApplicationTests {
 
     @Test
     void delete() {
-        SysPropertyPK pk = new SysPropertyPK("Test2", "Hello");
-        service.delete(pk);
     }
 
     @Test
