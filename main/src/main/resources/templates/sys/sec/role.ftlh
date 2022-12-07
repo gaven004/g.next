@@ -2,18 +2,19 @@
 <@base.page>
     <div class="row">
         <div class="col-md-4">
-            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/sysPropertyCategories" data-token="${_csrf.token}">
+            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/sysRoles"
+                    data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
-            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/sysPropertyCategories" data-token="${_csrf.token}">
+            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/sysRoles"
+                    data-token="${_csrf.token}">
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
         </div>
         <div class="col-md-8">
             <div class="input-group" style="margin-left:auto;">
                 <form id="form" class="form-inline align-right">
-                    <input name="id" type="text" placeholder="编码">
-                    <input name="name" type="text" placeholder="名称">
+                    <input name="name" type="text" placeholder="角色">
                     <button class="btn btn-sm btn-info" type="button" id="jqgSearch">
                         <i class="ace-icon glyphicon glyphicon-search"></i> 查找
                     </button>
@@ -37,55 +38,41 @@
     <script>
         jQuery(function ($) {
             $("#grid-table").grid({
-                url: "_rest/c4m/sysPropertyCategories",
-                editUrl: "_rest/c4m/sysPropertyCategories",
-                delUrl: "_rest/c4m/sysPropertyCategories",
+                url: "_rest/c4m/sysRoles",
+                editUrl: "_rest/c4m/sysRoles",
+                delUrl: "_rest/c4m/sysRoles",
                 token: _csrf,
                 colModel: [{
                     key: true,
-                    label: '编码',
+                    label: '',
                     name: 'id',
-                    width: 60,
-                    editable: true,
-                    editrules : {
-                        required : true,
-                    },
+                    hidden: true,
+                    editable : true,
                 }, {
-                    label: '名称',
+                    label: '角色',
                     name: 'name',
-                    width: 150,
+                    width: 100,
                     editable: true,
-                    editrules : {
-                        required : true,
+                    editrules: {
+                        required: true,
                     },
                     editoptions: {
                         size: "20",
-                        maxlength: "30"
+                        maxlength: "60"
                     }
                 }, {
                     label: '状态',
                     name: 'status',
                     width: 50,
-                    formatter:'select',
                     editable: true,
-                    edittype: "select",
-                    editrules : {
-                        required : true,
+                    editrules: {
+                        required: true,
                     },
+                    edittype: "select",
                     editoptions: {
                         value: "VALID:启用;INVALID:停用"
-                    }
-                }, {
-                    label: '说明',
-                    name: 'note',
-                    width: 150,
-                    sortable: false,
-                    editable: true,
-                    edittype: "textarea",
-                    editoptions: {
-                        rows: "2",
-                        cols: "10"
-                    }
+                    },
+                    formatter:'select',
                 }]
             });
         });

@@ -2,11 +2,11 @@
 <@base.page>
     <div class="row">
         <div class="col-md-4">
-            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/sysProperties"
+            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/sysActions"
                     data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
-            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/sysProperties"
+            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/sysActions"
                     data-token="${_csrf.token}">
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
@@ -14,8 +14,8 @@
         <div class="col-md-8">
             <div class="input-group" style="margin-left:auto;">
                 <form id="form" class="form-inline align-right">
-                    <input name="category" type="text" placeholder="参数类型">
-                    <input name="name" type="text" placeholder="参数名">
+                    <input name="resource" type="text" class="input-elm" placeholder="资源">
+                    <input name="description" type="text" class="input-elm" placeholder="说明">
                     <button class="btn btn-sm btn-info" type="button" id="jqgSearch">
                         <i class="ace-icon glyphicon glyphicon-search"></i> 查找
                     </button>
@@ -39,9 +39,9 @@
     <script>
         jQuery(function ($) {
             $("#grid-table").grid({
-                url: "_rest/c4m/sysProperties",
-                editUrl: "_rest/c4m/sysProperties",
-                delUrl: "_rest/c4m/sysProperties",
+                url: "_rest/c4m/sysActions",
+                editUrl: "_rest/c4m/sysActions",
+                delUrl: "_rest/c4m/sysActions",
                 token: _csrf,
                 colModel: [{
                     key: true,
@@ -50,23 +50,35 @@
                     hidden: true,
                     editable : true,
                 }, {
-                    label: '参数类型',
-                    name: 'category',
+                    label: '资源',
+                    name: 'resource',
                     width: 100,
+                    editable: true,
+                    editrules: {
+                        required: true,
+                    },
+                    editoptions: {
+                        size: "20",
+                        maxlength: "250"
+                    }
+                }, {
+                    label: '请求方法',
+                    name: 'method',
+                    width: 50,
                     editable: true,
                     edittype: "select",
                     editoptions: {
-                        dataUrl: "_rest/c4m/sysPropertyCategories?status=VALID&page=0&size=1000&sort=name,asc",
+                        dataUrl: "enums/ActionMethod",
                         buildSelect: function (data, xhr, cm, col) {
-                            return jqgBuildSelect(data, xhr, cm, col, 'id', 'name');
+                            return jqgBuildSelect(data, xhr, cm, col, 'value', 'label');
                         },
                     },
                     editrules: {
                         required: true,
                     },
                 }, {
-                    label: '参数名',
-                    name: 'name',
+                    label: '说明',
+                    name: 'description',
                     width: 100,
                     editable: true,
                     editrules: {
@@ -74,67 +86,34 @@
                     },
                     editoptions: {
                         size: "20",
-                        maxlength: "30"
+                        maxlength: "250"
                     }
                 }, {
-                    label: '参数值',
-                    name: 'value',
-                    width: 100,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "30"
-                    }
-                }, {
-                    label: '扩展属性',
-                    name: 'properties',
-                    width: 150,
-                    sortable: false,
-                    editable: true,
-                    edittype: "textarea",
-                    editoptions: {
-                        rows: "2",
-                        cols: "10"
-                    }
-                }, {
-                    label: '排序',
-                    name: 'sortOrder',
+                    label: '权限控制',
+                    name: 'permitAll',
                     width: 50,
                     editable: true,
-                    editoptions: {
-                        size: "20",
-                        maxlength: "6"
-                    },
                     editrules: {
-                        integer: true
-                    }
+                        required: true,
+                    },
+                    edittype: "select",
+                    editoptions: {
+                        value: "false:是;true:否"
+                    },
+                    formatter:'select',
                 }, {
                     label: '状态',
                     name: 'status',
                     width: 50,
-                    formatter: "select",
                     editable: true,
-                    edittype: "select",
                     editrules: {
                         required: true,
                     },
+                    edittype: "select",
                     editoptions: {
                         value: "VALID:启用;INVALID:停用"
-                    }
-                }, {
-                    label: '说明',
-                    name: 'note',
-                    width: 150,
-                    sortable: false,
-                    editable: true,
-                    edittype: "textarea",
-                    editoptions: {
-                        rows: "2",
-                        cols: "10"
-                    }
+                    },
+                    formatter:'select',
                 }]
             });
         });

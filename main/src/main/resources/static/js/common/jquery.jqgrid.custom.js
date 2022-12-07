@@ -1,13 +1,23 @@
-function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop) {
+function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
     let html = '<select id="' + cm.name + '" name="' + cm.name + '" size="1" class="FormElement ui-widget-content ui-corner-all">';
-    html += '<option value="">请选择...</option>';
+    if (typeof show_tips === "undefined" || show_tips) {
+        html += '<option value="">请选择...</option>';
+    }
     if (text) {
         try {
             let data = JSON.parse(text);
-            if (data && data.content) {
-                data.content.forEach(
-                    item => html += '<option value="' + item[value_prop] + '">' + item[label_prop] + '</option>'
-                );
+            if (data) {
+                if (data.content) {
+                    // for spring data rest
+                    data.content.forEach(
+                        item => html += '<option value="' + item[value_prop] + '">' + item[label_prop] + '</option>'
+                    );
+                } else if (data.body) {
+                    // for old rest api
+                    data.body.forEach(
+                        item => html += '<option value="' + item[value_prop] + '">' + item[label_prop] + '</option>'
+                    );
+                }
             }
         } catch (e) {
         }

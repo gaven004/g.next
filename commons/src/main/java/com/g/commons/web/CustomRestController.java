@@ -46,7 +46,7 @@ import com.g.commons.model.PagedModelLite;
 
 @BasePathAwareController
 public class CustomRestController implements ApplicationEventPublisherAware {
-    public static final String CUSTOM_REST_ROOT_MAPPING = "/rest";
+    public static final String CUSTOM_REST_ROOT_MAPPING = "/c4m";
     public static final String RESOURCE_CUSTOM_REST_MAPPING = CUSTOM_REST_ROOT_MAPPING + "/{repository}";
 
     public static final boolean oneIndexedParameters = true;

@@ -76,11 +76,10 @@
 <@menu>
     <@menuTop name="Dashboard" icon="fa fa-tachometer" url="blank" />
     <@menuTop name="基础资料管理" icon="fa fa-cogs">
-        <@menuItem url="">系统功能</@menuItem>
-        <@menuItem url="">系统菜单</@menuItem>
         <@menuItem url="view/sys/prop/category">参数类型</@menuItem>
         <@menuItem url="view/sys/prop/property">系统参数</@menuItem>
-        <@menuItem url="">角色管理</@menuItem>
-        <@menuItem url="">用户管理</@menuItem>
+        <@menuItem url="view/sys/sec/action">系统功能</@menuItem>
+        <@menuItem url="view/sys/sec/role">角色管理</@menuItem>
+        <@menuItem url="view/sys/sec/user">用户管理</@menuItem>
     </@menuTop>
 </@menu>

@@ -6,16 +6,16 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.StringJoiner;
-
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.*;
+import org.springframework.util.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.g.commons.enums.Status;
 import com.g.commons.model.AbstractEntity;
 
@@ -102,6 +102,7 @@ public class SysUser extends AbstractEntity implements java.io.Serializable {
     }
 
     @Column(name = "password", length = 60)
+    @JsonIgnore
     public String getPassword() {
         return this.password;
     }
@@ -134,7 +135,7 @@ public class SysUser extends AbstractEntity implements java.io.Serializable {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    @BatchSize(size=20)
+    @BatchSize(size = 20)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     public Set<SysRole> getRoles() {
         return roles;

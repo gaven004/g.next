@@ -1,23 +1,23 @@
 ### main
-GET http://localhost:8080/api
+GET http://localhost:8080/_rest
 
 ### Get sysPropertyCategories
-GET http://localhost:8080/api/sysPropertyCategories?status=VALID&page=0&size=2&sort=name,asc
+GET http://localhost:8080/_rest/sysPropertyCategories?status=VALID&page=0&size=2&sort=name,asc
 Accept: application/json
 
 ### Get sysPropertyCategories compact
-GET http://localhost:8080/api/sysPropertyCategories?status=VALID&page=0&size=2&sort=name,asc
+GET http://localhost:8080/_rest/sysPropertyCategories?status=VALID&page=0&size=2&sort=name,asc
 Accept: application/x-spring-data-compact+json
 
 ### Get custom sysPropertyCategories
-GET http://localhost:8080/api/rest/sysPropertyCategories?status=VALID&page=0&size=10&sort=name,asc
+GET http://localhost:8080/_rest/c4m/sysPropertyCategories?status=VALID&page=0&size=10&sort=name,asc
 #Accept: application/json
 
 ### Custom Multi Delete sysPropertyCategory - UNIT
-DELETE http://localhost:8080/api/rest/sysPropertyCategories?ids=UNIT,TEST2
+DELETE http://localhost:8080/_rest/c4m/sysPropertyCategories?ids=UNIT,TEST2
 
 ### Custom create
-POST http://localhost:8080/api/rest/sysPropertyCategories
+POST http://localhost:8080/_rest/c4m/sysPropertyCategories
 Accept: application/json
 Content-Type: application/json
 
@@ -28,28 +28,28 @@ Content-Type: application/json
 }
 
 ### Get sysPropertyCategory - UNIT
-http://localhost:8080/api/sysPropertyCategories/UNIT
+http://localhost:8080/_rest/sysPropertyCategories/UNIT
 Accept: application/json
 
 ### Get sysPropertyCategory - UNIT
-http://localhost:8080/api/sysPropertyCategories/UUU
+http://localhost:8080/_rest/sysPropertyCategories/UUU
 Accept-Language: zh-CN
 Accept: application/json
 
 ### Custom Get sysPropertyCategory - UNIT
-http://localhost:8080/api/rest/sysPropertyCategories/UNIT
+http://localhost:8080/_rest/c4m/sysPropertyCategories/UNIT
 Accept: application/json
 
 ### Update sysPropertyCategories
-PATCH http://localhost:8080/api/rest/sysPropertyCategories/TEST2
+PATCH http://localhost:8080/_rest/c4m/sysPropertyCategories/TEST2
 Content-Type: application/json
 
 {
-  "status" : "VALID"
+  "status": "VALID"
 }
 
 ### Update sysPropertyCategories
-PUT http://localhost:8080/api/rest/sysPropertyCategories/TEST2
+PUT http://localhost:8080/_rest/c4m/sysPropertyCategories/TEST2
 Content-Type: application/json
 
 {
@@ -59,50 +59,67 @@ Content-Type: application/json
 }
 
 ### Delete sysPropertyCategories
-DELETE http://localhost:8080/api/rest/sysPropertyCategories/TEST2
+DELETE http://localhost:8080/_rest/c4m/sysPropertyCategories/TEST2
 
 ### Get User
-GET http://localhost:8080/api/sysUsers/1
+GET http://localhost:8080/_rest/sysUsers/1
 Content-Type: application/json
 
 ### Get User
-GET http://localhost:8080/api/sysUsers
+GET http://localhost:8080/_rest/sysUsers
 Content-Type: application/json
 
 ### Get Users custom
-GET http://localhost:8080/api/rest/sysUsers
+GET http://localhost:8080/_rest/c4m/sysUsers
 Accept-Language: zh-CN
 Content-Type: application/json
 
 ### Get User custom
-GET http://localhost:8080/api/rest/sysUsers/1
+GET http://localhost:8080/_rest/c4m/sysUsers/1
 Accept-Language: zh-CN
 Content-Type: application/json
 
 ### SysUsersRepository search
-GET http://localhost:8080/api/sysUsers/search
+GET http://localhost:8080/_rest/sysUsers/search
 Content-Type: application/json
 
 ### SysUsersRepository search
-GET http://localhost:8080/api/sysUsers/search
+GET http://localhost:8080/_rest/sysUsers/search
 Content-Type: application/json
 
 ### SysUsersRepository findByAccount
-GET http://localhost:8080/api/sysUsers/search/findByAccount?account=admin
+GET http://localhost:8080/_rest/sysUsers/search/findByAccount?account=admin
 Content-Type: application/json
 
 ### SysUsersRepository findByAccount custom
-GET http://localhost:8080/api/rest/sysUsers/search/findByAccount?account=admin
+GET http://localhost:8080/_rest/c4m/sysUsers/search/findByAccount?account=admin
 Content-Type: application/json
 
 ### SysAction get
-GET http://localhost:8080/api/sysActions
+GET http://localhost:8080/_rest/sysActions
 Content-Type: application/json
 
 ### SysAction search
-GET http://localhost:8080/api/sysActions/search
+GET http://localhost:8080/_rest/sysActions/search
 Content-Type: application/json
 
 ### SysAction search
-GET http://localhost:8080/api/sysActions/search/findByResource?resource=/sys/users
+GET http://localhost:8080/_rest/sysActions/search/findByResource?resource=/sys/users
 Content-Type: application/json
+
+### User update
+PATCH http://localhost:8080/_rest/c4m/sysUsers/1
+Content-Type: application/json
+
+{
+  "id": "1",
+  "account": "admin",
+  "username": "系统管理员",
+  "email": "admin@next.com",
+  "roles": [
+    {"id": "140228410537410560", "name": "系统管理员", "status": "VALID", "authorities": []}
+  ],
+  "status": "VALID",
+  "oper": "edit",
+  "_csrf": "a90b4953-7e45-4374-8899-b83725dab485"
+}

@@ -29,8 +29,9 @@ spring:
   jmx:
     enabled: true
   redis:
-    host: localhost
-    port: 6379
+    host: 47.94.96.234
+    port: 16379
+    password: KVge8oLd2t81
 #    host: 39.105.19.141
 #    port: 7001
 #    password: 9vrGKspASS
@@ -43,9 +44,15 @@ spring:
 #    url: jdbc:mysql://39.105.19.141:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull
 #    username: root
 #    password: hmFFXag3Ek
-    url: jdbc:mysql://localhost:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
-    username: root
-    password: MYSQL_ROOT_PASSWORD
+#    url: jdbc:mysql://localhost:3306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+#    username: root
+#    password: MYSQL_ROOT_PASSWORD
+    url: jdbc:mysql://47.94.96.234:13306/next?serverTimezone=Asia/Shanghai&characterEncoding=utf-8
+    username: next
+    password: UnfHtrVxwNOa
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
   jpa:
     database: mysql
     hibernate:
@@ -83,7 +90,7 @@ spring:
       pageable:
         one-indexed-parameters: true
     rest:
-      base-path: /api
+      base-path: /_rest
       return-body-on-update: true
       return-body-on-create: true
 

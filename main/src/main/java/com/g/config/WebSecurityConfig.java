@@ -13,7 +13,7 @@ public class WebSecurityConfig {
     @Bean
     @Order(10)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
-        http.antMatcher("/api/**")
+        http.antMatcher("/_rest/**")
                 .authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll())
                 .csrf(csrf -> csrf.disable());
         return http.build();
@@ -24,8 +24,8 @@ public class WebSecurityConfig {
                                                     @Qualifier("gUserDetailsService") UserDetailsService userDetailsService) throws Exception {
         http.userDetailsService(userDetailsService)
                 .authorizeHttpRequests(authorize ->
-                        authorize.antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**")
-                                .permitAll())
+                        authorize.antMatchers("/**/*.html", "/css/**", "/img/**", "/js/**", "/vendors/**").permitAll()
+                                .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/form-login")
                         .failureForwardUrl("/form-login?error")
                         .defaultSuccessUrl("/blank")
