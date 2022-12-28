@@ -4,6 +4,6 @@ public class UnsupportedFileTypeException extends GenericAppException {
     private static final long serialVersionUID = -2222889008658819968L;
 
     public UnsupportedFileTypeException() {
-        super(ErrorCode.UnsupportedFileType, ErrorMessage.UnsupportedFileType);
+        super(ErrorCode.UnsupportedFileType.code(), ErrorCode.UnsupportedFileType.message());
     }
 }

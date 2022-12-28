@@ -1,8 +1,6 @@
 package com.g.commons.utils;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import com.g.config.SystemConfig;
 
 /**
  * ID生成器，Twitter的分布式雪花算法SnowFlake的JAVA实现
@@ -23,8 +21,9 @@ import org.springframework.stereotype.Component;
  * snowflake生成的ID整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞（由datacenter和workerId作区分），并且效率较高。据说：snowflake每秒能够产生26万个ID。
  */
 
-@Component
 public class IDGenerator {
+    private static volatile IDGenerator instance;
+
     /**
      * 起始的时间戳
      */
@@ -59,17 +58,43 @@ public class IDGenerator {
     private long sequence = 0L; // 序列号
     private long lastTimestamp = -1L; // 上一次时间戳
 
-    @Autowired
-    public IDGenerator(@Value("${g.commons.IDGenerator.datacenterId:0}") long datacenterId,
-                       @Value("${g.commons.IDGenerator.workerId:0}") long workerId) {
+    private IDGenerator() {
+        long candidateDatacenterId;
+        long candidateWorkerId;
+
+        try {
+            candidateDatacenterId = Long.parseLong(SystemConfig.getProperty("commons.IDGenerator.datacenterId"));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("datacenter id must be set");
+        }
+        try {
+            candidateWorkerId = Long.parseLong(SystemConfig.getProperty("commons.IDGenerator.workerId"));
+        } catch (Exception e) {
+            throw new IllegalArgumentException("worker id must be set");
+        }
+
         if (datacenterId > MAX_DATACENTER_ID || datacenterId < 0) {
             throw new IllegalArgumentException(String.format("datacenter Id can't be greater than %d or less than 0", MAX_DATACENTER_ID));
         }
         if (workerId > MAX_WORKER_ID || workerId < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", MAX_WORKER_ID));
         }
-        this.datacenterId = datacenterId;
-        this.workerId = workerId;
+
+        this.datacenterId = candidateDatacenterId;
+        this.workerId = candidateWorkerId;
+    }
+
+    public static IDGenerator getInstance() {
+        IDGenerator result = instance;
+        if (result != null) {
+            return result;
+        }
+        synchronized (IDGenerator.class) {
+            if (instance == null) {
+                instance = new IDGenerator();
+            }
+            return instance;
+        }
     }
 
     /**

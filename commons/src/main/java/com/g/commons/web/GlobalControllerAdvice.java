@@ -35,7 +35,7 @@ public class GlobalControllerAdvice {
                     .append(fieldError.getDefaultMessage()).append(", ");
         }
         buff.replace(buff.length() - 2, buff.length(), "]");
-        return new ApiResponse(ErrorCode.IllegalArgument, buff.toString());
+        return new ApiResponse(ErrorCode.IllegalArgument.code(), buff.toString());
     }
 
     @ExceptionHandler

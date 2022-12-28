@@ -5,10 +5,9 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import com.g.config.SystemConfig;
 
 /**
  * 字符ID生成器，与{@link com.g.commons.utils.IDGenerator}类似的算法
@@ -22,8 +21,9 @@ import org.springframework.util.StringUtils;
  *
  * @version 1.0.0, 2020-12-12, Gaven
  */
-@Component
 public class HexIDGenerator {
+    private static volatile HexIDGenerator instance;
+
     private int idLength; // ID长度
     private String workerId; // 机器标识
     private short sequence = 0; // 序列号
@@ -33,14 +33,26 @@ public class HexIDGenerator {
     ZoneOffset zoneOffset = OffsetDateTime.now().getOffset();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
-    @Autowired
-    public HexIDGenerator(@Value("${g.commons.HexIDGenerator.workerId}") String workerId) {
+    private HexIDGenerator() {
+        this.workerId = SystemConfig.getProperty("commons.HexIDGenerator.workerId");
         if (!StringUtils.hasText(workerId)) {
             throw new IllegalArgumentException("Worker id must be set");
         }
 
-        this.workerId = workerId;
         this.idLength = 14 + workerId.length() + 4; // Length of datetime string + workerId.length + length of integer
+    }
+
+    public static HexIDGenerator getInstance() {
+        HexIDGenerator result = instance;
+        if (result != null) {
+            return result;
+        }
+        synchronized (HexIDGenerator.class) {
+            if (instance == null) {
+                instance = new HexIDGenerator();
+            }
+            return instance;
+        }
     }
 
     /**
@@ -73,7 +85,7 @@ public class HexIDGenerator {
         StringBuilder buff = new StringBuilder(idLength)
                 .append(lastTimestampString) // 时间戳部分
                 .append(workerId) // 机器标识部分
-                .append(StringUtil.format((short) sequence)); // 序列号部分
+                .append(StringUtil.format(sequence)); // 序列号部分
 
         return buff.toString();
     }

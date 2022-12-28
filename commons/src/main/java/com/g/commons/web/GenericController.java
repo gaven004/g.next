@@ -67,7 +67,7 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
         return ApiResponse.success(service.update(entity));
     }
 
-    @DeleteMapping("/$batch")
+    @DeleteMapping
     public ApiResponse<?> delete(@RequestBody @Valid ID[] ids) {
         for (ID id : ids) {
             service.delete(convert(id));

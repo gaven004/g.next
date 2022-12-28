@@ -60,6 +60,6 @@ public class EnumsController implements InitializingBean {
         return Optional.ofNullable((type.indexOf('.') >= 0) ? type : NAME_MAP.get(type))
                 .map(fullname -> CLASS_MAP.get(fullname))
                 .map(clazz -> ApiResponse.success(EnumUtil.getDescOptions(clazz)))
-                .orElse(ApiResponse.error(ErrorCode.EntityNotFound, "没有指定的枚举类"));
+                .orElse(ApiResponse.error(ErrorCode.EntityNotFound.code(), "没有指定的枚举类"));
     }
 }

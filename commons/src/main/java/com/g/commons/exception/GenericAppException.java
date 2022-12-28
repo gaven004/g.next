@@ -19,11 +19,15 @@ public class GenericAppException extends RuntimeException {
     private String sn; // 异常唯一标识，用于日志跟踪
 
     public GenericAppException() {
-        this(ErrorCode.Generic, UUID.randomUUID().toString(), ErrorMessage.Generic);
+        this(ErrorCode.Generic.code(), UUID.randomUUID().toString(), ErrorCode.Generic.message());
+    }
+
+    public GenericAppException(DescribableError error) {
+        this(error.code(), UUID.randomUUID().toString(), error.message());
     }
 
     public GenericAppException(String message) {
-        this(ErrorCode.Generic, UUID.randomUUID().toString(), message);
+        this(ErrorCode.Generic.code(), UUID.randomUUID().toString(), message);
     }
 
     public GenericAppException(String code, String message) {
@@ -37,11 +41,15 @@ public class GenericAppException extends RuntimeException {
     }
 
     public GenericAppException(String message, Throwable cause) {
-        this(ErrorCode.Generic, UUID.randomUUID().toString(), message, cause);
+        this(ErrorCode.Generic.code(), UUID.randomUUID().toString(), message, cause);
     }
 
     public GenericAppException(String code, String message, Throwable cause) {
         this(code, UUID.randomUUID().toString(), message, cause);
+    }
+
+    public GenericAppException(DescribableError error, Throwable cause) {
+        this(error.code(), UUID.randomUUID().toString(), error.message(), cause);
     }
 
     public GenericAppException(String code, String sn, String message, Throwable cause) {
