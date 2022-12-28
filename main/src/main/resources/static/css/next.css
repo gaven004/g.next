@@ -42,6 +42,10 @@ textarea[readonly].show {
     margin-bottom: 10px;
 }
 
+.form-inline > .btn {
+    margin-top: -4px;
+}
+
 /* jqgrid调整 */
 
 /* dialog */

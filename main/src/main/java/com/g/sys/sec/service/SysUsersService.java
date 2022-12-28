@@ -66,7 +66,7 @@ public class SysUsersService
     @Qualifier("usrMailSender")
     private MailSender mailSender;
 
-    private Querydsl querydsl;
+    private volatile Querydsl querydsl;
 
     @Override
     @Transactional

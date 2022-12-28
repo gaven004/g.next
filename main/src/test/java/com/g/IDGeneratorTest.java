@@ -6,12 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.g.commons.utils.HexIDGenerator;
 import com.g.commons.utils.IDGenerator;
 
-public class IDGeneratorTest extends NextApplicationTests {
-    @Autowired
-    IDGenerator idGenerator;
+public class IDGeneratorTest {
+    IDGenerator idGenerator = IDGenerator.getInstance();
 
-    @Autowired
-    HexIDGenerator hexIDGenerator;
+    HexIDGenerator hexIDGenerator = HexIDGenerator.getInstance();
 
     @Test
     void nextId() {

@@ -114,12 +114,6 @@ spring:
 #      include: true
 
 g:
-  commons:
-    IDGenerator:
-      datacenterId: 0
-      workerId: 0
-    HexIDGenerator:
-      workerId: '00'
   sec:
     entryPoint:
       realmName: "G.Next Open Api"

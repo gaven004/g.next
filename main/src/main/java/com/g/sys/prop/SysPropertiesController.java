@@ -39,7 +39,7 @@ public class SysPropertiesController {
     ApiResponse<List<Option>> getOptions() {
         Iterable<SysProperty> properties = repository.findAll();
         if (properties != null && properties.iterator().hasNext()) {
-            List<Option> result = new ArrayList();
+            List<Option> result = new ArrayList<>();
             properties.forEach(item -> {
                 result.add(new Option(item.getName(), item.getValue()));
             });
@@ -52,8 +52,8 @@ public class SysPropertiesController {
     @GetMapping("/{id}")
     ApiResponse<SysProperty> get(@PathVariable Long id) {
         return service.get(id)
-                .map(entity -> ApiResponse.success(entity))
-                .orElseThrow(() -> new EntityNotFoundException());
+                .map(ApiResponse::success)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @PostMapping

@@ -11,11 +11,10 @@ import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.fge.jsonpatch.diff.JsonDiff;
-import com.querydsl.core.types.Predicate;
-
 import com.g.commons.utils.EnumUtil;
 import com.g.commons.utils.IDGenerator;
+import com.github.fge.jsonpatch.diff.JsonDiff;
+import com.querydsl.core.types.Predicate;
 
 @Service
 public class SysLogService {
@@ -25,11 +24,11 @@ public class SysLogService {
     private final IDGenerator idGenerator;
 
     @Autowired
-    public SysLogService(SysLogRepository repository, EntityManagerFactory emf, ObjectMapper mapper, IDGenerator idGenerator) {
+    public SysLogService(SysLogRepository repository, EntityManagerFactory emf, ObjectMapper mapper) {
         this.repository = repository;
         this.emf = emf;
         this.mapper = mapper;
-        this.idGenerator = idGenerator;
+        this.idGenerator = IDGenerator.getInstance();
     }
 
     public SysLog logCreate(Long uid, Object obj) {
