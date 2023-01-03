@@ -95,7 +95,7 @@ textarea[readonly].show {
 /* 表头 */
 .ui-jqgrid .ui-jqgrid-labels {
     border-bottom: none;
-    /*background: #F0F0F0 none repeat-x;*/
+    background: #F2F2F2 none repeat-x;
     filter: none;
     padding: 0 !important;
     border-left: 1px solid #E1E1E1 !important;
