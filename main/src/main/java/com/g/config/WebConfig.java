@@ -11,7 +11,8 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
     public WebConfig(@Autowired FreeMarkerConfigurer freeMarkerConfigurer) {
-        freeMarkerConfigurer.getTaglibFactory().setClasspathTlds(Arrays.asList("/META-INF/security.tld"));
+        freeMarkerConfigurer.getTaglibFactory().setClasspathTlds(
+                Arrays.asList("/META-INF/security.tld", "/META-INF/spring.tld", "/META-INF/spring-form.tld"));
     }
 
     @Override

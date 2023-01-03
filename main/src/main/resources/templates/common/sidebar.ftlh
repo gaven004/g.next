@@ -82,4 +82,8 @@
         <@menuItem url="view/sys/sec/role">角色管理</@menuItem>
         <@menuItem url="view/sys/sec/user">用户管理</@menuItem>
     </@menuTop>
+    <@menuTop name="通知公告" icon="fa fa-clipboard">
+        <@menuItem url="view/bbs/column">栏目管理</@menuItem>
+        <@menuItem url="view/bbs/article">文章编辑</@menuItem>
+    </@menuTop>
 </@menu>

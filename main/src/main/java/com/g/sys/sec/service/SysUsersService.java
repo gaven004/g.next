@@ -11,7 +11,6 @@ import static org.springframework.ui.freemarker.FreeMarkerTemplateUtils.processT
 
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,12 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
-import freemarker.template.Configuration;
-
 import com.g.commons.exception.EntityNotFoundException;
 import com.g.commons.exception.IllegalArgumentException;
 import com.g.commons.service.GenericService;
@@ -41,6 +34,11 @@ import com.g.commons.utils.StringUtil;
 import com.g.sys.sec.model.QSysUser;
 import com.g.sys.sec.model.SysUser;
 import com.g.sys.sec.persistence.SysUsersRepository;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
+import freemarker.template.Configuration;
 
 @Service
 public class SysUsersService
@@ -113,6 +111,12 @@ public class SysUsersService
         return super.update(entity);
     }
 
+    @Transactional
+    public SysUser updateProfile(SysUser entity) {
+        checkEmail(entity);
+        repository.updateProfile(entity.getId(), entity.getUsername(), entity.getEmail());
+        return entity;
+    }
 
     @Transactional
     public void changePassword(@NotNull Long id, @NotBlank String oldPwd, @NotBlank String newPwd) {
@@ -125,8 +129,7 @@ public class SysUsersService
             throw new IllegalArgumentException("原密码错误");
         }
 
-        user.setPassword(passwordEncoder.encode(newPwd));
-        super.update(user);
+        repository.updatePassword(id, passwordEncoder.encode(newPwd));
     }
 
     @Transactional
@@ -138,12 +141,8 @@ public class SysUsersService
         }
 
         log.info("用户（email：{}）重置密码", email);
-
         String pwd = StringUtil.randomString(PASSWORD_LENGTH, true, false, false, false);
-        user.setPassword(passwordEncoder.encode(pwd));
-
-        repository.save(user);
-
+        repository.updatePassword(user.getId(), passwordEncoder.encode(pwd));
         sendMail(user, pwd, Action.RESET);
     }
 
@@ -153,7 +152,7 @@ public class SysUsersService
     private void checkAccount(SysUser src) {
         String account = src.getAccount();
         SysUser found = findByAccount(account);
-        if (found != null && found.getId() != src.getId()) {
+        if (found != null && !found.getId().equals(src.getId())) {
             throw new IllegalArgumentException("重复的用户账号");
         }
     }
@@ -165,8 +164,8 @@ public class SysUsersService
         String email = src.getEmail();
         if (StringUtils.hasText(email)) {
             SysUser found = findByEmail(email);
-            if (found != null && found.getId() != src.getId()) {
-                throw new IllegalArgumentException("重复的用户账号");
+            if (found != null && !found.getId().equals(src.getId())) {
+                throw new IllegalArgumentException("重复的用户邮箱");
             }
         }
     }

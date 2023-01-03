@@ -1,7 +1,7 @@
 <#macro page useJQGrid=true>
 <!DOCTYPE html>
 <#import "/spring.ftl" as spring />
-<#assign sec = JspTaglibs["http://www.springframework.org/security/tags"]>
+<#assign sec = JspTaglibs["http://www.springframework.org/security/tags"]/>
 <html lang="zh">
 <head>
     <meta charset="utf-8">
@@ -77,13 +77,13 @@
                     </a>
                     <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <li>
-                            <a href="admin/user/profile.view">
+                            <a href="sys/users/profile">
                                 <i class="ace-icon fa fa-user"></i>
                                 个人资料
                             </a>
                         </li>
                         <li>
-                            <a href="admin/user/change-pwd.view">
+                            <a href="sys/users/change-pwd">
                                 <i class="ace-icon fa fa-lock"></i>
                                 修改密码
                             </a>

@@ -71,23 +71,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
         }
 
         function resultMsg(response, postdata, oper) {
-            // const result = eval('(' + response.responseText + ')');
-            // if (!result || !result.code) {
-            //     return [false, '服务器异常'];
-            // }
-            // if (result.code === 1) {
-            //     // layer.msg(!result.msg ? '成功！' : result.msg, {
-            //     //     icon: 1
-            //     // });
-            //     return [true, "", ""];
-            // } else {
-            //     return [false, !result.msg ? '服务器异常' : result.msg];
-            // }
-
             if (response && response.status && response.status < 400) {
-                // layer.msg(!result.msg ? '成功！' : result.msg, {
-                //     icon: 1
-                // });
                 return [true, "", ""];
             } else {
                 return [false, '服务器异常'];
@@ -122,7 +106,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
             };
         }
 
-        function jqgEditOptions(url, token, formHeight, formWidth, formDataHeight, top, left) {
+        function jqgEditOptions(url, token, formHeight, formWidth, formDataHeight, top, left, beforeSubmit) {
             return {
                 baseurl: url,
                 url: function (id, oper, postdata, o) {
@@ -150,6 +134,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
                         .wrapInner('<div class="widget-header" />');
                     styleEditForm(form);
                 },
+                beforeSubmit: beforeSubmit,
                 afterSubmit: resultMsg,
                 errorTextFormat: errorMsg
             };
@@ -291,7 +276,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
                 keys: true,
                 editbutton: false,
                 editformbutton: !!o.editUrl,
-                editOptions: $.extend(o.editOptions || {}, jqgEditOptions(o.editUrl, o.token, o.formEditHeight, o.formEditWidth, o.formDataHeight, o.top, o.left)),
+                editOptions: $.extend(o.editOptions || {}, jqgEditOptions(o.editUrl, o.token, o.formEditHeight, o.formEditWidth, o.formDataHeight, o.top, o.left, o.beforeEditSubmit)),
                 delbutton: !!o.delUrl,
                 delOptions: $.extend(o.delOptions || {}, jqgDelOptions(o.delUrl, o.token))
             },

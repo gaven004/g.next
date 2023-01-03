@@ -59,6 +59,14 @@
                 editUrl: "_rest/c4m/sysUsers",
                 delUrl: "_rest/c4m/sysUsers",
                 token: _csrf,
+                formDataHeight: "450px",
+                beforeEditSubmit: function (postdata, formid) {
+                    if (postdata && postdata.roles) {
+                        const words = postdata.roles.split(',');
+                        postdata.roles = words.map(x => ('sysRoles/' + x));
+                    }
+                    return [true, ""];
+                },
                 colModel: [{
                     key: true,
                     label: '',
@@ -114,7 +122,11 @@
                     editoptions: {
                         dataUrl: "_rest/c4m/sysRoles?status=VALID&page=0&size=1000&sort=name,asc",
                         buildSelect: function (data, xhr, cm, col) {
-                            return jqgBuildSelect(data, xhr, cm, col, 'id', 'name', false);
+                            let html = jqgBuildSelect(data, xhr, cm, col, 'id', 'name', false);
+                            window.setTimeout(function () {
+                                $("select#roles.chosen-select.FormElement").trigger("chosen:updated");
+                            }, 500);
+                            return html;
                         },
                         multiple: true,
                         size: 5,

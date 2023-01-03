@@ -53,6 +53,7 @@ spring:
     hikari:
       maximum-pool-size: 5
       minimum-idle: 2
+      max-lifetime: 60000
   jpa:
     database: mysql
     hibernate:
