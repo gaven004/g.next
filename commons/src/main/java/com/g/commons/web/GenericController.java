@@ -2,10 +2,10 @@ package com.g.commons.web;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -14,11 +14,11 @@ import org.springframework.util.NumberUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import com.querydsl.core.types.Predicate;
-
 import com.g.commons.model.ApiResponse;
+import com.g.commons.model.PagedModelLite;
 import com.g.commons.service.GenericService;
 import com.g.commons.utils.GenericsUtils;
+import com.querydsl.core.types.Predicate;
 
 public abstract class GenericController<S extends GenericService<R, T, ID>,
         R extends PagingAndSortingRepository<T, ID> & QuerydslPredicateExecutor<T>, T, ID> {
@@ -42,7 +42,8 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
         Predicate predicate = argumentResolver.resolveArgument(webRequest, domainClass);
 
         if (isPage(webRequest)) {
-            return ApiResponse.success(service.findAll(predicate, pageable));
+            return ApiResponse.success(new PagedModelLite<>((PageImpl) service.findAll(predicate, pageable),
+                    CustomRestController.oneIndexedParameters));
         }
 
         if (isSort(webRequest)) {
