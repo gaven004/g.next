@@ -2,7 +2,6 @@ package com.g.sys.sec.web;
 
 import java.util.Collection;
 import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -46,6 +45,19 @@ public class WebSecurity {
         }
 
         return check(authentication, uri, actionMethod);
+    }
+
+    public boolean check(String uri) {
+        try {
+            final Authentication authentication = WebSecurityHelper.getAuthentication();
+            return check(authentication, uri, ActionMethod.GET);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean check(Authentication authentication, String uri) {
+        return check(authentication, uri, ActionMethod.GET);
     }
 
     public boolean check(Authentication authentication, String uri, ActionMethod actionMethod) {

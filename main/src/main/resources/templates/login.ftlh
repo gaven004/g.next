@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-
+    <@sec.csrfMetaTags />
     <base href="<@spring.url '/'/>"/>
 
     <title>Login - G.Next Admin</title>
@@ -45,7 +45,7 @@
                     <div class="space-18"></div>
                     <div class="position-relative">
                         <div id="login-box"
-                             class="login-box widget-box no-border <#if springMacroRequestContext.requestUri?index_of('/reset-pwd.view') < 0>visible</#if>">
+                             class="login-box widget-box no-border <#if springMacroRequestContext.requestUri?index_of('/reset-pwd') < 0>visible</#if>">
                             <div class="widget-body">
                                 <div class="widget-main">
                                     <h4 class="header blue lighter bigger">
@@ -56,7 +56,7 @@
                                     <#if RequestParameters.error??>
                                         <div class="alert alert-danger">
                                             <i class="ace-icon fa fa-exclamation-triangle"></i>
-                                            &nbsp;${Session["SPRING_SECURITY_LAST_EXCEPTION"].message}
+                                            &nbsp;${Request["SPRING_SECURITY_LAST_EXCEPTION"].message!}
                                             <br/>
                                         </div>
                                     </#if>
@@ -119,7 +119,7 @@
                         </div><!-- /.login-box -->
 
                         <div id="forgot-box"
-                             class="forgot-box widget-box no-border <#if springMacroRequestContext.requestUri?index_of('/reset-pwd.view') gte 0>visible</#if>">
+                             class="forgot-box widget-box no-border <#if springMacroRequestContext.requestUri?index_of('/reset-pwd') gte 0>visible</#if>">
                             <div class="widget-body">
                                 <div class="widget-main">
                                     <h4 class="header red lighter bigger">
@@ -143,8 +143,7 @@
                                             <br/>
                                         </div>
                                     </#if>
-                                    <form id="frmResetPwd" name="frmResetPwd" action="admin/user/reset-pwd.view"
-                                          onSubmit="return false;" method="POST">
+                                    <form id="frmResetPwd" name="frmResetPwd" action="/sys/users/reset-pwd" method="POST">
                                         <fieldset>
                                             <label class="block clearfix">
                                                 <span class="block input-icon input-icon-right">
@@ -154,7 +153,7 @@
                                                 </span>
                                             </label>
                                             <div class="clearfix">
-                                                <button id="btnResetPwd" type="button"
+                                                <button id="btnResetPwd" type="submit"
                                                         class="width-35 pull-right btn btn-sm btn-danger">
                                                     <i class="ace-icon fa fa-lightbulb-o"></i>
                                                     <span class="bigger-110">发送邮件!</span>
@@ -185,27 +184,22 @@
 
 <!-- include ace.js -->
 <script src="vendors/ace/js/ace.min.js"></script>
+<script src="js/common/common.js"></script>
 
 <!-- inline scripts related to this page -->
 <script type="text/javascript">
     jQuery(function ($) {
+        const csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+        const csrfHeader = $("meta[name='_csrf_header']").attr("content");
+        const csrfToken = $("meta[name='_csrf']").attr("content");
+
         $(document).on('click', '.toolbar a[data-target]', function (e) {
             e.preventDefault();
             let target = $(this).data('target');
             $('.widget-box.visible').removeClass('visible');//hide others
             $(target).addClass('visible');//show target
         });
-
-        $('button#btnResetPwd').bind('click', function () {
-            let param = $("form#frmResetPwd").serialize();
-            comm.ajax2msg("rest/admin/user/reset-pwd", param);
-        });
     });
-
-    function resetPwd() {
-        let param = $("form#frmResetPwd").serialize();
-        comm.ajax2msg("rest/admin/user/reset-pwd", param);
-    }
 </script>
 </body>
 </html>

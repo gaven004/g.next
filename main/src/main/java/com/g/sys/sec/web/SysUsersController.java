@@ -91,6 +91,18 @@ public class SysUsersController
         return ApiResponse.success();
     }
 
+    @PostMapping("reset-pwd")
+    public String resetPwd(Model model, String email) {
+        try {
+            service.resetPassword(email);
+            ControllerHelper.setSuccessMsg(model, "密码已重置，并发送到注册的邮箱，请前往查收！");
+        } catch (Exception e) {
+            ControllerHelper.setErrorMsg(model, "系统操作异常！", e);
+        }
+
+        return "login";
+    }
+
     /**
      * 个人信息，展示、保存
      *

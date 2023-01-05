@@ -140,7 +140,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
             };
         }
 
-        function jqgAddFunc(grid_id, beforeProcessing, afterProcessing) {
+        function jqgAddFunc(grid_id, beforeProcessing, afterProcessing, beforeSubmit) {
             return function () {
                 const grid = $("#" + grid_id);
 
@@ -182,6 +182,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
                             .wrapInner('<div class="widget-header" />');
                         styleEditForm(form);
                     },
+                    beforeSubmit: beforeSubmit,
                     afterSubmit: resultMsg,
                     errorTextFormat: errorMsg
                 });
@@ -356,7 +357,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
             grid.trigger('reloadGrid');
         });
 
-        $("#jqgAdd").click(jqgAddFunc("grid-table"));
+        $("#jqgAdd").click(jqgAddFunc("grid-table", null, null, o.beforeEditSubmit));
         $("#jqgDel").click(jqgDelFunc("grid-table"));
 
         setTimeout(function () {

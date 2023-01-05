@@ -143,6 +143,10 @@ textarea[readonly].show {
     color: #666;
 }
 
+.ui-jqgrid .ui-jqgrid-pager {
+    border-top: 0!important;
+}
+
 /* 导入jquery-ui的几个样式，以支持jqgrid的弹框调整大小 */
 .ui-resizable-se {
     cursor: se-resize;
@@ -154,7 +158,7 @@ textarea[readonly].show {
 
 .ui-resizable-handle {
     position: absolute;
-    font-size: .1px;
+    font-size: 12px;
     display: block;
     -ms-touch-action: none;
     touch-action: none;
@@ -170,4 +174,10 @@ textarea[readonly].show {
 .table-bordered.solid-1 th,
 .table-bordered.solid-1 td {
     border: 1px solid #000 !important;
+}
+
+/* 调整chosen，展示扁平化 */
+.chosen-container-multi .chosen-choices li.search-choice {
+    border-radius: 2px !important;
+    background-image: none !important;
 }

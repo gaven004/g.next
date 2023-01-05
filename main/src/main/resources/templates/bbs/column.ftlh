@@ -2,18 +2,20 @@
 <@base.page>
     <div class="row">
         <div class="col-md-4">
-            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/bbsColumns" data-token="${_csrf.token}">
+            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/bbsColumns"
+                    data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
-            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/bbsColumns" data-token="${_csrf.token}">
+            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/bbsColumns"
+                    data-token="${_csrf.token}">
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
         </div>
         <div class="col-md-8">
             <div class="input-group" style="margin-left:auto;">
                 <form id="form" class="form-inline align-right">
-                    <input name="id" type="text" placeholder="编码">
-                    <input name="name" type="text" placeholder="名称">
+                    <input name="id" type="text" placeholder="栏目编码">
+                    <input name="name" type="text" placeholder="栏目名称">
                     <button class="btn btn-sm btn-info" type="button" id="jqgSearch">
                         <i class="ace-icon glyphicon glyphicon-search"></i> 查找
                     </button>
@@ -80,6 +82,12 @@
                     editoptions: {
                         size: "20",
                         maxlength: "200"
+                    },
+                    formatter: function (cellvalue, options, rowObject) {
+                        return '<span src="' + cellvalue + '">  <i class="' + cellvalue + '"></i>  ' + cellvalue + '</span>';
+                    },
+                    unformat: function (cellvalue, options, cellobject) {
+                        return $('span', cellobject).attr('src');
                     }
                 }, {
                     label: '排序',

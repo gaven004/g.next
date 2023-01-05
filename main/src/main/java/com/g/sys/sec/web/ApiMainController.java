@@ -10,6 +10,7 @@ import com.g.commons.model.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,22 +33,24 @@ import com.g.sys.sec.model.UserInfo;
 import com.g.sys.sec.service.JwtService;
 
 @RestController
+@RequestMapping("api")
 public class ApiMainController {
+/*
     private static final Logger logger = LoggerFactory.getLogger(ApiMainController.class);
 
-//    private final AuthenticationManager authenticationManager;
-//
-//    private final JwtService jwtService;
-//
-//    @Autowired
-//    public ApiMainController(AuthenticationManager authenticationManager,
-//                             JwtService jwtService) {
-//        Assert.notNull(authenticationManager, "A AuthenticationManager must be set");
-//        Assert.notNull(jwtService, "A JwtService must be set");
-//
-//        this.authenticationManager = authenticationManager;
-//        this.jwtService = jwtService;
-//    }
+    private final AuthenticationManager authenticationManager;
+
+    private final JwtService jwtService;
+
+    @Autowired
+    public ApiMainController(@Qualifier("restAuthenticationManager") AuthenticationManager authenticationManager,
+                             JwtService jwtService) {
+        Assert.notNull(authenticationManager, "A AuthenticationManager must be set");
+        Assert.notNull(jwtService, "A JwtService must be set");
+
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+    }
 
     @RequestMapping(path = "/test")
     public ResponseEntity<ApiResponse<String>> test() {
@@ -61,62 +64,63 @@ public class ApiMainController {
         return new ResponseEntity(result, null, HttpStatus.OK);
     }
 
-//    @PostMapping(path = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-//    public ResponseEntity<ApiResponse<UserInfo>> login(HttpServletRequest request, @Validated @RequestBody LoginUser user) {
-//        final boolean debug = logger.isDebugEnabled();
-//
-//        ApiResponse<UserInfo> response = null;
-//        try {
-//            Authentication authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-//            if (debug) {
-//                logger.debug("Try authenticate for user: {}", user.getUsername());
-//            }
-//
-//            Authentication authResult = authenticationManager.authenticate(authRequest);
-//            if (debug) {
-//                logger.debug("Authentication success: {}", authResult);
-//            }
-//
-//            SecurityUser authUser = (SecurityUser) authResult.getPrincipal();
-//            response = ApiResponse.success(getUserInfo(request, authUser));
-//        } catch (AuthenticationException failed) {
-//            SecurityContextHolder.clearContext();
-//
-//            if (debug) {
-//                logger.debug("Authentication request for failed: {}", failed.getMessage());
-//            }
-//
-//            response = ApiResponse.error(ErrorCode.Generic, failed.getMessage());
-//        }
-//
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Cache-Control", "no-store");
-//        headers.set("Pragma", "no-cache");
-//        headers.set("Content-Type", "application/json;charset=UTF-8");
-//
-//        return new ResponseEntity(response, headers, HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(path = "/refresh-token")
-//    public ApiResponse<UserInfo> refreshToken(HttpServletRequest request) {
-//        SecurityUser authUser = WebSecurityHelper.getAuthUser();
-//        return ApiResponse.success(getUserInfo(request, authUser));
-//    }
-//
-//    private UserInfo getUserInfo(HttpServletRequest request, SecurityUser authUser) {
-//        Map<String, Object> payloads = new HashMap<>();
-//        payloads.put(PayloadKey.username, authUser.getUsername());
-//        payloads.put(PayloadKey.ip, RequestHelper.getClientIpAddr(request));
-//
-//        final Map<String, Object> signResult = jwtService.sign(payloads);
-//
-//        UserInfo accessToken = new UserInfo();
-//        accessToken.setAccount(authUser.getUsername());
-//        accessToken.setUsername(authUser.getNickname());
-//        accessToken.setIssuer((String) signResult.get(JwtService.ISSUER));
-//        accessToken.setIssuerAt((Date) signResult.get(JwtService.ISSUED_AT));
-//        accessToken.setExpiresAt((Date) signResult.get(JwtService.EXPIRES_AT));
-//        accessToken.setToken((String) signResult.get(JwtService.TOKEN));
-//        return accessToken;
-//    }
+    @PostMapping(path = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<ApiResponse<UserInfo>> login(HttpServletRequest request, @Validated @RequestBody LoginUser user) {
+        final boolean debug = logger.isDebugEnabled();
+
+        ApiResponse<UserInfo> response = null;
+        try {
+            Authentication authRequest = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+            if (debug) {
+                logger.debug("Try authenticate for user: {}", user.getUsername());
+            }
+
+            Authentication authResult = authenticationManager.authenticate(authRequest);
+            if (debug) {
+                logger.debug("Authentication success: {}", authResult);
+            }
+
+            SecurityUser authUser = (SecurityUser) authResult.getPrincipal();
+            response = ApiResponse.success(getUserInfo(request, authUser));
+        } catch (AuthenticationException failed) {
+            SecurityContextHolder.clearContext();
+
+            if (debug) {
+                logger.debug("Authentication request for failed: {}", failed.getMessage());
+            }
+
+            response = ApiResponse.error(failed.getMessage());
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Cache-Control", "no-store");
+        headers.set("Pragma", "no-cache");
+        headers.set("Content-Type", "application/json;charset=UTF-8");
+
+        return new ResponseEntity(response, headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/refresh-token")
+    public ApiResponse<UserInfo> refreshToken(HttpServletRequest request) {
+        SecurityUser authUser = WebSecurityHelper.getAuthUser();
+        return ApiResponse.success(getUserInfo(request, authUser));
+    }
+
+    private UserInfo getUserInfo(HttpServletRequest request, SecurityUser authUser) {
+        Map<String, Object> payloads = new HashMap<>();
+        payloads.put(PayloadKey.username, authUser.getUsername());
+        payloads.put(PayloadKey.ip, RequestHelper.getClientIpAddr(request));
+
+        final Map<String, Object> signResult = jwtService.sign(payloads);
+
+        UserInfo accessToken = new UserInfo();
+        accessToken.setAccount(authUser.getUsername());
+        accessToken.setUsername(authUser.getNickname());
+        accessToken.setIssuer((String) signResult.get(JwtService.ISSUER));
+        accessToken.setIssuerAt((Date) signResult.get(JwtService.ISSUED_AT));
+        accessToken.setExpiresAt((Date) signResult.get(JwtService.EXPIRES_AT));
+        accessToken.setToken((String) signResult.get(JwtService.TOKEN));
+        return accessToken;
+    }
+*/
 }

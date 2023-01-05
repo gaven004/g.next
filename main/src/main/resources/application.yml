@@ -28,6 +28,17 @@ spring:
 #    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
   jmx:
     enabled: true
+  mail:
+    host: smtp.163.com
+    port: 465
+    protocol: smtps
+    username: gsgdgcyxgs_pm@163.com
+    password: abcde12345
+    properties:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
   redis:
     host: 47.94.96.234
     port: 16379

@@ -1,0 +1,18 @@
+###
+GET http://localhost:8080/api/test
+
+### Send POST request with json body
+POST http://localhost:8080/api/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "123456"
+}
+
+> {% client.global.set("auth_token", response.body.body.token); %}
+
+### Say Hello
+POST http://localhost:8080/api/hello
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}

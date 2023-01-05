@@ -2,4 +2,12 @@
 GET http://localhost:8080/test
 
 ###
-GET http://localhost:8080/enums/ActionMethod
+GET http://localhost:8080/api/enums/ActionMethod
+
+### Reset password
+PUT http://localhost:8080/sys/users/reset-password
+Content-Type: application/json
+
+{
+  "email": "13808821842@139.com"
+}

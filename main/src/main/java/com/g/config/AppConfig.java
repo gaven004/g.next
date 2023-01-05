@@ -5,16 +5,18 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.g.commons.utils.MailSender;
 import com.g.commons.utils.ObjectMapperUtil;
 
 @Configuration
-@ImportResource("classpath*:sys-config.xml")
 @AutoConfigureBefore({DataSourceAutoConfiguration.class, WebMvcAutoConfiguration.class})
 public class AppConfig {
     @Bean
@@ -27,5 +29,18 @@ public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public MailSender usrMailSender(JavaMailSender mailSender) {
+        Assert.notNull(mailSender, "A JavaMailSender must be set");
+        return new MailSender("gsgdgcyxgs_pm@163.com", mailSender);
+    }
+
+    @Bean
+    public ReloadableResourceBundleMessageSource messageSource() {
+        final ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:org/springframework/security/messages");
+        return messageSource;
     }
 }
