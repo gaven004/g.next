@@ -2,10 +2,10 @@
 <@base.page>
     <div class="row">
         <div class="col-md-4">
-            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/sysPropertyCategories" data-token="${_csrf.token}">
+            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="sys/property/categories" data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
-            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/sysPropertyCategories" data-token="${_csrf.token}">
+            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="sys/property/categories" data-token="${_csrf.token}">
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
         </div>
@@ -37,9 +37,9 @@
     <script>
         jQuery(function ($) {
             $("#grid-table").grid({
-                url: "_rest/c4m/sysPropertyCategories",
-                editUrl: "_rest/c4m/sysPropertyCategories",
-                delUrl: "_rest/c4m/sysPropertyCategories",
+                url: "sys/property/categories",
+                editUrl: "sys/property/categories",
+                delUrl: "sys/property/categories",
                 token: _csrf,
                 colModel: [{
                     key: true,

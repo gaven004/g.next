@@ -8,17 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.g.commons.exception.EntityNotFoundException;
+import com.g.commons.service.GenericService;
 import com.g.commons.utils.NullAwareBeanUtilsBean;
 import com.g.sys.log.SysLogService;
 
 @Service
-public class SysPropertyCategoriesService {
-    private final SysPropertyCategoriesRepository repository;
+public class SysPropertyCategoriesService
+        extends GenericService<SysPropertyCategoriesRepository, SysPropertyCategory, String> {
     private final SysLogService logService;
 
     @Autowired
-    public SysPropertyCategoriesService(SysPropertyCategoriesRepository repository, SysLogService logService) {
-        this.repository = repository;
+    public SysPropertyCategoriesService(SysLogService logService) {
         this.logService = logService;
     }
 

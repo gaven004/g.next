@@ -1,6 +1,6 @@
 package com.g.config;
 
-import static com.g.commons.web.CustomRestController.oneIndexedParameters;
+import static com.g.commons.web.GenericController.oneIndexedParameters;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;

@@ -78,6 +78,19 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
             }
         }
 
+        function showErrMsg(msg, title) {
+            if (!msg || /^\s*$/.test(msg)) {
+                msg = '<p>无法从服务器获取数据，请试试以下办法：</p><ul><li>检查输入的条件是否有问题</li><li>重新登录系统再试</li></ul>';
+            }
+            if (!title || /^\s*$/.test(title)) {
+                title = '系统异常';
+            }
+            bootbox.dialog({
+                message: msg,
+                title: title
+            });
+        }
+
         function errorMsg(response) {
             const result = eval('(' + response.responseText + ')');
             return [false, !result.msg ? '服务器异常' : result.msg];
@@ -227,7 +240,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
                     mtype: 'DELETE',
                     delData: {
                         "_csrf": token,
-                        "ids": ids.toString()
+                        "ids": ids
                     },
                     beforeShowForm: function (e) {
                         let form = $(e[0]);
@@ -304,7 +317,7 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
             multiboxonly: !!o.delUrl,
             multiselectWidth: 30,
             prmNames: {page: "page", rows: "size"},
-            jsonReader: {page: "page.number", total: "page.totalPages", records: "page.totalElements", root: "content"},
+            jsonReader: {page: "body.page.number", total: "body.page.totalPages", records: "body.page.totalElements", root: "body.content"},
             serializeGridData: function (postData) {
                 // 兼容QueryDSL的Sorting
                 if (postData && postData.sidx && postData.sidx.trim().length > 0) {
@@ -321,13 +334,12 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
                 return JSON.stringify(postData);
             },
             loadError: function (xhr, status, error) {   // 弹出错误信息
-                // showErrMsg(xhr && xhr.responseJSON && xhr.responseJSON.msg ? xhr.responseJSON.msg : null);
+                showErrMsg(xhr && xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : null);
             },
             loadComplete: function (data) {
-                // if (data && data.result && data.result === 'ERROR') {
-                //     // showErrMsg(data.msg);
-                //     return;
-                // }
+                if (data && data.result && data.result !== 'SUCCESS') {
+                    showErrMsg(data.message);
+                }
             }
         }, o || {});
 

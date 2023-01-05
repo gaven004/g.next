@@ -22,6 +22,8 @@ import com.querydsl.core.types.Predicate;
 
 public abstract class GenericController<S extends GenericService<R, T, ID>,
         R extends PagingAndSortingRepository<T, ID> & QuerydslPredicateExecutor<T>, T, ID> {
+    public static final boolean oneIndexedParameters = true;
+
     @Autowired
     protected QuerydslPredicateArgumentCustomResolver argumentResolver;
 
@@ -43,7 +45,7 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
 
         if (isPage(webRequest)) {
             return ApiResponse.success(new PagedModelLite<>((PageImpl) service.findAll(predicate, pageable),
-                    CustomRestController.oneIndexedParameters));
+                    oneIndexedParameters));
         }
 
         if (isSort(webRequest)) {
@@ -63,13 +65,18 @@ public abstract class GenericController<S extends GenericService<R, T, ID>,
         return ApiResponse.success(service.save(entity));
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     public ApiResponse<T> update(@RequestBody @Valid T entity) {
         return ApiResponse.success(service.update(entity));
     }
 
+    @PatchMapping("/{id}")
+    public ApiResponse<T> patch(@RequestBody @Valid T entity) {
+        return ApiResponse.success(service.update(entity));
+    }
+
     @DeleteMapping
-    public ApiResponse<?> delete(@RequestBody @Valid ID[] ids) {
+    public ApiResponse<?> delete(@RequestParam(value = "ids[]") ID[] ids) {
         for (ID id : ids) {
             service.delete(convert(id));
         }
