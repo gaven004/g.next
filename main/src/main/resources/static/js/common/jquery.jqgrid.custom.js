@@ -70,12 +70,19 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
             buttons.eq(0).removeClass('btn-default').addClass('btn-danger');
         }
 
-        function resultMsg(response, postdata, oper) {
+        function resultMsg(response) {
             if (response && response.status && response.status < 400) {
                 return [true, "", ""];
-            } else {
-                return [false, '服务器异常'];
             }
+            return errorMsg(response);
+        }
+
+        function errorMsg(response) {
+            let result;
+            if (response) {
+                result = response.responseJSON ? response.responseJSON : eval('(' + response.responseText + ')');
+            }
+            return [false, !result.message ? '服务器异常' : '系统异常：' + result.message];
         }
 
         function showErrMsg(msg, title) {
@@ -89,11 +96,6 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
                 message: msg,
                 title: title
             });
-        }
-
-        function errorMsg(response) {
-            const result = eval('(' + response.responseText + ')');
-            return [false, !result.msg ? '服务器异常' : result.msg];
         }
 
         function jqgDelOptions(url, token) {
@@ -276,25 +278,27 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
         };
 
         // 增加编辑列参数
-        const acColModel = [{
-            label: ' ',
-            name: 'myac',
-            index: '',
-            width: !!o.editUrl && !!o.delUrl ? 66 : 40,
-            align: 'center',
-            fixed: true,
-            resize: false,
-            sortable: false,
-            formatter: 'actions',
-            formatoptions: {
-                keys: true,
-                editbutton: false,
-                editformbutton: !!o.editUrl,
-                editOptions: $.extend(o.editOptions || {}, jqgEditOptions(o.editUrl, o.token, o.formEditHeight, o.formEditWidth, o.formDataHeight, o.top, o.left, o.beforeEditSubmit)),
-                delbutton: !!o.delUrl,
-                delOptions: $.extend(o.delOptions || {}, jqgDelOptions(o.delUrl, o.token))
-            },
-        }];
+        const acColModel = (o.editUrl || o.delUrl) ?
+            [{
+                label: ' ',
+                name: 'myac',
+                index: '',
+                width: !!o.editUrl && !!o.delUrl ? 66 : 40,
+                align: 'center',
+                fixed: true,
+                resize: false,
+                sortable: false,
+                formatter: 'actions',
+                formatoptions: {
+                    keys: true,
+                    editbutton: false,
+                    editformbutton: !!o.editUrl,
+                    editOptions: $.extend(o.editOptions || {}, jqgEditOptions(o.editUrl, o.token, o.formEditHeight, o.formEditWidth, o.formDataHeight, o.top, o.left, o.beforeEditSubmit)),
+                    delbutton: !!o.delUrl,
+                    delOptions: $.extend(o.delOptions || {}, jqgDelOptions(o.delUrl, o.token))
+                },
+            }]
+            : [];
 
         if (o && o.colModel) {
             o.colModel = acColModel.concat(o.colModel);
@@ -317,7 +321,12 @@ function jqgBuildSelect(text, xhr, cm, col, value_prop, label_prop, show_tips) {
             multiboxonly: !!o.delUrl,
             multiselectWidth: 30,
             prmNames: {page: "page", rows: "size"},
-            jsonReader: {page: "body.page.number", total: "body.page.totalPages", records: "body.page.totalElements", root: "body.content"},
+            jsonReader: {
+                page: "body.page.number",
+                total: "body.page.totalPages",
+                records: "body.page.totalElements",
+                root: "body.content"
+            },
             serializeGridData: function (postData) {
                 // 兼容QueryDSL的Sorting
                 if (postData && postData.sidx && postData.sidx.trim().length > 0) {

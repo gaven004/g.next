@@ -12,18 +12,18 @@ import org.springframework.stereotype.Service;
 
 import com.g.commons.enums.Status;
 import com.g.commons.exception.EntityNotFoundException;
+import com.g.commons.service.GenericService;
 import com.g.commons.utils.NullAwareBeanUtilsBean;
 import com.g.sys.log.SysLogService;
 import com.querydsl.core.types.Predicate;
 
 @Service
-public class SysPropertiesService {
-    private final SysPropertiesRepository repository;
+public class SysPropertiesService
+        extends GenericService<SysPropertiesRepository, SysProperty, Long> {
     private final SysLogService logService;
 
     @Autowired
-    public SysPropertiesService(SysPropertiesRepository repository, SysLogService logService) {
-        this.repository = repository;
+    public SysPropertiesService(SysLogService logService) {
         this.logService = logService;
     }
 
@@ -36,7 +36,7 @@ public class SysPropertiesService {
 
     @Transactional
     public SysProperty update(final Long operator, final SysProperty entity) {
-        final Optional<SysProperty> optional = get(entity.getId());
+        final Optional<SysProperty> optional = repository.findById(entity.getId());
         return optional
                 .map(source -> {
                     try {
@@ -57,14 +57,6 @@ public class SysPropertiesService {
     public void delete(Long operator, Long pk) {
         repository.deleteById(pk);
         logService.logDelete(operator, new SysProperty(pk));
-    }
-
-    public Optional<SysProperty> get(Long pk) {
-        return repository.findById(pk);
-    }
-
-    public Page<SysProperty> findAll(Predicate predicate, Pageable pageable) {
-        return repository.findAll(predicate, pageable);
     }
 
     public Iterable<SysProperty> findByCategory(String category) {

@@ -1,15 +1,20 @@
+<#assign sec = JspTaglibs["http://www.springframework.org/security/tags"]/>
 <#import "/common/base.ftlh" as base>
 <@base.page>
     <div class="row">
         <div class="col-md-4">
-            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/sysProperties"
+            <@sec.authorize access="@webSecurity.check('/sys/properties', 'POST')">
+            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="sys/properties"
                     data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
-            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/sysProperties"
+            </@sec.authorize>
+            <@sec.authorize access="@webSecurity.check('/sys/properties', 'DELETE')">
+            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="sys/properties"
                     data-token="${_csrf.token}">
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
+            </@sec.authorize>
         </div>
         <div class="col-md-8">
             <div class="input-group" style="margin-left:auto;">
@@ -37,106 +42,12 @@
     </div>
 
     <script>
-        jQuery(function ($) {
-            $("#grid-table").grid({
-                url: "_rest/c4m/sysProperties",
-                editUrl: "_rest/c4m/sysProperties",
-                delUrl: "_rest/c4m/sysProperties",
-                token: _csrf,
-                colModel: [{
-                    key: true,
-                    label: '',
-                    name: 'id',
-                    hidden: true,
-                    editable : true,
-                }, {
-                    label: '参数类型',
-                    name: 'category',
-                    width: 100,
-                    editable: true,
-                    edittype: "select",
-                    editoptions: {
-                        dataUrl: "_rest/c4m/sysPropertyCategories?status=VALID&page=0&size=1000&sort=name,asc",
-                        buildSelect: function (data, xhr, cm, col) {
-                            return jqgBuildSelect(data, xhr, cm, col, 'id', 'name');
-                        },
-                    },
-                    editrules: {
-                        required: true,
-                    },
-                }, {
-                    label: '参数名',
-                    name: 'name',
-                    width: 100,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "30"
-                    }
-                }, {
-                    label: '参数值',
-                    name: 'value',
-                    width: 100,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "30"
-                    }
-                }, {
-                    label: '扩展属性',
-                    name: 'properties',
-                    width: 150,
-                    sortable: false,
-                    editable: true,
-                    edittype: "textarea",
-                    editoptions: {
-                        rows: "2",
-                        cols: "10"
-                    }
-                }, {
-                    label: '排序',
-                    name: 'sortOrder',
-                    width: 50,
-                    editable: true,
-                    editoptions: {
-                        size: "20",
-                        maxlength: "6"
-                    },
-                    editrules: {
-                        integer: true
-                    }
-                }, {
-                    label: '状态',
-                    name: 'status',
-                    width: 50,
-                    formatter: "select",
-                    editable: true,
-                    edittype: "select",
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        value: "VALID:启用;INVALID:停用"
-                    }
-                }, {
-                    label: '说明',
-                    name: 'note',
-                    width: 150,
-                    sortable: false,
-                    editable: true,
-                    edittype: "textarea",
-                    editoptions: {
-                        rows: "2",
-                        cols: "10"
-                    }
-                }]
-            });
-        });
+        <@sec.authorize access="@webSecurity.check('/sys/properties', 'PATCH')">
+        const _edit_permission = true;
+        </@sec.authorize>
+        <@sec.authorize access="@webSecurity.check('/sys/properties', 'DELETE')">
+        const _delete_permission = true;
+        </@sec.authorize>
     </script>
+    <script src="js/sys/prop/property.js"></script>
 </@base.page>

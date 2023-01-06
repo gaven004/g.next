@@ -30,11 +30,11 @@ import com.g.sys.sec.service.SysActionService;
 @RequestMapping("sys/action")
 public class SysActionController
         extends GenericController<SysActionService, SysActionRepository, SysAction, Long> {
-    @GetMapping("/$options")
+    @GetMapping("/options")
     ApiResponse<List<Option>> getOptions() {
         var qSysAction = QSysAction.sysAction;
         Predicate predicate = qSysAction.status.eq(Status.VALID);
-        Iterable<SysAction> actions = service.findAll(predicate, Sort.by("resource"));
+        Iterable<SysAction> actions = service.findAll(predicate);
         if (actions != null && actions.iterator().hasNext()) {
             List<Option> result = new ArrayList();
             actions.forEach(item -> {

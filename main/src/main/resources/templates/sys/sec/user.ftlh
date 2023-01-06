@@ -1,15 +1,20 @@
+<#assign sec = JspTaglibs["http://www.springframework.org/security/tags"]/>
 <#import "/common/base.ftlh" as base>
 <@base.page>
     <div class="row">
         <div class="col-md-4">
-            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/sysUsers"
-                    data-token="${_csrf.token}">
-                <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
-            </button>
-            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/sysUsers"
-                    data-token="${_csrf.token}">
-                <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
-            </button>
+            <@sec.authorize access="@webSecurity.check('/sys/users', 'POST')">
+                <button id="jqgAdd" class="btn btn-success btn-sm" data-url="sys/users"
+                        data-token="${_csrf.token}">
+                    <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
+                </button>
+            </@sec.authorize>
+            <@sec.authorize access="@webSecurity.check('/sys/users', 'DELETE')">
+                <button id="jqgDel" class="btn btn-sm btn-danger" data-url="sys/users"
+                        data-token="${_csrf.token}">
+                    <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
+                </button>
+            </@sec.authorize>
         </div>
         <div class="col-md-8">
             <div class="input-group" style="margin-left:auto;">
@@ -41,132 +46,12 @@
     <script src="vendors/chosen/chosen.jquery.min.js"></script>
 
     <script>
-        jQuery(function ($) {
-            function initChosen(element) {
-                window.setTimeout(function () {
-                    $(element).chosen({
-                        width: "90%",
-                        no_results_text: "没有符合条件的数据！",
-                        placeholder_text_multiple: "请选择...",
-                        placeholder_text_single: "请选择..."
-                    });
-                    $(element).trigger("chosen:updated");
-                }, 200);
-            }
-
-            $("#grid-table").grid({
-                url: "_rest/c4m/sysUsers",
-                editUrl: "_rest/c4m/sysUsers",
-                delUrl: "_rest/c4m/sysUsers",
-                token: _csrf,
-                formDataHeight: "450px",
-                beforeEditSubmit: function (postdata, formid) {
-                    if (postdata && postdata.roles) {
-                        const words = postdata.roles.split(',');
-                        postdata.roles = words.map(x => ('sysRoles/' + x));
-                    }
-                    return [true, ""];
-                },
-                colModel: [{
-                    key: true,
-                    label: '',
-                    name: 'id',
-                    hidden: true,
-                    editable: true,
-                }, {
-                    label: '用户账号',
-                    name: 'account',
-                    width: 100,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "15"
-                    }
-                }, {
-                    label: '用户名',
-                    name: 'username',
-                    width: 100,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "60"
-                    }
-                }, {
-                    label: '邮箱',
-                    name: 'email',
-                    width: 100,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                        email: true
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "60"
-                    }
-                }, {
-                    label: '所属角色',
-                    name: 'roles',
-                    width: 200,
-                    editable: true,
-                    edittype: "select",
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        dataUrl: "_rest/c4m/sysRoles?status=VALID&page=0&size=1000&sort=name,asc",
-                        buildSelect: function (data, xhr, cm, col) {
-                            let html = jqgBuildSelect(data, xhr, cm, col, 'id', 'name', false);
-                            window.setTimeout(function () {
-                                $("select#roles.chosen-select.FormElement").trigger("chosen:updated");
-                            }, 500);
-                            return html;
-                        },
-                        multiple: true,
-                        size: 5,
-                        class: "chosen-select",
-                        dataInit: initChosen,
-                    },
-                    formatter: function (cellvalue, options, rowObject) {
-                        let ids = '', names = '';
-                        if (cellvalue) {
-                            cellvalue.forEach(element => {
-                                ids += element.id + ',';
-                                names += element.name + '，'
-                            });
-                            if (ids !== '') {
-                                ids = ids.substring(0, ids.length - 1);
-                            }
-                            if (names !== '') {
-                                names = names.substring(0, names.length - 1);
-                            }
-                        }
-                        return '<span data-id="' + ids + '">' + names + '</span>';
-                    },
-                    unformat: function (cellvalue, options, cellobject) {
-                        return $('span', cellobject).attr('data-id');
-                    }
-                }, {
-                    label: '状态',
-                    name: 'status',
-                    width: 50,
-                    editable: true,
-                    edittype: "select",
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        value: "VALID:启用;INVALID:停用"
-                    },
-                    formatter: 'select',
-                }]
-            });
-        });
+        <@sec.authorize access="@webSecurity.check('/sys/users', 'PATCH')">
+        const _edit_permission = true;
+        </@sec.authorize>
+        <@sec.authorize access="@webSecurity.check('/sys/users', 'DELETE')">
+        const _delete_permission = true;
+        </@sec.authorize>
     </script>
+    <script src="js/sys/sec/user.js"></script>
 </@base.page>

@@ -17,7 +17,7 @@ import com.g.sys.sec.web.WebSecurityHelper;
 public class SysPropertyCategoriesController
         extends GenericController<SysPropertyCategoriesService, SysPropertyCategoriesRepository, SysPropertyCategory, String> {
 
-    @GetMapping("/$options")
+    @GetMapping("/options")
     public ApiResponse<List<Option>> getOptions() {
         Iterable<SysPropertyCategory> categories = service.findAll();
         if (categories.iterator().hasNext()) {

@@ -1,13 +1,18 @@
+<#assign sec = JspTaglibs["http://www.springframework.org/security/tags"]/>
 <#import "/common/base.ftlh" as base>
 <@base.page>
     <div class="row">
         <div class="col-md-4">
+            <@sec.authorize access="@webSecurity.check('/sys/property/categories', 'POST')">
             <button id="jqgAdd" class="btn btn-success btn-sm" data-url="sys/property/categories" data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
+            </@sec.authorize>
+            <@sec.authorize access="@webSecurity.check('/sys/property/categories', 'DELETE')">
             <button id="jqgDel" class="btn btn-sm btn-danger" data-url="sys/property/categories" data-token="${_csrf.token}">
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
+            </@sec.authorize>
         </div>
         <div class="col-md-8">
             <div class="input-group" style="margin-left:auto;">
@@ -35,59 +40,12 @@
     </div>
 
     <script>
-        jQuery(function ($) {
-            $("#grid-table").grid({
-                url: "sys/property/categories",
-                editUrl: "sys/property/categories",
-                delUrl: "sys/property/categories",
-                token: _csrf,
-                colModel: [{
-                    key: true,
-                    label: '编码',
-                    name: 'id',
-                    width: 60,
-                    editable: true,
-                    editrules : {
-                        required : true,
-                    },
-                }, {
-                    label: '名称',
-                    name: 'name',
-                    width: 150,
-                    editable: true,
-                    editrules : {
-                        required : true,
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "30"
-                    }
-                }, {
-                    label: '状态',
-                    name: 'status',
-                    width: 50,
-                    formatter:'select',
-                    editable: true,
-                    edittype: "select",
-                    editrules : {
-                        required : true,
-                    },
-                    editoptions: {
-                        value: "VALID:启用;INVALID:停用"
-                    }
-                }, {
-                    label: '说明',
-                    name: 'note',
-                    width: 150,
-                    sortable: false,
-                    editable: true,
-                    edittype: "textarea",
-                    editoptions: {
-                        rows: "2",
-                        cols: "10"
-                    }
-                }]
-            });
-        });
+    <@sec.authorize access="@webSecurity.check('sys/property/categories', 'PATCH')">
+    const _edit_permission = true;
+    </@sec.authorize>
+    <@sec.authorize access="@webSecurity.check('sys/property/categories', 'DELETE')">
+    const _delete_permission = true;
+    </@sec.authorize>
     </script>
+    <script src="js/sys/prop/category.js"></script>
 </@base.page>

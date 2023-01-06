@@ -35,7 +35,7 @@ import com.g.sys.sec.service.SysRolesService;
 @RequestMapping("sys/roles")
 public class SysRolesController
         extends GenericController<SysRolesService, SysRolesRepository, SysRole, Long> {
-    @GetMapping("/$options")
+    @GetMapping("/options")
     ApiResponse<List<Option>> getOptions() {
         var qSysRoles = QSysRole.sysRoles;
         Predicate predicate = qSysRoles.status.eq(Status.VALID);

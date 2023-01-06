@@ -56,6 +56,15 @@ public class WebSecurity {
         }
     }
 
+    public boolean check(String uri, ActionMethod actionMethod) {
+        try {
+            final Authentication authentication = WebSecurityHelper.getAuthentication();
+            return check(authentication, uri, actionMethod);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public boolean check(Authentication authentication, String uri) {
         return check(authentication, uri, ActionMethod.GET);
     }

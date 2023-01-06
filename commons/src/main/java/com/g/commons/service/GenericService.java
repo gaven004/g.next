@@ -45,8 +45,7 @@ public abstract class GenericService<R extends PagingAndSortingRepository<T, ID>
                     } catch (InvocationTargetException e) {
                         // Ignore
                     }
-                    source = repository.save(source);
-                    return source;
+                    return repository.save(source);
                 })
                 .orElseThrow(() -> new EntityNotFoundException());
     }

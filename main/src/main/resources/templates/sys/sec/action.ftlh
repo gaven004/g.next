@@ -1,15 +1,20 @@
+<#assign sec = JspTaglibs["http://www.springframework.org/security/tags"]/>
 <#import "/common/base.ftlh" as base>
 <@base.page>
     <div class="row">
         <div class="col-md-4">
-            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="_rest/c4m/sysActions"
+            <@sec.authorize access="@webSecurity.check('/sys/action', 'POST')">
+            <button id="jqgAdd" class="btn btn-success btn-sm" data-url="sys/action"
                     data-token="${_csrf.token}">
                 <i class="ace-icon glyphicon glyphicon-plus"></i> 新建
             </button>
-            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="_rest/c4m/sysActions"
+            </@sec.authorize>
+            <@sec.authorize access="@webSecurity.check('/sys/action', 'DELETE')">
+            <button id="jqgDel" class="btn btn-sm btn-danger" data-url="sys/action"
                     data-token="${_csrf.token}">
                 <i class="ace-icon  glyphicon glyphicon-trash "></i> 删除
             </button>
+            </@sec.authorize>
         </div>
         <div class="col-md-8">
             <div class="input-group" style="margin-left:auto;">
@@ -37,85 +42,12 @@
     </div>
 
     <script>
-        jQuery(function ($) {
-            $("#grid-table").grid({
-                url: "_rest/c4m/sysActions",
-                editUrl: "_rest/c4m/sysActions",
-                delUrl: "_rest/c4m/sysActions",
-                token: _csrf,
-                colModel: [{
-                    key: true,
-                    label: '',
-                    name: 'id',
-                    hidden: true,
-                    editable : true,
-                }, {
-                    label: '资源',
-                    name: 'resource',
-                    width: 100,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "250"
-                    }
-                }, {
-                    label: '请求方法',
-                    name: 'method',
-                    width: 50,
-                    editable: true,
-                    edittype: "select",
-                    editoptions: {
-                        dataUrl: "enums/ActionMethod",
-                        buildSelect: function (data, xhr, cm, col) {
-                            return jqgBuildSelect(data, xhr, cm, col, 'value', 'label');
-                        },
-                    },
-                    editrules: {
-                        required: true,
-                    },
-                }, {
-                    label: '说明',
-                    name: 'description',
-                    width: 100,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    editoptions: {
-                        size: "20",
-                        maxlength: "250"
-                    }
-                }, {
-                    label: '权限控制',
-                    name: 'permitAll',
-                    width: 50,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    edittype: "select",
-                    editoptions: {
-                        value: "false:是;true:否"
-                    },
-                    formatter:'select',
-                }, {
-                    label: '状态',
-                    name: 'status',
-                    width: 50,
-                    editable: true,
-                    editrules: {
-                        required: true,
-                    },
-                    edittype: "select",
-                    editoptions: {
-                        value: "VALID:启用;INVALID:停用"
-                    },
-                    formatter:'select',
-                }]
-            });
-        });
+        <@sec.authorize access="@webSecurity.check('/sys/action', 'PATCH')">
+        const _edit_permission = true;
+        </@sec.authorize>
+        <@sec.authorize access="@webSecurity.check('/sys/action', 'DELETE')">
+        const _delete_permission = true;
+        </@sec.authorize>
     </script>
+    <script src="js/sys/sec/action.js"></script>
 </@base.page>

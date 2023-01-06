@@ -55,6 +55,45 @@ public class SysUsersController
         return result;
     }
 
+    @Override
+    @PostMapping
+    @ResponseBody
+    public ApiResponse<SysUser> save(@RequestBody @Valid SysUser entity) {
+        return ApiResponse.success(service.save(entity));
+    }
+
+    @Override
+    @PutMapping("/{id}")
+    @ResponseBody
+    public ApiResponse<SysUser> update(@RequestBody @Valid SysUser entity) {
+        return ApiResponse.success(service.update(entity));
+    }
+
+    @Override
+    @PatchMapping("/{id}")
+    @ResponseBody
+    public ApiResponse<SysUser> patch(@RequestBody @Valid SysUser entity) {
+        return ApiResponse.success(service.update(entity));
+    }
+
+    @Override
+    @DeleteMapping
+    @ResponseBody
+    public ApiResponse<?> delete(@RequestParam(value = "ids[]") Long[] ids) {
+        for (Long id : ids) {
+            service.delete(id);
+        }
+        return ApiResponse.success();
+    }
+
+    @Override
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ApiResponse<SysUser> delete(@PathVariable Long id) {
+        service.delete(id);
+        return ApiResponse.success();
+    }
+
     @PutMapping("/current-user")
     @ResponseBody
     public ApiResponse<SysUser> updateCurrentUser(@RequestBody @Valid SysUser entity) {
@@ -191,5 +230,4 @@ public class SysUsersController
 
         return "/sys/sec/user_chg_pwd";
     }
-
 }
