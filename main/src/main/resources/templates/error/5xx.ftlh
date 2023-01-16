@@ -47,7 +47,7 @@
             <!-- Page Content -->
             <div class="row">
                 <div class="col-sm-10 col-sm-offset-1"
-                     style="height: 80vh; min-height: 540px; display: flex; justify-content: center; align-items: center;">
+                     style="max-width: 83.33vw; height: 80vh; min-height: 540px; display: flex; justify-content: center; align-items: center;">
                     <div class="py-3 px-1 py-lg-4 px-lg-5">
                         <div class="text-center fa-4x">
                             <span class="text-110 text-dark-m3 d-none d-sm-inline">
@@ -55,23 +55,17 @@
                             </span>
                         </div>
                         <div class="text-center fa-4x orange" style="padding: 0.25em; letter-spacing: 8px">
-                            ${status!"5XX"}
+                            ${status!"5XX"} <span class="smaller-80">  系统异常</span>
                         </div>
-                        <div class="text-center">
-                                <span class="text-120 text-danger-m1 p-15">
-                                    <i class="fas fa-exclamation-triangle mr-1 mb-1"></i>
-                                    系统异常：
-                                </span>
-                            <span class="text-120 text-primary-d2 p-15">
-                                    ${message!}...
-                                </span>
+                        <div class="text-center overflow-hidden" style="max-height: 3.5em">
+                            <span class="bigger-125 blue">
+                                <i class="ace-icon fa fa-exclamation-triangle red2"></i>
+                                ${message!}...
+                            </span>
                         </div>
                         <#if trace?has_content>
-                            <div class="alert fade show bgc-white brc-secondary-l2 rounded mt-4" role="alert">
-                                <div class="position-tl h-102 border-l-4 brc-danger m-n1px rounded-left"></div>
-                                <!-- the big red line on left -->
-
-                                <pre class="overflow-auto" style="height: 50vh">${trace!}</pre>
+                            <div class="well" style="margin-top: 2em; padding: 1.2em">
+                                <pre style="max-width: 83.33vw; max-height: 40vh; overflow: auto; border: 0">${trace!}</pre>
                             </div>
                         </#if>
                         <hr>

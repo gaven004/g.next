@@ -4,11 +4,13 @@ import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
 @Configuration
+@ImportResource("classpath*:model-resolver.xml")
 public class WebConfig implements WebMvcConfigurer {
     public WebConfig(@Autowired FreeMarkerConfigurer freeMarkerConfigurer) {
         freeMarkerConfigurer.getTaglibFactory().setClasspathTlds(

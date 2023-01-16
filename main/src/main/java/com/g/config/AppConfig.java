@@ -15,6 +15,7 @@ import org.springframework.util.Assert;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.g.commons.utils.MailSender;
 import com.g.commons.utils.ObjectMapperUtil;
+import com.g.sys.att.service.FileUploader;
 
 @Configuration
 @AutoConfigureBefore({DataSourceAutoConfiguration.class, WebMvcAutoConfiguration.class})
@@ -35,6 +36,13 @@ public class AppConfig {
     public MailSender usrMailSender(JavaMailSender mailSender) {
         Assert.notNull(mailSender, "A JavaMailSender must be set");
         return new MailSender("gsgdgcyxgs_pm@163.com", mailSender);
+    }
+
+    @Bean
+    @Primary
+    public FileUploader fileUploader() {
+        return new FileUploader(Long.parseLong(SystemConfig.getProperty("upload.maxFileSize")),
+                SystemConfig.getProperty("upload.basePath"), "sys/attachment", null);
     }
 
     @Bean

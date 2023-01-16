@@ -10,6 +10,8 @@ package com.g.sys.sec.service;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -34,18 +36,21 @@ public class SysMenuService
     }
 
     @Override
+    @Transactional
     public SysMenu save(SysMenu entity) {
         checkParent(entity);
         return super.save(entity);
     }
 
     @Override
+    @Transactional
     public SysMenu update(SysMenu entity) {
         checkParent(entity);
         return super.update(entity);
     }
 
     @Override
+    @Transactional
     public void delete(Long id) {
         checkChildren(id);
         super.delete(id);

@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="vendors/fontawesome/css/font-awesome.min.css">
     <!-- include fonts -->
     <link rel="stylesheet" type="text/css" href="vendors/opensans/opensans.css">
+    <link rel="stylesheet" type="text/css" href="vendors/chosen/chosen.min.css">
     <#if useJQGrid>
     <!-- include jqgrid -->
     <link rel="stylesheet" type="text/css" href="vendors/jqgrid/css/ui.jqgrid.css">
@@ -30,6 +31,7 @@
 <script src="vendors/jquery/js/jquery.cookie.min.js"></script>
 <script src="vendors/bootstrap/js/bootstrap.js"></script>
 <script src="vendors/bootbox/bootbox.js"></script>
+<script src="vendors/chosen/chosen.jquery.js"></script>
 
 <!-- include ace.js -->
 <script src="vendors/ace/js/ace-elements.min.js"></script>
@@ -55,7 +57,7 @@
         <div class="navbar-buttons navbar-header pull-right" role="navigation">
             <ul class="nav ace-nav">
                 <li class="purple">
-                    <a class="dropdown-toggle" href="notice.view">
+                    <a class="dropdown-toggle" href="view/bbs/show">
                         通知公告&nbsp;<i class="ace-icon fa fa-newspaper-o"></i>
                         <i id="new_notice" class="ace-icon fa fa-star orange2 hidden"></i>
                     </a>
@@ -124,7 +126,7 @@
                 </ul><!-- /.breadcrumb -->
             </div>
             <!-- 内容页 -->
-            <div class="page-content" style="padding-top:12px;padding-bottom:12px">
+            <div id="page-content" class="page-content" style="padding-top:12px;padding-bottom:12px">
             <#nested>
             </div>
         </div>

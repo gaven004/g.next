@@ -6,6 +6,7 @@
         display: block;
     }
 }
+
 @media (min-width: 992px) {
     .navbar-toggle {
         display: none;
@@ -13,37 +14,39 @@
 }
 
 /* 条件查询form各个控件统一大小 */
+
+input, select {
+    height: 34px;
+}
+
 form.fix-input-size input,
 form.fix-input-size select {
     width: 188px;
-    height: 34px;
 }
 
-select {
-    height: 34px;
-}
-
-input[readonly].show {
+form.fix-input-size input[readonly].show,
+form.fix-input-size textarea[readonly].show {
     color: #393939;
     background: #FFFFFF !important;
     cursor: default;
 }
 
-textarea[readonly].show {
-    color: #393939;
-    background: #FFFFFF !important;
-    cursor: default;
-}
-
-.radio-inline {
+form.fix-input-size .radio-inline {
     position: relative;
     display: inline;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.form-inline > .btn {
-    margin-top: -4px;
+.form-inline.fix-input-size > .btn,
+.form-inline.fix-input-size > .chosen-container > .chosen-single {
+    margin-top: -3px;
+}
+
+.form-inline.fix-input-size > .chosen-container > .chosen-single {
+    height: 34px;
+    line-height: 32px;
+    border: 1px solid #D5D5D5;
 }
 
 /* jqgrid调整 */
@@ -75,8 +78,7 @@ textarea[readonly].show {
 
 .ui-jqdialog-content .DataTD input,
 .ui-jqdialog-content .DataTD select,
-.ui-jqdialog-content .DataTD textarea
-{
+.ui-jqdialog-content .DataTD textarea {
     width: 90%
 }
 
@@ -95,10 +97,14 @@ textarea[readonly].show {
 /* 表头 */
 .ui-jqgrid .ui-jqgrid-labels {
     border-bottom: none;
-    background: #F2F2F2 none repeat-x;
+    background-image: none;
     filter: none;
     padding: 0 !important;
     border-left: 1px solid #E1E1E1 !important;
+}
+
+th[aria-selected=true] {
+    background-image: none;
 }
 
 .ui-jqgrid .ui-jqgrid-labels th {
@@ -116,7 +122,11 @@ textarea[readonly].show {
 }
 
 .ui-jqgrid .ui-jqgrid-htable .ui-jqgrid-labels > th.jqgh_cbox {
-    padding-top: 10px;
+    padding-top: 4px;
+}
+
+.ui-jqgrid .ui-jqgrid-htable .ui-jqgrid-labels > th.jqgh_cbox > div {
+    padding-bottom: 0;
 }
 
 .ui-jqgrid .ui-jqgrid-htable th div {
@@ -144,7 +154,7 @@ textarea[readonly].show {
 }
 
 .ui-jqgrid .ui-jqgrid-pager {
-    border-top: 0!important;
+    border-top: 0 !important;
 }
 
 /* 导入jquery-ui的几个样式，以支持jqgrid的弹框调整大小 */

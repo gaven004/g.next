@@ -1,3 +1,47 @@
+const COMM = {
+    fetch: function (url, method, body, option) {
+        option = Object.assign(option || {}, {
+            method: method,
+            headers: {
+                Accept: 'application/json',
+                "X-CSRF-TOKEN": _csrf
+            },
+            body: body
+        });
+        return fetch(url, option)
+            .then(response => response.json());
+    },
+    fetchAndMessage: function (url, method, body, option, message) {
+        return this.fetch(url, method, body, option)
+            .then(data => {
+                if (data.result === 'SUCCESS') {
+                    let dialog = bootbox.dialog({
+                        message: message || '操作成功',
+                        backdrop: true
+                    });
+                    window.setTimeout(function () {
+                        dialog.modal('hide');
+                    }, 3000);
+                } else {
+                    bootbox.dialog({
+                        message: data.message,
+                        title: '系统异常',
+                        backdrop: true
+                    });
+                }
+                return data;
+            })
+            .catch(error => {
+                bootbox.dialog({
+                    message: error,
+                    title: '系统异常',
+                    backdrop: true
+                });
+            });
+    },
+};
+
+
 (function ($) {
     /**
      * form数据转成对象

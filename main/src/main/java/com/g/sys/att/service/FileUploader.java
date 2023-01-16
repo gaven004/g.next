@@ -3,7 +3,7 @@ package com.g.sys.att.service;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 
@@ -21,6 +21,15 @@ import com.g.commons.utils.HexIDGenerator;
 import com.g.sys.SysErrorCode;
 import com.g.sys.att.model.Module;
 
+/**
+ * 文件上传组件
+ * <p>
+ * 文件上传，一般几种需求：
+ * 1、直接上传到指定目录（模块对应目录），保留原文件名
+ * 2、直接上传到指定目录（模块对应目录），自动重命名避免重复，保留后缀以保留文件类型不变
+ * 3、直接上传到指定目录（模块对应目录），自动生成一个子目录避免重复，再将原文件保存到子目录下
+ * 4、直接上传到指定目录（模块对应目录），再指定子目录，以及指定重命名的文件名
+ */
 public class FileUploader {
     private static final Logger logger = LoggerFactory.getLogger(FileUploader.class);
 
@@ -32,16 +41,7 @@ public class FileUploader {
 
     private final String browseUrl; // 浏览路径
 
-    private final HashSet<String> supportFileTypes;
-
-    public FileUploader(long maxFileSize, String basePath, String browseUrl, HashSet<String> supportFileTypes) {
-        this.maxFileSize = maxFileSize;
-        this.basePath = Path.of(basePath).normalize();
-        this.browseUrl = browseUrl;
-        this.supportFileTypes = supportFileTypes;
-
-        basePathNameCount = this.basePath.getNameCount();
-    }
+    private final Set<String> supportFileTypes;
 
     /**
      * 根据路径获取文件名称
@@ -61,6 +61,23 @@ public class FileUploader {
      */
     public static String getExtension(String filename) {
         return FilenameUtils.getExtension(filename).toLowerCase();
+    }
+
+    public FileUploader(long maxFileSize, String basePath, String browseUrl, Set<String> supportFileTypes) {
+        this.maxFileSize = maxFileSize;
+        this.basePath = Path.of(basePath).normalize();
+        this.browseUrl = browseUrl;
+        this.supportFileTypes = supportFileTypes;
+
+        basePathNameCount = this.basePath.getNameCount();
+    }
+
+    public Path getBasePath() {
+        return basePath;
+    }
+
+    public Path getPath(Module module) {
+        return basePath.resolve(module.path());
     }
 
     /**
@@ -83,7 +100,7 @@ public class FileUploader {
         }
 
         if (maxFileSize < source.getSize()) {
-            throw new ExceedMaxSizeException("上传文件大小不能超过" + String.valueOf(maxFileSize));
+            throw new ExceedMaxSizeException("上传文件大小不能超过" + maxFileSize);
         }
 
         return getFilename(filename);
@@ -123,6 +140,15 @@ public class FileUploader {
     public String uploadAndGetPath(@NotNull MultipartFile source, Module module)
             throws GenericAppException {
         return uploadAndGetPath(source, module, null, null);
+    }
+
+    /**
+     * 上传文件到指定目录，并自动重命名
+     */
+    public String uploadAndGetPath(@NotNull MultipartFile source, Module module, boolean genPath)
+            throws GenericAppException {
+        String subPath = genPath ? HexIDGenerator.getInstance().nextId() : null;
+        return uploadAndGetPath(source, module, subPath, false);
     }
 
     /**
@@ -174,6 +200,11 @@ public class FileUploader {
         }
     }
 
+    public void delete(Module module, String filename) {
+        Path path = getPath(module).resolve(filename);
+        delete(path);
+    }
+
     /**
      * 删除文件或目录，如果删除后目录为空，这空目录一并删除
      *
@@ -181,22 +212,25 @@ public class FileUploader {
      * @return
      */
     public static void delete(String filename) {
-        logger.debug("删除文件：{}", filename);
-
         if (!StringUtils.hasText(filename)) {
             return;
         }
 
-        Path path = Path.of(filename);
+        delete(Path.of(filename));
+    }
+
+    public static void delete(Path path) {
+        logger.debug("删除文件：{}", path);
+
         if (!Files.exists(path)) {
-            logger.info("要删除的文件不存在[{}]", filename);
+            logger.info("要删除的文件不存在[{}]", path);
             return;
         }
 
         try {
             Files.delete(path);
         } catch (IOException e) {
-            logger.warn("删除文件失败[{}]", filename);
+            logger.warn("删除文件失败[{}]", path);
             throw new GenericAppException(SysErrorCode.FileDeleteFailed, e);
         }
 
@@ -207,7 +241,7 @@ public class FileUploader {
 
         boolean empty = false;
         try (Stream<Path> entries = Files.list(parent)) {
-            empty = entries.findFirst().isPresent();
+            empty = !entries.findFirst().isPresent();
         } catch (IOException e) {
         }
 
@@ -215,7 +249,7 @@ public class FileUploader {
             try {
                 Files.delete(parent);
             } catch (IOException e) {
-                logger.warn("删除文件失败[{}]", filename);
+                logger.warn("删除文件失败[{}]", path);
                 throw new GenericAppException(SysErrorCode.FileDeleteFailed, e);
             }
         }

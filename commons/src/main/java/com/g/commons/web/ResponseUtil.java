@@ -4,10 +4,15 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FilenameUtils;
+import org.springframework.http.HttpStatus;
 
 import com.g.commons.utils.LocalDateTimeUtil;
 
@@ -21,20 +26,80 @@ public class ResponseUtil {
      * https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
      * https://www.iana.org/assignments/media-types/media-types.xhtml
      */
-    static final Map<String, String> contentTypeMap = Map.of(
-            "pdf", "application/pdf",
-            "xls", "application/vnd.ms-excel",
-            "xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "doc", "application/msword",
-            "docx", "application/application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            "zip", "application/zip");
+    static final Map<String, String> contentTypeMap = Map.ofEntries(
+            Map.entry("apng", "image/apng"),
+            Map.entry("avif", "image/avif"),
+            Map.entry("bmp", "image/bmp"),
+            Map.entry("gif", "image/gif"),
+            Map.entry("ico", "image/x-icon"),
+            Map.entry("cur", "image/x-icon"),
+            Map.entry("jpg", "image/jpeg"),
+            Map.entry("jpeg", "image/jpeg"),
+            Map.entry("jfif", "image/jpeg"),
+            Map.entry("pjpeg", "image/jpeg"),
+            Map.entry("pjp", "image/jpeg"),
+            Map.entry("png", "image/png"),
+            Map.entry("svg", "image/svg+xml"),
+            Map.entry("tif", "image/tiff"),
+            Map.entry("tiff", "image/tiff"),
+            Map.entry("webp", "image/webp"),
+            Map.entry("pdf", "application/pdf"),
+            Map.entry("xls", "application/vnd.ms-excel"),
+            Map.entry("xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+            Map.entry("doc", "application/msword"),
+            Map.entry("docx", "application/application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+            Map.entry("zip", "application/zip"));
+
+    /**
+     * 直接输出文件到response
+     *
+     * @param response
+     * @param source
+     * @throws IOException
+     */
+    public static void write(HttpServletResponse response, Path source) throws IOException {
+        String ext = FilenameUtils.getExtension(source.toString()).toLowerCase();
+        long size = Files.size(source);
+
+        response.setStatus(HttpStatus.OK.value());
+        response.setContentType(contentTypeMap.get(ext));
+        response.setContentLength((int) size);
+
+        Files.copy(source, response.getOutputStream());
+    }
+
+    /**
+     * 以附件的方式输出文件到response
+     *
+     * @param request
+     * @param response
+     * @param source
+     * @throws IOException
+     */
+    public static void write(HttpServletRequest request, HttpServletResponse response, Path source) throws IOException {
+
+        String filename = source.toString();
+        String ext = FilenameUtils.getExtension(filename).toLowerCase();
+        String basename = FilenameUtils.getBaseName(filename);
+
+        String contentType = contentTypeMap.get(ext);
+        if (null == contentType) {
+            throw new RuntimeException("Unsupported file type");
+        }
+
+        basename = getFileName(request, basename);
+        response.setHeader("content-disposition", "attachment;filename=" + basename + "." + ext);
+        response.setContentType(contentType);
+
+        Files.copy(source, response.getOutputStream());
+    }
 
     /**
      * 根据不同文件类型，从HttpServletResponse获取输出流，从而将文件以流的方式，输出到客户端
      *
      * @param request
      * @param response
-     * @param basename 文件名，不带后缀扩展名
+     * @param basename  文件名，不带后缀扩展名
      * @param extension 文件的扩展名
      * @return
      * @throws IOException

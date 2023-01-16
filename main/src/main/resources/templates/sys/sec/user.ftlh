@@ -42,9 +42,6 @@
         </div>
     </div>
 
-    <link rel="stylesheet" type="text/css" href="vendors/chosen/chosen.min.css">
-    <script src="vendors/chosen/chosen.jquery.min.js"></script>
-
     <script>
         <@sec.authorize access="@webSecurity.check('/sys/users', 'PATCH')">
         const _edit_permission = true;

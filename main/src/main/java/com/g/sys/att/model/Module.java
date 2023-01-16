@@ -1,7 +1,7 @@
 package com.g.sys.att.model;
 
 public enum Module {
-    COMMON("common");
+    COMMON("common"), BBS_IMG("bbs/img"), BBS_ATTACHMENT("bbs/attachment");
 
     private final String path; // 上传文件保存路径
 
