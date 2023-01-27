@@ -118,7 +118,7 @@ public class SysMessageService {
         }
 
         if (entity.getFiles() != null) {
-            attachmentService.save(Module.BBS_ATTACHMENT, messageId.toString(), entity.getFiles());
+            attachmentService.save(Module.MSG_ATTACHMENT, messageId.toString(), entity.getFiles());
         }
     }
 

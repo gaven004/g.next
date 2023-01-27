@@ -66,59 +66,66 @@ jQuery(function ($) {
         }
         ,
         //show write mail form
-        show_form: function () {
+        show_form: async function () {
             if ($('.message-form').is(':visible')) return;
 
             $('.message-container').append('<div class="message-loading-overlay"><i class="fa-spin ace-icon fa fa-spinner orange2 bigger-160"></i></div>');
 
-            setTimeout(function () {
-                $('.message-container').find('.message-loading-overlay').remove();
-
-                let $message = $('#message-write');
-                $('#message-write').empty();
-                $('#messageFormTemplate').template(messageEntity || {}).appendTo($message);
-
-                // 校验初始化
-                $('form#id-message-form').validate({
-                    focusInvalid: true,
-                    ignore: ":hidden:not(select)",
-                    rules: {
-                        recipientId: {
-                            required: true,
-                        },
-                        subject: {
-                            required: true
-                        }
-                    },
-                    messages: {
-                        columnId: "请选择收件人",
-                        title: "请输入主题",
-                    },
-
-                    highlight: function (e) {
-                        $(e).closest('.form-group').addClass('has-error');
-                    },
-
-                    success: function (e) {
-                        $(e).closest('.form-group').removeClass('has-error');
-                        $(e).closest('.form-group').find('div.help-block').html('');
-                    },
-
-                    errorPlacement: function (error, element) {
-                        const block = $(element).closest('.form-group').find('div.help-block');
-                        block.html('');
-                        error.appendTo(block);
+            if (messageEntity && messageEntity.id) {
+                // 查询附件信息
+                const promise = COMM.fetch("sys/attachment?module=MSG_ATTACHMENT&srcRecode=" + messageEntity.id);
+                await promise.then(response => {
+                    if (response.result === 'SUCCESS' && response.body) {
+                        $.extend(messageEntity, {files: response.body, readonly: false});
                     }
                 });
+            }
 
-                // reset form??
-                msgEditor = CKEDITOR.replace("message", {
-                    filebrowserImageUploadUrl: 'upload/MSG_IMG?_csrf=' + _csrf,
-                    height: '30vh'
-                });
-                $('#recipientId').chosen({});
+            $('.message-container').find('.message-loading-overlay').remove();
 
-            }, 300 + parseInt(Math.random() * 300));
+            let $message = $('#message-write');
+            $('#message-write').empty();
+            $('#messageFormTemplate').template(messageEntity || {}).appendTo($message);
+
+            // 校验初始化
+            $('form#id-message-form').validate({
+                focusInvalid: true,
+                ignore: ":hidden:not(select)",
+                rules: {
+                    recipientId: {
+                        required: true,
+                    },
+                    subject: {
+                        required: true
+                    }
+                },
+                messages: {
+                    columnId: "请选择收件人",
+                    title: "请输入主题",
+                },
+
+                highlight: function (e) {
+                    $(e).closest('.form-group').addClass('has-error');
+                },
+
+                success: function (e) {
+                    $(e).closest('.form-group').removeClass('has-error');
+                    $(e).closest('.form-group').find('div.help-block').html('');
+                },
+
+                errorPlacement: function (error, element) {
+                    const block = $(element).closest('.form-group').find('div.help-block');
+                    block.html('');
+                    error.appendTo(block);
+                }
+            });
+
+            // reset form??
+            msgEditor = CKEDITOR.replace("message", {
+                filebrowserImageUploadUrl: 'upload/MSG_IMG?_csrf=' + _csrf,
+                height: '30vh'
+            });
+            $('#recipientId').chosen({});
         },
         save_as_draft: function () {
             $('#message').val(msgEditor.getData());
@@ -295,7 +302,7 @@ jQuery(function ($) {
                 if (cellvalue && cellvalue.length > 0) {
                     let label = cellvalue.map(e => e.recipientName).join(', ');
                     let val = cellvalue.map(e => e.recipientId).toString();
-                    return '<span class="message-text" val="' + val +'">' + label + '</span>';
+                    return '<span class="message-text" val="' + val + '">' + label + '</span>';
                 }
                 return '';
             },

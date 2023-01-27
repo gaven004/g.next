@@ -13,7 +13,7 @@
             </button>
             {{/unless}}
             <button class="btn btn-sm btn-primary" type="button" {{#unless id}}disabled="disabled"{{/unless}}
-                    onclick="download({{id}})">
+                    onclick="download('{{id}}')">
                 <i class="ace-icon glyphicon glyphicon-zoom-in"></i>
                 阅览
             </button>
