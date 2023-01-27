@@ -45,7 +45,7 @@ jQuery(function ($) {
             $("#detailTemplate").template(data).appendTo(parent);
 
             const myeditor = CKEDITOR.replace("content", {
-                filebrowserImageUploadUrl: 'bbs/article/upload?_csrf=' + _csrf,
+                filebrowserImageUploadUrl: 'upload/BBS_IMG?_csrf=' + _csrf,
                 height: '40vh'
             });
 

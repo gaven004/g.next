@@ -50,7 +50,7 @@ public class SysAttachmentService
 
     @Transactional
     public void save(Module module, String srcRecode, List<AttachmentFile> files, String subPath, boolean genpath, boolean rename) {
-        if (files == null || files.isEmpty()) {
+        if (files == null) {
             return;
         }
 

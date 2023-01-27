@@ -1,0 +1,31 @@
+div.ui-jqgrid-view > div.ui-state-default.ui-corner-top.ui-jqgrid-hdiv {
+    display: none;
+}
+
+div.ui-jqgrid-view > div.ui-jqgrid-bdiv {
+    border-top: 0;
+}
+
+.ui-jqgrid .ui-jqgrid-btable {
+    border-left: 0;
+}
+
+.ui-jqgrid .ui-jqgrid-bdiv tr.ui-row-ltr > td {
+    border-right: 0;
+}
+
+.ui-jqgrid tr.jqgrow > td {
+    line-height: 250%;
+}
+
+.message-star {
+    margin: 0;
+}
+
+.message-text {
+    cursor: pointer;
+}
+
+.message-form {
+    border: 0;
+}

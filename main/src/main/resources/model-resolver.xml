@@ -15,5 +15,10 @@
                       p:type="com.g.bbs.model.BbsArticleStatus" p:name="_ARTICLE_STATUS" />
             </list>
         </entry>
+        <entry key="/sys/msg/message">
+            <list>
+				<ref bean="sysUserModelResolver" />
+            </list>
+        </entry>
     </util:map>
 </beans>

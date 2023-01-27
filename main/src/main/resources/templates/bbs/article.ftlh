@@ -116,7 +116,7 @@
                         <option value="">请选择...</option>
                         <#if _BBS_COLUMNS ??>
                             <#list _BBS_COLUMNS as c>
-                                <option value="${c.id?c}" {{#eq columnId ${c.id?c}}}selected='selected'{{/eq}}>${c.name!}</option>
+                                <option value="${c.id?c}" {{#eq columnId '${c.id?c}'}}selected='selected'{{/eq}}>${c.name!}</option>
                             </#list>
                         </#if>
                     </select>

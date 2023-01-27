@@ -58,14 +58,14 @@
             <ul class="nav ace-nav">
                 <li class="purple">
                     <a class="dropdown-toggle" href="view/bbs/show">
-                        通知公告&nbsp;<i class="ace-icon fa fa-newspaper-o"></i>
-                        <i id="new_notice" class="ace-icon fa fa-star orange2 hidden"></i>
+                        <i class="ace-icon fa fa-newspaper-o"></i>&nbsp;通知公告
+                        <i id="new_notice" class="ace-icon fa fa-star orange2"></i>
                     </a>
                 </li>
                 <li class="green dropdown-modal" >
-                    <a class="dropdown-toggle" href="r?l=oa/message">
-                        员工通信&nbsp;<i class="ace-icon fa fa-comments-o icon-animated-vertical"></i>
-                        <span id="messageNumber" class="badge badge-success"></span>
+                    <a class="dropdown-toggle" href="view/sys/msg/message">
+                        <i class="ace-icon fa fa-comments-o icon-animated-vertical"></i>&nbsp;站内通信
+                        <span id="new_message" class="badge badge-success">1</span>
                     </a>
                 </li>
                 <li class="light-blue">
