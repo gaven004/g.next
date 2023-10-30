@@ -24,12 +24,14 @@ logging:
 spring:
   #  autoconfigure:
   #    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+  jmx:
+    enabled: true
   # 配置数据源信息
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/app_db?serverTimezone=UTC&characterEncoding=utf-8
-    username: db_user
-    password: 123456
+    url: jdbc:mysql://localhost:3306/next?serverTimezone=UTC&characterEncoding=utf-8
+    username: root
+    password: MYSQL_ROOT_PASSWORD
   jpa:
     database: mysql
     hibernate:
@@ -71,16 +73,22 @@ spring:
 
 # Actuator
 management:
+  endpoints:
+    enabled-by-default: true
+    jmx:
+      exposure:
+        include: "*"
+    web:
+      exposure:
+        include: "*"
   endpoint:
     httptrace:
+      enabled: true
+    info:
       enabled: true
   trace:
     http:
       include: true
-  endpoints:
-    web:
-      exposure:
-        include: "*"
 
 g:
   commons:

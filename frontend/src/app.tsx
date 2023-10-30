@@ -55,11 +55,19 @@ export async function getInitialState(): Promise<{
           path: '/welcome',
           name: '欢迎',
           icon: <HomeOutlined/>,
-          component: './sys/Menu',
+          component: './Welcome',
         },
         {
           path: '/',
           redirect: '/welcome',
+        },
+        {
+          path: '/profile',
+          component: './sys/Profile',
+          hideInMenu: true,
+          "menu": {
+            "name": "个人中心"
+          },
         },
         {
           path: '/403',
